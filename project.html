@@ -96,155 +96,111 @@
             <h4 class="text-white mb-0"><span class="display-1">6</span> of our latest projects</h4>
           </div>
         </div>
+
         <div class="col-lg-7">
           <div class="row g-0">
+
+            <!-- 1 -->
             <div class="col-md-6 col-lg-4 wow fadeIn" data-wow-delay="0.2s">
               <div class="project-item position-relative overflow-hidden">
-                <img class="img-fluid h-100 " src="img/project-1.jpg" alt="">
-                <a class="project-overlay text-decoration-none" href="#!">
+                <img class="img-fluid w-100" src="img/project-1.jpg" alt="">
+                <a class="project-overlay text-decoration-none" href="#" data-bs-toggle="modal"
+                  data-bs-target="#projectVideoModal" data-video="img/data.mp4" data-title="Data">
                   <h4 class="text-white">Data</h4>
                 </a>
               </div>
             </div>
+
+            <!-- 2 -->
             <div class="col-md-6 col-lg-4 wow fadeIn" data-wow-delay="0.3s">
               <div class="project-item position-relative overflow-hidden">
                 <img class="img-fluid w-100" src="img/project-2.jpg" alt="">
-                <a class="project-overlay text-decoration-none" href="#!">
+                <a class="project-overlay text-decoration-none" href="#" data-bs-toggle="modal"
+                  data-bs-target="#projectVideoModal" data-video="img/bionic.mp4" data-title="Bionic">
                   <h4 class="text-white">Bionic</h4>
                 </a>
               </div>
             </div>
+
+            <!-- 3 -->
             <div class="col-md-6 col-lg-4 wow fadeIn" data-wow-delay="0.4s">
               <div class="project-item position-relative overflow-hidden">
                 <img class="img-fluid w-100" src="img/project-3.jpg" alt="">
-                <a class="project-overlay text-decoration-none" href="#!">
+                <a class="project-overlay text-decoration-none" href="#" data-bs-toggle="modal"
+                  data-bs-target="#projectVideoModal" data-video="img/listen.mp4" data-title="Listen">
                   <h4 class="text-white">Listen</h4>
                 </a>
               </div>
             </div>
+
+            <!-- 4 -->
             <div class="col-md-6 col-lg-4 wow fadeIn" data-wow-delay="0.5s">
               <div class="project-item position-relative overflow-hidden">
                 <img class="img-fluid w-100" src="img/project-4.jpg" alt="">
-                <a class="project-overlay text-decoration-none" href="#!">
+                <a class="project-overlay text-decoration-none" href="#" data-bs-toggle="modal"
+                  data-bs-target="#projectVideoModal" data-video="img/vision.mp4" data-title="Vision">
                   <h4 class="text-white">Vision</h4>
                 </a>
               </div>
             </div>
+
+            <!-- 5 -->
             <div class="col-md-6 col-lg-4 wow fadeIn" data-wow-delay="0.6s">
               <div class="project-item position-relative overflow-hidden">
                 <img class="img-fluid w-100" src="img/project-5.jpg" alt="">
-                <a class="project-overlay text-decoration-none" href="#!">
+                <a class="project-overlay text-decoration-none" href="#" data-bs-toggle="modal"
+                  data-bs-target="#projectVideoModal" data-video="img/control.mp4" data-title="Control">
                   <h4 class="text-white">Control</h4>
                 </a>
               </div>
             </div>
+
+            <!-- 6 -->
             <div class="col-md-6 col-lg-4 wow fadeIn" data-wow-delay="0.7s">
               <div class="project-item position-relative overflow-hidden">
                 <img class="img-fluid w-100" src="img/project-6.jpg" alt="">
-                <a class="project-overlay text-decoration-none" href="#!">
+                <a class="project-overlay text-decoration-none" href="#" data-bs-toggle="modal"
+                  data-bs-target="#projectVideoModal" data-video="img/sensors.mp4" data-title="Sensors">
                   <h4 class="text-white">Sensors</h4>
                 </a>
               </div>
             </div>
+
           </div>
         </div>
+
       </div>
     </div>
   </div>
   <!-- Project End -->
 
-  <!-- Videos -->
-  <!-- Video Modal for Kitchen -->
-  <div class="modal fade" id="videoModal-1" tabindex="-1" aria-hidden="true">
+
+  <!-- Project Video Modal -->
+  <div class="modal fade" id="projectVideoModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
       <div class="modal-content bg-dark">
+        <div class="modal-header border-0">
+          <h5 class="modal-title text-white" id="projectVideoTitle">Project Video</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
         <div class="modal-body p-0">
           <div class="ratio ratio-16x9">
-            <iframe id="kitchenVideo" src="https://www.youtube.com/embed/yourVideoID?enablejsapi=1"
-              title="Kitchen Project Video" allowfullscreen></iframe>
+            <video id="projectVideo" class="w-100 h-100" controls preload="metadata" playsinline>
+              <source id="projectVideoSource" src="" type="video/mp4">
+              Your browser does not support HTML5 video.
+            </video>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <!-- Video Modal Kitchen End -->
-  <!-- Video Modal for Kitchen -->
-  <div class="modal fade" id="videoModal-2" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-      <div class="modal-content bg-dark">
-        <div class="modal-body p-0">
-          <div class="ratio ratio-16x9">
-            <iframe id="kitchenVideo" src="https://www.youtube.com/embed/yourVideoID?enablejsapi=1"
-              title="Kitchen Project Video" allowfullscreen></iframe>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- Video Modal Kitchen End -->
-  <!-- Video Modal for Kitchen -->
-  <div class="modal fade" id="videoModal-3" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-      <div class="modal-content bg-dark">
-        <div class="modal-body p-0">
-          <div class="ratio ratio-16x9">
-            <iframe id="kitchenVideo" src="https://www.youtube.com/embed/yourVideoID?enablejsapi=1"
-              title="Kitchen Project Video" allowfullscreen></iframe>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- Video Modal Kitchen End -->
-  <!-- Video Modal for Kitchen -->
-  <div class="modal fade" id="videoModal-4" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-      <div class="modal-content bg-dark">
-        <div class="modal-body p-0">
-          <div class="ratio ratio-16x9">
-            <iframe id="kitchenVideo" src="https://www.youtube.com/embed/yourVideoID?enablejsapi=1"
-              title="Kitchen Project Video" allowfullscreen></iframe>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- Video Modal Kitchen End -->
-  <!-- Video Modal for Kitchen -->
-  <div class="modal fade" id="videoModal-5" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-      <div class="modal-content bg-dark">
-        <div class="modal-body p-0">
-          <div class="ratio ratio-16x9">
-            <iframe id="kitchenVideo" src="https://www.youtube.com/embed/yourVideoID?enablejsapi=1"
-              title="Kitchen Project Video" allowfullscreen></iframe>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- Video Modal Kitchen End -->
-  <!-- Video Modal for Kitchen -->
-  <div class="modal fade" id="videoModal-6" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-      <div class="modal-content bg-dark">
-        <div class="modal-body p-0">
-          <div class="ratio ratio-16x9">
-            <iframe id="kitchenVideo" src="https://www.youtube.com/embed/yourVideoID?enablejsapi=1"
-              title="Kitchen Project Video" allowfullscreen></iframe>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- Video Modal Kitchen End -->
-  <!-- Videos End -->
+
 
 
 
   <!-- Testimonial Start -->
   <div class="container-xxl pb-5">
-  
+
   </div>
   <!-- Testimonial End -->
 

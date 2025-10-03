@@ -86,7 +86,7 @@
             if (!cls) status.classList.add('text-dark');
         }
 
-        
+
         // Your Formspree endpoint
         const ENDPOINT = 'https://formspree.io/f/mkgqbkwz'; // <- replace
 
@@ -146,7 +146,35 @@
         console.log('[contact] handler ready');
     })();
 
+    document.addEventListener('DOMContentLoaded', () => {
+        const modalEl = document.getElementById('projectVideoModal');
+        const video = document.getElementById('projectVideo');
+        const source = document.getElementById('projectVideoSource');
+        const title = document.getElementById('projectVideoTitle');
 
+        modalEl.addEventListener('show.bs.modal', (ev) => {
+            const trigger = ev.relatedTarget; // the <a> clicked
+            const path = trigger?.getAttribute('data-video') || '';
+            const label = trigger?.getAttribute('data-title') || 'Project Video';
+            title.textContent = label;
+
+            // Set source and load
+            source.src = path;
+            video.load();
+
+            // Try autoplay (user click usually allows it)
+            const p = video.play();
+            if (p && typeof p.catch === 'function') { p.catch(() => {/* ignore */ }); }
+        });
+
+        modalEl.addEventListener('hidden.bs.modal', () => {
+            // Stop and release the file
+            video.pause();
+            video.currentTime = 0;
+            source.src = '';
+            video.load();
+        });
+    });
 
 
 })(jQuery);
