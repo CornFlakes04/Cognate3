@@ -10,8 +10,8 @@
         }, 1);
     };
     spinner();
-    
-    
+
+
     // Initiate the wowjs
     new WOW().init();
 
@@ -24,8 +24,8 @@
             $('.sticky-top').removeClass('bg-white shadow-sm').css('top', '-150px');
         }
     });
-    
-    
+
+
     // Back to top button
     $(window).scroll(function () {
         if ($(this).scrollTop() > 100) {
@@ -35,7 +35,7 @@
         }
     });
     $('.back-to-top').click(function () {
-        $('html, body').animate({scrollTop: 0}, 1500, 'easeInOutExpo');
+        $('html, body').animate({ scrollTop: 0 }, 1500, 'easeInOutExpo');
         return false;
     });
 
@@ -61,6 +61,92 @@
         loop: true,
         nav: false
     });
-    
-})(jQuery);
 
+    //smtp
+    // Robust no-redirect contact handler
+    (function () {
+        const form = document.getElementById('contactForm');
+        if (!form) { console.warn('[contact] #contactForm not found'); return; }
+
+        // Ensure/attach a status element
+        let status = document.getElementById('contactStatus');
+        if (!status) {
+            status = document.createElement('p');
+            status.id = 'contactStatus';
+            status.className = 'text-center mt-3';
+            form.appendChild(status);
+        }
+
+        // Helper
+        function setStatus(msg, cls) {
+            status.hidden = false;
+            status.className = 'text-center mt-3 ' + (cls || 'text-muted');
+            status.textContent = msg;
+            // ensure it’s not visually invisible on light bg
+            if (!cls) status.classList.add('text-dark');
+        }
+
+        
+        // Your Formspree endpoint
+        const ENDPOINT = 'https://formspree.io/f/mkgqbkwz'; // <- replace
+
+        // Absolute guarantee: no native submit
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+
+            try {
+                const name = (document.getElementById('name')?.value || '').trim();
+                const email = (document.getElementById('email')?.value || '').trim();
+                const subject = (document.getElementById('subject')?.value || '').trim();
+                const message = (document.getElementById('message')?.value || '').trim();
+
+                if (!name || !email || !subject || !message) {
+                    return setStatus('Please fill out all fields.', 'text-danger');
+                }
+
+                setStatus('Sending…', 'text-muted');
+
+                const fd = new FormData();
+                fd.set('name', name);
+                fd.set('email', email);
+                fd.set('subject', subject);
+                fd.set('message', message);
+                fd.set('_replyto', email);
+                fd.set('_subject', 'Nexora Tech — Contact Form');
+
+
+
+                const res = await fetch(ENDPOINT, {
+                    method: 'POST',
+                    headers: { 'Accept': 'application/json' },
+                    body: fd
+                });
+
+                if (!res.ok) {
+                    const text = await res.text().catch(() => '');
+                    console.error('[contact] Formspree error', res.status, text);
+                    return setStatus(
+                        res.status === 404 ? 'Form not found. Check your Formspree URL/activation.'
+                            : 'Failed to send. Please try again later.',
+                        'text-danger'
+                    );
+                }
+
+                setStatus('Thanks! Your message has been sent.', 'text-success');
+                form.reset();
+                status.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            } catch (err) {
+                console.error('[contact] submit error', err);
+                setStatus('Network or script error. Check console.', 'text-danger');
+            }
+        });
+
+        // Quick sanity log to confirm this block actually ran
+        console.log('[contact] handler ready');
+    })();
+
+
+
+
+})(jQuery);

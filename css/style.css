@@ -1,5 +1,6 @@
 /********** Template CSS **********/
 
+
 /*** Spinner ***/
 #spinner {
   opacity: 0;
@@ -227,10 +228,6 @@
   position: relative;
   padding: 30px 25px;
   transition: .5s;
-}
-
-.service-item.bg-primary:hover {
-  background: var(--bs-light) !important;
 }
 
 .service-item.bg-primary p {
