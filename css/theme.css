@@ -1,0 +1,210 @@
+/* Light (default) */
+:root{
+  --bg:#ffffff; --fg:#0f2a28; --muted:#5b6f6b;
+  --card:#ffffff; --card-border:rgba(0,0,0,.08); --card-shadow:0 16px 40px rgba(0,0,0,.08);
+  --primary:#11a79a; --primary-700:#0b7f73;
+}
+
+/* Dark */
+:root[data-theme="dark"]{
+  --bg:#070f10; --fg:#e8f6f3; --muted:#98b8b3;
+  --card:rgba(14,22,22,.90); --card-border:rgba(255,255,255,.08); --card-shadow:0 20px 60px rgba(0,0,0,.45);
+}
+
+/* System follows OS */
+@media (prefers-color-scheme: dark){
+  :root[data-theme="system"]{
+    --bg:#070f10; --fg:#e8f6f3; --muted:#98b8b3;
+    --card:rgba(14,22,22,.90); --card-border:rgba(255,255,255,.08); --card-shadow:0 20px 60px rgba(0,0,0,.45);
+  }
+}
+
+/* Map vars to elements used across pages */
+body{ background:var(--bg); color:var(--fg); }
+.card, .card-pane, .card-glass{ background:var(--card); border:1px solid var(--card-border); box-shadow:var(--card-shadow); }
+.text-muted{ color:var(--muted) !important; }
+.btn-teal, .btn-nx{ background:var(--primary) !important; border-color:var(--primary) !important; color:#031110 !important; }
+.btn-teal:hover, .btn-nx:hover{ background:var(--primary-700) !important; border-color:var(--primary-700) !important; }
+/* === Contact page theme fixes === */
+/* Headings */
+.contact h1, .contact h2, .contact .section-title h1,
+.contact .section-title h2 { color: var(--fg); }
+
+/* Inputs / textarea */
+.contact .form-control,
+.contact-form .form-control {
+  background: var(--card);
+  color: var(--fg);
+  border: 1px solid var(--card-border);
+  box-shadow: none;
+}
+.contact .form-control:focus,
+.contact-form .form-control:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 .2rem rgba(17,167,154,.22);
+}
+
+/* Placeholders */
+.contact .form-control::placeholder,
+.contact-form .form-control::placeholder { color: #8aa19c; opacity: 1; }
+/* Slightly brighter placeholder in dark */
+:root[data-theme="dark"] .contact .form-control::placeholder,
+:root[data-theme="dark"] .contact-form .form-control::placeholder { color: #bcd0cc; }
+
+/* Textarea height and caret visibility */
+.contact textarea.form-control,
+.contact-form textarea.form-control { min-height: 180px; caret-color: var(--fg); }
+
+/* Helper text */
+.contact .text-muted, .contact-form .text-muted { color: var(--muted) !important; }
+
+/* Button (if not already themed) */
+.contact .btn-primary { background: var(--primary); border-color: var(--primary); color:#031110; }
+.contact .btn-primary:hover { background: var(--primary-700); border-color: var(--primary-700); }
+
+/* Safari/Chrome autofill contrast */
+.contact input:-webkit-autofill,
+.contact textarea:-webkit-autofill {
+  -webkit-text-fill-color: var(--fg);
+  transition: background-color 9999s ease-in-out 0s;
+}
+/* ===== Force readable Contact page in DARK MODE (high-specificity, last) ===== */
+:root[data-theme="dark"] h1,
+:root[data-theme="dark"] h2,
+:root[data-theme="dark"] h3,
+:root[data-theme="dark"] label,
+:root[data-theme="dark"] .section-title h1,
+:root[data-theme="dark"] .section-title h2 {
+  color: var(--fg) !important;
+}
+
+/* Inputs / selects / textareas */
+:root[data-theme="dark"] input.form-control,
+:root[data-theme="dark"] textarea.form-control,
+:root[data-theme="dark"] select.form-select {
+  background: var(--card) !important;
+  color: var(--fg) !important;
+  border: 1px solid var(--card-border) !important;
+  box-shadow: none !important;
+}
+
+/* Placeholders */
+:root[data-theme="dark"] input.form-control::placeholder,
+:root[data-theme="dark"] textarea.form-control::placeholder {
+  color: #bcd0cc !important;
+  opacity: 1 !important;
+}
+
+/* Buttons */
+:root[data-theme="dark"] .btn-primary {
+  background: var(--primary) !important;
+  border-color: var(--primary) !important;
+  color: #031110 !important;
+}
+:root[data-theme="dark"] .btn-primary:hover {
+  background: var(--primary-700) !important;
+  border-color: var(--primary-700) !important;
+}
+
+/* If the section uses Bootstrap .bg-light strips, neutralize them in dark */
+:root[data-theme="dark"] .bg-light {
+  background-color: rgba(255,255,255,0.06) !important;
+  color: var(--fg) !important;
+}
+/* ===== Navbar + top strip fixes in DARK MODE ===== */
+
+/* Any Bootstrap .bg-white/.bg-light used in headers/hero */
+:root[data-theme="dark"] .bg-white { 
+  background-color: rgba(255,255,255,0.06) !important; 
+  color: var(--fg) !important;
+}
+:root[data-theme="dark"] .bg-light {
+  background-color: rgba(255,255,255,0.06) !important;
+  color: var(--fg) !important;
+}
+
+/* Navbar background + borders */
+:root[data-theme="dark"] .navbar.navbar-light {
+  background-color: rgba(14,22,22,.90) !important;  /* match --card */
+  border-color: var(--card-border) !important;
+  box-shadow: 0 2px 0 rgba(255,255,255,.06);
+}
+
+/* Brand + links */
+:root[data-theme="dark"] .navbar-brand h1,
+:root[data-theme="dark"] .navbar .nav-link {
+  color: var(--fg) !important;
+}
+:root[data-theme="dark"] .navbar .nav-link.active,
+:root[data-theme="dark"] .navbar .nav-link:hover {
+  color: var(--primary) !important;
+}
+
+/* Toggler button */
+:root[data-theme="dark"] .navbar-light .navbar-toggler {
+  border-color: var(--card-border) !important;
+  background: rgba(255,255,255,.06);
+}
+:root[data-theme="dark"] .navbar-light .navbar-toggler-icon {
+  filter: invert(1) opacity(.85);
+}
+
+/* Any header/hero wrapper that used white bg */
+:root[data-theme="dark"] .header, 
+:root[data-theme="dark"] .hero-header, 
+:root[data-theme="dark"] .topbar {
+  background-color: transparent !important;
+  color: var(--fg) !important;
+}
+/* ===== Home (index.php) header/hero: force dark variant ===== */
+:root[data-theme="dark"] .hero-header,
+:root[data-theme="dark"] .page-header,
+:root[data-theme="dark"] .header,
+:root[data-theme="dark"] .header-bg,
+:root[data-theme="dark"] .hero,
+:root[data-theme="dark"] .hero-start,
+:root[data-theme="dark"] .banner,
+:root[data-theme="dark"] .masthead {
+  /* kill any light background images/gradients the template sets */
+  background-image: none !important;
+  background-color: transparent !important;   /* let body dark show through */
+}
+
+/* If your template puts a light panel immediately under the navbar,
+   neutralize typical light helpers used there. */
+:root[data-theme="dark"] .bg-white,
+:root[data-theme="dark"] .bg-light {
+  background-color: rgba(255,255,255,0.06) !important;
+  color: var(--fg) !important;
+  background-image: none !important;
+}
+
+/* Headings/hero text on dark */
+:root[data-theme="dark"] .hero-header h1,
+:root[data-theme="dark"] .hero-header h2,
+:root[data-theme="dark"] .hero-header p,
+:root[data-theme="dark"] .page-header h1,
+:root[data-theme="dark"] .page-header p {
+  color: var(--fg) !important;
+  text-shadow: none !important;
+}
+
+/* Optional: if a thin white border/line sits under the navbar, soften it */
+:root[data-theme="dark"] .navbar + .border-bottom,
+:root[data-theme="dark"] .navbar.border-bottom {
+  border-color: var(--card-border) !important;
+}
+/* ===== Dashboard list-group fixes for DARK MODE ===== */
+:root[data-theme="dark"] .list-group-item{
+  background-color: rgba(255,255,255,0.06) !important; /* match dark cards */
+  color: var(--fg) !important;
+  border-color: var(--card-border) !important;
+}
+:root[data-theme="dark"] .list-group-item .text-muted{
+  color: var(--muted) !important;
+}
+/* Optional: remove white separators on striped groups */
+:root[data-theme="dark"] .list-group-flush > .list-group-item{
+  border-left: 0 !important;
+  border-right: 0 !important;
+}
