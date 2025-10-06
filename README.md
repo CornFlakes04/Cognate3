@@ -34,11 +34,11 @@ cd Cognate3
 
 ## 👥 Team Members
 
-- **Jaime Rodrigazo III**
-- **Reymart Impuesto**
-- **Ace Cabrera**  
-- **Fernand Emil Saul**  
-- **Alejandra Maraasin**
+- **Jaime Rodrigazo III** - Lead Developer
+- **Reymart Impuesto** - Frontend Developer  
+- **Ace Cabrera** - Backend Developer 
+- **Fernand Emil Saul** - Documentation & Testing 
+- **Alejandra Maraasin** - Documentation & Testing 
 
 
 *Last updated: October 6 2025*  

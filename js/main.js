@@ -49,19 +49,6 @@
         items: 1
     });
 
-
-    // Testimonials carousel
-    $(".testimonial-carousel").owlCarousel({
-        items: 1,
-        autoplay: true,
-        smartSpeed: 1000,
-        animateIn: 'fadeIn',
-        animateOut: 'fadeOut',
-        dots: true,
-        loop: true,
-        nav: false
-    });
-
     //smtp
     // Robust no-redirect contact handler
     (function () {
@@ -146,6 +133,7 @@
         console.log('[contact] handler ready');
     })();
 
+    // Video Modal
     document.addEventListener('DOMContentLoaded', () => {
         const modalEl = document.getElementById('projectVideoModal');
         const video = document.getElementById('projectVideo');
@@ -176,19 +164,21 @@
         });
     });
 
+    // Products: sort + filter (works with or without #sortSelect)
     (function () {
         const grid = document.getElementById('productGrid');
-        const select = document.getElementById('sortSelect');
+        const select = document.getElementById('sortSelect');       // may be null (you commented it out)
         const filtersWrap = document.getElementById('filters');
-        const clearBtn = document.getElementById('clearFilters');
-        if (!grid || !select || !filtersWrap) return;
+        const clearBtn = document.getElementById('clearFilters');    // may be null if you commented it out too
+        if (!grid || !filtersWrap) return;                           // don’t require select anymore
 
-        // Snapshot original columns (Bootstrap cols)
+        // Snapshot original columns (Bootstrap cols) to restore “Featured” order
         const cols = Array.from(grid.children);
         cols.forEach((col, i) => col.dataset.originalIndex = i);
 
-        // Helpers to read metadata
+        // --- Helpers ---
         const getItem = col => col.querySelector('.product-item');
+
         function getPrice(col) {
             const item = getItem(col);
             if (!item) return Number.POSITIVE_INFINITY;
@@ -210,56 +200,58 @@
                 .filter(Boolean);
         }
 
-        // Active categories (Set of lowercase strings)
+        // Active categories from checkboxes in #filters
         const checks = Array.from(filtersWrap.querySelectorAll('input[type="checkbox"]'));
         function activeCats() {
             return new Set(checks.filter(c => c.checked).map(c => c.value.toLowerCase()));
         }
-        function matchesCats(col, active) {
-            if (active.size === 0) return true; // no filters => show all
+        function matchesCats(col, act) {
+            if (act.size === 0) return true;
             const cats = getCats(col);
-            // OR-logic: show if any selected category is present on the item
-            return cats.some(c => active.has(c));
+            return cats.some(c => act.has(c));
         }
 
+        // Main: apply current sort + filter
         function applySortFilter() {
-            const mode = select.value;
+            const mode = select?.value || '0';   // default to “Featured” when select is missing
             const act = activeCats();
 
-            // Sort copy of all columns by current mode
             const ordered = cols.slice();
             if (mode === '1') {
-                ordered.sort((a, b) => getPrice(a) - getPrice(b));
+                ordered.sort((a, b) => getPrice(a) - getPrice(b));       // Low → High
             } else if (mode === '2') {
-                ordered.sort((a, b) => getPrice(b) - getPrice(a));
+                ordered.sort((a, b) => getPrice(b) - getPrice(a));       // High → Low
             } else if (mode === '3') {
-                ordered.sort((a, b) => getAdded(b) - getAdded(a)); // Newest first
+                ordered.sort((a, b) => getAdded(b) - getAdded(a));       // Newest
             } else {
-                ordered.sort((a, b) => a.dataset.originalIndex - b.dataset.originalIndex);
+                ordered.sort((a, b) => a.dataset.originalIndex - b.dataset.originalIndex); // Featured
             }
 
-            // Re-append in sorted order and apply visibility by filters
             ordered.forEach(col => {
-                grid.appendChild(col); // moves node
+                grid.appendChild(col);
                 col.style.display = matchesCats(col, act) ? '' : 'none';
             });
         }
 
-        // Events
-        select.addEventListener('change', applySortFilter);
+        // Events (guarded for optional elements)
+        select?.addEventListener('change', applySortFilter);
         checks.forEach(c => c.addEventListener('change', applySortFilter));
         clearBtn?.addEventListener('click', () => {
             checks.forEach(c => (c.checked = false));
+            // If you also want to reset sort when Clear is present:
+            if (select) select.value = '0';
             applySortFilter();
         });
 
-        // Initial run
+        // Initial render
         applySortFilter();
     })();
 
+
+    // Product details modal (unified): populate on show + make whole card clickable
     (function () {
-        const modal = document.getElementById('productModal');
-        if (!modal) return;
+        const modalEl = document.getElementById('productModal');
+        if (!modalEl) return;
 
         const el = {
             title: document.getElementById('productModalTitle'),
@@ -275,11 +267,15 @@
         function getTitle(item) {
             const h4 = item.querySelector('h4');
             if (h4 && h4.textContent.trim()) return h4.textContent.trim();
+            const img = item.querySelector('img');
+            if (img?.alt?.trim()) return img.alt.trim();
             const lab = item.querySelector('.product-overlay small');
-            if (lab && lab.textContent.trim()) return lab.textContent.trim();
+            if (lab?.textContent?.trim()) return lab.textContent.trim();
             return item.dataset.title || 'Product';
         }
         function getCat(item) {
+            const cats = (item.dataset.cats || '').trim();
+            if (cats) return cats;
             const lab = item.querySelector('.product-overlay small');
             return lab ? lab.textContent.trim() : '';
         }
@@ -291,43 +287,99 @@
             url.searchParams.set('product', title);
             return url.pathname + url.search;
         }
+        function populate(item) {
+            const imgEl = item.querySelector('img');
+            const title = getTitle(item);
+            const cat = getCat(item);
+            const price = item.dataset.price
+                ? peso(item.dataset.price)
+                : (item.querySelector('.h5')?.textContent?.trim() || '');
+            const desc = item.dataset.desc || 'No description available.';
+            const sku = item.dataset.sku || '';
 
+            el.title.textContent = title;
+            if (imgEl?.src) { el.img.src = imgEl.src; el.img.alt = title; }
+            else { el.img.removeAttribute('src'); el.img.alt = ''; }
+            el.cat.textContent = cat;
+            el.price.textContent = price;
+            el.desc.textContent = desc;
+            el.cta.href = buildInquiryURL(title, sku);
+        }
+
+        // A) Single source of truth: populate when the modal is about to show
+        modalEl.addEventListener('show.bs.modal', (ev) => {
+            const trigger = ev.relatedTarget;                     // img or Details button
+            const item = trigger?.closest('.product-item')
+                || document.querySelector('.product-item.__opening'); // programmatic fallback
+            if (item) populate(item);
+        });
+
+        // B) Whole card click opens modal (except real buttons/links)
         document.addEventListener('click', (e) => {
-            // Details -> populate modal
-            const btn = e.target.closest('.btn-details');
-            if (btn) {
-                const item = btn.closest('.product-item');
-                if (!item) return;
+            const item = e.target.closest('.product-item');
+            if (!item) return;
+            if (e.target.closest('.btn, a, [data-bs-toggle]')) return;
 
-                const imgEl = item.querySelector('img');
-                const title = getTitle(item);
-                const cat = getCat(item);
-                const price = item.dataset.price ? peso(item.dataset.price) : (item.querySelector('.h5')?.textContent?.trim() || '');
-                const desc = item.dataset.desc || 'No description available.';
-                const sku = item.dataset.sku || '';
+            const Modal = window.bootstrap?.Modal;
+            if (!Modal) { console.error('[product] Bootstrap JS not loaded'); return; }
 
-                el.title.textContent = title;
-                if (imgEl) { el.img.src = imgEl.getAttribute('src') || ''; el.img.alt = title; }
-                else { el.img.removeAttribute('src'); el.img.alt = ''; }
-                el.cat.textContent = cat;
-                el.price.textContent = price;
-                el.desc.textContent = desc;
-                el.cta.href = buildInquiryURL(title, sku);
-                return;
-            }
+            // Mark the item so the show handler can find it (fallback path)
+            document.querySelectorAll('.product-item.__opening').forEach(x => x.classList.remove('__opening'));
+            item.classList.add('__opening');
+            new Modal(modalEl).show();
+        });
 
-            // Inquire buttons on cards -> inject subject just-in-time
+        // C) Inject subject/SKU when clicking "Inquire" on a card
+        document.addEventListener('click', (e) => {
             const link = e.target.closest('a.btn-inquire');
-            if (link) {
-                const item = link.closest('.product-item');
-                if (!item) return;
-                const title = getTitle(item);
-                const sku = item.dataset.sku || '';
-                link.href = buildInquiryURL(title, sku);
-            }
+            if (!link) return;
+            const item = link.closest('.product-item');
+            if (!item) return;
+            const title = getTitle(item);
+            const sku = item.dataset.sku || '';
+            link.href = buildInquiryURL(title, sku);
         });
     })();
 
+
+    // Show product name on hover by injecting it into the overlay
+    (function () {
+        const items = document.querySelectorAll('.product-item');
+        if (!items.length) return;
+
+        // Same title derivation used by the modal (kept local to avoid coupling)
+        function getTitle(item) {
+            const h4 = item.querySelector('h4');
+            if (h4 && h4.textContent.trim()) return h4.textContent.trim();
+            const img = item.querySelector('img');
+            if (img?.alt?.trim()) return img.alt.trim();
+            const lab = item.querySelector('.product-overlay small');
+            if (lab?.textContent?.trim()) return lab.textContent.trim();
+            return item.dataset.title || 'Product';
+        }
+
+        items.forEach(item => {
+            const overlay = item.querySelector('.product-overlay');
+            if (!overlay) return;
+
+            // Avoid duplicates if scripts re-run
+            if (!overlay.querySelector('.product-name')) {
+                const name = document.createElement('div');
+                name.className = 'product-name';
+                name.textContent = getTitle(item);
+                overlay.insertBefore(name, overlay.firstElementChild || null);
+            }
+
+            // Optional: native tooltip as fallback
+            const t = getTitle(item);
+            if (!item.title) item.title = t;
+            const img = item.querySelector('img');
+            if (img && !img.title) img.title = t;
+        });
+    })();
+
+
+    // Contact form: populate subject/product from URL params
     (function () {
         const qs = new URLSearchParams(location.search);
         const subject = qs.get('subject');
@@ -342,5 +394,7 @@
             prodEl.value = [product, sku ? `[${sku}]` : null].filter(Boolean).join(' ');
         }
     })();
+
+
 
 })(jQuery);

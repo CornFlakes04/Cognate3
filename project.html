@@ -195,20 +195,12 @@
     </div>
   </div>
 
-
-  <!-- TODO: Add data-price, data-added="YYYY-MM-DD", and comma-separated data-cats on the .product-item. -->
   <!-- Products Start -->
   <div class="container-fluid bg-light py-5">
     <div class="container py-5">
       <div class="d-flex align-items-center justify-content-between mb-3">
         <h1 class="mb-0">Products</h1>
         <div class="d-flex align-items-center gap-2">
-          <select id="sortSelect" class="form-select w-auto" aria-label="Sort products">
-            <option value="0" selected>Sort by: Featured</option>
-            <option value="1">Price: Low to High</option>
-            <option value="2">Price: High to Low</option>
-            <option value="3">Newest</option>
-          </select>
           <button id="clearFilters" class="btn btn-outline-secondary">Clear</button>
         </div>
       </div>
@@ -239,12 +231,22 @@
         <div class="col-md-6 col-lg-5th wow fadeIn" data-wow-delay="0.1s">
           <div class="team-item product-item position-relative overflow-hidden" data-price="2490"
             data-added="2025-10-01"
-            data-desc="Compact controller for smart lockers. Supports I2C LCD, buzzer control, relay outputs, and REST API integration."
-            data-sku="SLCV2" data-cats="Control">
-            <img class="img-fluid w-100" src="img/prod-1.jpg" alt="Smart Locker Controller v2">
-            <span class="position-absolute top-0 start-0 m-2 badge bg-primary">New</span>
+            data-desc="Rack-mount edge platform that centralizes vibration and temperature sensing for rotating assets. Performs envelope/spectral feature extraction on-device and feeds RUL models so you can act before failure. Integrates with existing SCADA/historians via OPC-UA/Modbus/MQTT and buffers weeks of data to NVMe for automatic backfill after outages."
+            data-sku="PMC-24" data-cats="Data,Sensors">
+            <h4 class="visually-hidden">Predictive Maintenance Platform</h4>
+            <img class="img-fluid w-100" src="img/product-1.png" alt="Predictive Maintenance Platform" role="button"
+              tabindex="0" aria-label="View details: Predictive Maintenance Platform" data-bs-toggle="modal"
+              data-bs-target="#productModal">
+
+            <div class="product-specs">
+              <span class="chip">24ch IEPE</span>
+              <span class="chip">OPC-UA</span>
+              <span class="chip">RUL Models</span>
+              <span class="chip">1U Rack</span>
+            </div>
+
             <div class="team-overlay product-overlay text-center">
-              <small class="text-uppercase d-block mb-1">Smart Systems</small>
+              <small class="text-uppercase d-block mb-1">Data</small>
               <div class="h5 text-light mb-3">₱2,490</div>
               <div class="d-flex justify-content-center gap-2">
                 <button type="button" class="btn btn-outline-light btn-sm btn-details" data-bs-toggle="modal"
@@ -255,10 +257,218 @@
           </div>
         </div>
 
+        <!-- Product 2 -->
+        <div class="col-md-6 col-lg-5th wow fadeIn" data-wow-delay="0.2s">
+          <div class="team-item product-item position-relative overflow-hidden" data-price="1890"
+            data-added="2025-09-28"
+            data-desc="Control-room application that fuses dozens of street cameras into a live picture of city traffic. Streams counts, speed, dwell and congestion heatmaps in real time with GPU overlays. Federates across districts, exports GeoJSON/CSV, and supports SSO for ops and planning teams."
+            data-sku="UFA-55" data-cats="Data,Vision">
+            <h4 class="visually-hidden">Smart City Traffic Flow Analytics</h4>
+            <img class="img-fluid w-100" src="img/product-2.png" alt="Smart City Traffic Flow Analytics" role="button"
+              tabindex="0" aria-label="View details: Smart City Traffic Flow Analytics" data-bs-toggle="modal"
+              data-bs-target="#productModal">
+
+            <div class="product-specs">
+              <span class="chip">64 RTSP</span>
+              <span class="chip">Heatmaps</span>
+              <span class="chip">GPU Overlays</span>
+              <span class="chip">SSO</span>
+            </div>
+
+            <div class="team-overlay product-overlay text-center">
+              <small class="text-uppercase d-block mb-1">Data</small>
+              <div class="h5 text-light mb-3">₱1,890</div>
+              <div class="d-flex justify-content-center gap-2">
+                <button type="button" class="btn btn-outline-light btn-sm btn-details" data-bs-toggle="modal"
+                  data-bs-target="#productModal">Details</button>
+                <a class="btn btn-primary btn-sm btn-inquire" href="contact.html">Inquire</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product 3 -->
+        <div class="col-md-6 col-lg-5th wow FadeIn" data-wow-delay="0.3s">
+          <div class="team-item product-item position-relative overflow-hidden" data-price="1490"
+            data-added="2025-09-10"
+            data-desc="Research-grade prosthetic/robotic hand with multi-channel sEMG and closed-loop haptics. Prototype gestures and control strategies rapidly; access low-level streams for custom ML, with ROS 2 drivers and logging tools for reproducible experiments."
+            data-sku="H5-DEV" data-cats="Bionic,Data">
+            <h4 class="visually-hidden">IoT-Enabled Bionic Prosthetic Hand</h4>
+            <img class="img-fluid w-100" src="img/product-3.png" alt="IoT-Enabled Bionic Prosthetic Hand" role="button"
+              tabindex="0" aria-label="View details: IoT-Enabled Bionic Prosthetic Hand" data-bs-toggle="modal"
+              data-bs-target="#productModal">
+
+            <div class="product-specs">
+              <span class="chip">12 DOF</span>
+              <span class="chip">8-ch sEMG</span>
+              <span class="chip">Haptics</span>
+              <span class="chip">ROS 2</span>
+            </div>
+
+            <div class="team-overlay product-overlay text-center">
+              <small class="text-uppercase d-block mb-1">Bionic</small>
+              <div class="h5 text-light mb-3">₱1,490</div>
+              <div class="d-flex justify-content-center gap-2">
+                <button type="button" class="btn btn-outline-light btn-sm btn-details" data-bs-toggle="modal"
+                  data-bs-target="#productModal">Details</button>
+                <a class="btn btn-primary btn-sm btn-inquire" href="contact.html">Inquire</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product 4 -->
+        <div class="col-md-6 col-lg-5th wow fadeIn" data-wow-delay="0.4s">
+          <div class="team-item product-item position-relative overflow-hidden" data-price="990" data-added="2025-08-25"
+            data-desc="Powered assist exosuit that reduces strain during repetitive lifts. IMUs and pressure pads infer intent and adapt torque in real time. Hot-swap battery keeps shifts moving; passive failsafe ensures support even when power is off."
+            data-sku="X1-EXO" data-cats="Bionic">
+            <h4 class="visually-hidden">Smart Exoskeleton for Industry</h4>
+            <img class="img-fluid w-100" src="img/product-4.png" alt="Smart Exoskeleton for Industry" role="button"
+              tabindex="0" aria-label="View details: Smart Exoskeleton for Industry" data-bs-toggle="modal"
+              data-bs-target="#productModal">
+
+            <div class="product-specs">
+              <span class="chip">25 Nm Assist</span>
+              <span class="chip">Hot-swap</span>
+              <span class="chip">IP54</span>
+              <span class="chip">Failsafe</span>
+            </div>
+
+            <div class="team-overlay product-overlay text-center">
+              <small class="text-uppercase d-block mb-1">Bionic</small>
+              <div class="h5 text-light mb-3">₱990</div>
+              <div class="d-flex justify-content-center gap-2">
+                <button type="button" class="btn btn-outline-light btn-sm btn-details" data-bs-toggle="modal"
+                  data-bs-target="#productModal">Details</button>
+                <a class="btn btn-primary btn-sm btn-inquire" href="contact.html">Inquire</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product 5 -->
+        <div class="col-md-6 col-lg-5th wow fadeIn" data-wow-delay="0.5s">
+          <div class="team-item product-item position-relative overflow-hidden" data-price="3290"
+            data-added="2025-10-03"
+            data-desc="Privacy-aware voice node for rooms and kiosks. Local wake-word and on-device intents give instant responses; optionally route full STT/TTS to your provider. LED ring and mic-mute switch make the privacy state obvious; OTA keeps fleets current."
+            data-sku="EVN-V2" data-cats="Listen,Control">
+            <h4 class="visually-hidden">Smart Home Voice Assistant / Speaker</h4>
+            <img class="img-fluid w-100" src="img/product-5.png" alt="Smart Home Voice Assistant / Speaker"
+              role="button" tabindex="0" aria-label="View details: Smart Home Voice Assistant / Speaker"
+              data-bs-toggle="modal" data-bs-target="#productModal">
+
+            <div class="product-specs">
+              <span class="chip">4-Mic AEC</span>
+              <span class="chip">Wake-word</span>
+              <span class="chip">Wi-Fi 5</span>
+              <span class="chip">OTA</span>
+            </div>
+
+            <div class="team-overlay product-overlay text-center">
+              <small class="text-uppercase d-block mb-1">Listen</small>
+              <div class="h5 text-light mb-3">₱3,290</div>
+              <div class="d-flex justify-content-center gap-2">
+                <button type="button" class="btn btn-outline-light btn-sm btn-details" data-bs-toggle="modal"
+                  data-bs-target="#productModal">Details</button>
+                <a class="btn btn-primary btn-sm btn-inquire" href="contact.html">Inquire</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product 6 -->
+        <div class="col-md-6 col-lg-5th wow fadeIn" data-wow-delay="0.1s">
+          <div class="team-item product-item position-relative overflow-hidden" data-price="1190"
+            data-added="2025-08-05"
+            data-desc="Edge listening hub for machine-health analytics. Learns the acoustic fingerprint of bearings, pumps and gearboxes, then flags deviations before vibration trends shift. PoE simplifies deployment and MQTT/REST stream alerts into your CMMS or chat."
+            data-sku="A1-HUB" data-cats="Listen,Data">
+            <h4 class="visually-hidden">Industrial Acoustic Monitoring System</h4>
+            <img class="img-fluid w-100" src="img/product-6.png" alt="Industrial Acoustic Monitoring System"
+              role="button" tabindex="0" aria-label="View details: Industrial Acoustic Monitoring System"
+              data-bs-toggle="modal" data-bs-target="#productModal">
+
+            <div class="product-specs">
+              <span class="chip">8-Mic Array</span>
+              <span class="chip">4096-pt FFT</span>
+              <span class="chip">PoE</span>
+              <span class="chip">MQTT</span>
+            </div>
+
+            <div class="team-overlay product-overlay text-center">
+              <small class="text-uppercase d-block mb-1">Listen</small>
+              <div class="h5 text-light mb-3">₱1,190</div>
+              <div class="d-flex justify-content-center gap-2">
+                <button type="button" class="btn btn-outline-light btn-sm btn-details" data-bs-toggle="modal"
+                  data-bs-target="#productModal">Details</button>
+                <a class="btn btn-primary btn-sm btn-inquire" href="contact.html">Inquire</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product 7 -->
+        <div class="col-md-6 col-lg-5th wow fadeIn" data-wow-delay="0.2s">
+          <div class="team-item product-item position-relative overflow-hidden" data-price="2790"
+            data-added="2025-09-20"
+            data-desc="Inline inspection cell for PCB/parts with synchronized dual cameras and on-edge inference. PWM-dimmable lighting ensures consistent exposure; encoder/photoeye sync ties capture to conveyor motion. Web labeler + SDK shorten new-SKU ramp-up."
+            data-sku="AVS-12" data-cats="Vision,Control">
+            <h4 class="visually-hidden">AI-Powered Industrial Inspection Camera</h4>
+            <img class="img-fluid w-100" src="img/product-7.png" alt="AI-Powered Industrial Inspection Camera"
+              role="button" tabindex="0" aria-label="View details: AI-Powered Industrial Inspection Camera"
+              data-bs-toggle="modal" data-bs-target="#productModal">
+
+            <div class="product-specs">
+              <span class="chip">12MP Global</span>
+              <span class="chip">100+ TOPS</span>
+              <span class="chip">120 FPS</span>
+              <span class="chip">24V I/O</span>
+            </div>
+
+            <div class="team-overlay product-overlay text-center">
+              <small class="text-uppercase d-block mb-1">Vision</small>
+              <div class="h5 text-light mb-3">₱2,790</div>
+              <div class="d-flex justify-content-center gap-2">
+                <button type="button" class="btn btn-outline-light btn-sm btn-details" data-bs-toggle="modal"
+                  data-bs-target="#productModal">Details</button>
+                <a class="btn btn-primary btn-sm btn-inquire" href="contact.html">Inquire</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
       </div>
     </div>
   </div>
   <!-- Products End -->
+
+  <!-- Product Modal -->
+  <div class="modal fade" id="productModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="productModalTitle"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row g-3">
+            <div class="col-md-5">
+              <img id="productModalImg" class="img-fluid rounded" alt="">
+            </div>
+            <div class="col-md-7">
+              <small id="productModalCat" class="text-muted d-block mb-2"></small>
+              <div id="productModalPrice" class="h4 mb-3"></div>
+              <p id="productModalDesc" class="mb-0"></p>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <a id="productModalCTA" class="btn btn-primary" href="#">Inquire</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Product Modal End -->
 
   <!-- Testimonial Start -->
   <div class="container-xxl pb-5">
@@ -306,32 +516,7 @@
   <!-- Footer End -->
 
 
-  <!-- Product Modal -->
-  <div class="modal fade" id="productModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="productModalTitle"></h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="row g-3">
-            <div class="col-md-5">
-              <img id="productModalImg" class="img-fluid rounded" alt="">
-            </div>
-            <div class="col-md-7">
-              <small id="productModalCat" class="text-muted d-block mb-2"></small>
-              <div id="productModalPrice" class="h4 mb-3"></div>
-              <p id="productModalDesc" class="mb-0"></p>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <a id="productModalCTA" class="btn btn-primary" href="#">Inquire</a>
-        </div>
-      </div>
-    </div>
-  </div>
+
 
 
   <!-- Back to Top -->

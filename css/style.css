@@ -476,6 +476,135 @@
   border-right: none;
 }
 
+/* PRODUCTS DESIGN */
+
+/* Product name: hidden by default, fades in on hover */
+.product-name {
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: .2px;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity .18s ease, transform .18s ease;
+  margin-bottom: .25rem;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, .35);
+}
+
+.product-item:hover .product-name {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Card shell */
+.product-item {
+  border-radius: 1rem;
+  background: var(--bs-body-bg);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, .08);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.product-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, .14);
+}
+
+/* Overlay: make it a subtle blue gradient and fade in on hover */
+.product-item .product-overlay {
+  background: linear-gradient(180deg, rgba(13, 110, 253, 0) 0%, rgba(13, 110, 253, .85) 100%);
+  opacity: 0;
+  transition: opacity .2s ease;
+}
+
+.product-item:hover .product-overlay {
+  opacity: 1;
+}
+
+/* Corner ribbon */
+.product-ribbon {
+  position: absolute;
+  top: 12px;
+  right: -38px;
+  transform: rotate(45deg);
+  background: #0d6efd;
+  color: #fff;
+  font-weight: 600;
+  font-size: .75rem;
+  letter-spacing: .5px;
+  padding: 4px 48px;
+  z-index: 2;
+  box-shadow: 0 6px 16px rgba(13, 110, 253, .35);
+  user-select: none;
+  pointer-events: none;
+}
+
+/* Spec chips along the bottom of the image */
+.product-specs {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  padding: .5rem .75rem;
+  z-index: 1;
+  background: linear-gradient(to top, rgba(0, 0, 0, .55) 30%, rgba(0, 0, 0, 0) 100%);
+}
+
+.product-specs .chip {
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, .25);
+  background: rgba(255, 255, 255, .15);
+  border-radius: 999px;
+  padding: .15rem .6rem;
+  font-size: .75rem;
+  line-height: 1.2;
+  backdrop-filter: blur(2px);
+}
+
+/* Show hand cursor on card, image, and overlay */
+.product-item,
+.product-item img,
+.product-item .product-overlay {
+  cursor: pointer;
+}
+
+/* Don't let the overlay swallow clicks except on its controls */
+.product-item .product-overlay {
+  pointer-events: none;
+}
+
+.product-item .product-overlay .btn,
+.product-item .product-overlay a {
+  pointer-events: auto;
+  /* buttons/links still clickable */
+  cursor: pointer;
+}
+
+.product-item,
+.product-item img,
+.product-item .product-overlay {
+  cursor: pointer;
+}
+
+.product-item .product-overlay {
+  pointer-events: none;
+}
+
+.product-item .product-overlay .btn,
+.product-item .product-overlay a {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+
+/* Make product image show it's interactive */
+.product-item img {
+  cursor: pointer;
+}
+
+/* PRODUCTS DESIGN END*/
 
 /* Custom 5-column layout for large screens */
 @media (min-width: 992px) {
