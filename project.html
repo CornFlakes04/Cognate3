@@ -196,7 +196,69 @@
   </div>
 
 
+  <!-- TODO: Add data-price, data-added="YYYY-MM-DD", and comma-separated data-cats on the .product-item. -->
+  <!-- Products Start -->
+  <div class="container-fluid bg-light py-5">
+    <div class="container py-5">
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <h1 class="mb-0">Products</h1>
+        <div class="d-flex align-items-center gap-2">
+          <select id="sortSelect" class="form-select w-auto" aria-label="Sort products">
+            <option value="0" selected>Sort by: Featured</option>
+            <option value="1">Price: Low to High</option>
+            <option value="2">Price: High to Low</option>
+            <option value="3">Newest</option>
+          </select>
+          <button id="clearFilters" class="btn btn-outline-secondary">Clear</button>
+        </div>
+      </div>
 
+      <!-- Category filters -->
+      <div id="filters" class="btn-group flex-wrap mb-4" role="group" aria-label="Filter by category">
+        <input type="checkbox" class="btn-check" id="fData" value="Data" autocomplete="off">
+        <label class="btn btn-outline-primary me-2 mb-2" for="fData">Data</label>
+
+        <input type="checkbox" class="btn-check" id="fBionic" value="Bionic" autocomplete="off">
+        <label class="btn btn-outline-primary me-2 mb-2" for="fBionic">Bionic</label>
+
+        <input type="checkbox" class="btn-check" id="fListen" value="Listen" autocomplete="off">
+        <label class="btn btn-outline-primary me-2 mb-2" for="fListen">Listen</label>
+
+        <input type="checkbox" class="btn-check" id="fVision" value="Vision" autocomplete="off">
+        <label class="btn btn-outline-primary me-2 mb-2" for="fVision">Vision</label>
+
+        <input type="checkbox" class="btn-check" id="fControl" value="Control" autocomplete="off">
+        <label class="btn btn-outline-primary me-2 mb-2" for="fControl">Control</label>
+
+        <input type="checkbox" class="btn-check" id="fSensors" value="Sensors" autocomplete="off">
+        <label class="btn btn-outline-primary me-2 mb-2" for="fSensors">Sensors</label>
+      </div>
+
+      <div id="productGrid" class="row g-4">
+        <!-- Product 1 -->
+        <div class="col-md-6 col-lg-5th wow fadeIn" data-wow-delay="0.1s">
+          <div class="team-item product-item position-relative overflow-hidden" data-price="2490"
+            data-added="2025-10-01"
+            data-desc="Compact controller for smart lockers. Supports I2C LCD, buzzer control, relay outputs, and REST API integration."
+            data-sku="SLCV2" data-cats="Control">
+            <img class="img-fluid w-100" src="img/prod-1.jpg" alt="Smart Locker Controller v2">
+            <span class="position-absolute top-0 start-0 m-2 badge bg-primary">New</span>
+            <div class="team-overlay product-overlay text-center">
+              <small class="text-uppercase d-block mb-1">Smart Systems</small>
+              <div class="h5 text-light mb-3">₱2,490</div>
+              <div class="d-flex justify-content-center gap-2">
+                <button type="button" class="btn btn-outline-light btn-sm btn-details" data-bs-toggle="modal"
+                  data-bs-target="#productModal">Details</button>
+                <a class="btn btn-primary btn-sm btn-inquire" href="contact.html">Inquire</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <!-- Products End -->
 
   <!-- Testimonial Start -->
   <div class="container-xxl pb-5">
@@ -242,6 +304,34 @@
   </div>
 
   <!-- Footer End -->
+
+
+  <!-- Product Modal -->
+  <div class="modal fade" id="productModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="productModalTitle"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row g-3">
+            <div class="col-md-5">
+              <img id="productModalImg" class="img-fluid rounded" alt="">
+            </div>
+            <div class="col-md-7">
+              <small id="productModalCat" class="text-muted d-block mb-2"></small>
+              <div id="productModalPrice" class="h4 mb-3"></div>
+              <p id="productModalDesc" class="mb-0"></p>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <a id="productModalCTA" class="btn btn-primary" href="#">Inquire</a>
+        </div>
+      </div>
+    </div>
+  </div>
 
 
   <!-- Back to Top -->
