@@ -192,6 +192,17 @@
   background-size: contain;
 }
 
+.mission-vision h1 span {
+  background-color: var(--bs-light);
+  border-left: 4px solid var(--bs-primary);
+  padding-left: 8px;
+}
+
+.mission-vision p {
+  font-size: 1.05rem;
+  color: #555;
+}
+
 
 /*** Project ***/
 
@@ -605,6 +616,8 @@
 }
 
 /* PRODUCTS DESIGN END*/
+
+
 
 /* Custom 5-column layout for large screens */
 @media (min-width: 992px) {
