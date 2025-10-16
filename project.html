@@ -41,7 +41,6 @@
   </div>
   <!-- Spinner End -->
 
-
   <!-- Navbar Start -->
   <div class="container-fluid sticky-top">
     <div class="container">
@@ -60,10 +59,8 @@
             <a href="service.html" class="nav-item nav-link">Services</a>
             <a href="project.html" class="nav-item nav-link active">Projects</a>
             <a href="contact.html" class="nav-item nav-link">Contact</a>
-            <!-- Optional placeholders -->
             <a id="loginLink" href="login.html" class="nav-item nav-link">Log in</a>
             <button id="logoutBtn" type="button" class="btn btn-outline-danger ms-lg-3 d-none">Logout</button>
-
           </div>
         </div>
       </nav>
@@ -71,14 +68,11 @@
   </div>
   <!-- Navbar End -->
 
-
   <!-- Hero Start -->
   <div class="container-fluid bg-primary hero-header min-vh-50 d-flex align-items-center">
-    <div class="container">
-    </div>
+    <div class="container"></div>
   </div>
   <!-- Hero End -->
-
 
   <!-- Project Start -->
   <div class="container-fluid mt-5">
@@ -94,8 +88,7 @@
 
         <div class="col-lg-7">
           <div class="row g-0">
-
-            <!-- 1 -->
+            <!-- (Keep your static “projects” tiles if you want; they’re unrelated to products) -->
             <div class="col-md-6 col-lg-4 wow fadeIn" data-wow-delay="0.2s">
               <div class="project-item position-relative overflow-hidden">
                 <img class="img-fluid w-100" src="img/project-1.jpg" alt="">
@@ -106,7 +99,6 @@
               </div>
             </div>
 
-            <!-- 2 -->
             <div class="col-md-6 col-lg-4 wow fadeIn" data-wow-delay="0.3s">
               <div class="project-item position-relative overflow-hidden">
                 <img class="img-fluid w-100" src="img/project-2.jpg" alt="">
@@ -117,7 +109,6 @@
               </div>
             </div>
 
-            <!-- 3 -->
             <div class="col-md-6 col-lg-4 wow fadeIn" data-wow-delay="0.4s">
               <div class="project-item position-relative overflow-hidden">
                 <img class="img-fluid w-100" src="img/project-3.jpg" alt="">
@@ -128,7 +119,6 @@
               </div>
             </div>
 
-            <!-- 4 -->
             <div class="col-md-6 col-lg-4 wow fadeIn" data-wow-delay="0.5s">
               <div class="project-item position-relative overflow-hidden">
                 <img class="img-fluid w-100" src="img/project-4.jpg" alt="">
@@ -139,7 +129,6 @@
               </div>
             </div>
 
-            <!-- 5 -->
             <div class="col-md-6 col-lg-4 wow fadeIn" data-wow-delay="0.6s">
               <div class="project-item position-relative overflow-hidden">
                 <img class="img-fluid w-100" src="img/project-5.jpg" alt="">
@@ -150,7 +139,6 @@
               </div>
             </div>
 
-            <!-- 6 -->
             <div class="col-md-6 col-lg-4 wow fadeIn" data-wow-delay="0.7s">
               <div class="project-item position-relative overflow-hidden">
                 <img class="img-fluid w-100" src="img/project-6.jpg" alt="">
@@ -168,7 +156,6 @@
     </div>
   </div>
   <!-- Project End -->
-
 
   <!-- Project Video Modal -->
   <div class="modal fade" id="projectVideoModal" tabindex="-1" aria-hidden="true">
@@ -221,218 +208,8 @@
         <label class="btn btn-outline-primary me-2 mb-2" for="fSensors">Sensors</label>
       </div>
 
-      <div id="productGrid" class="row g-4">
-        <!-- Product 1 -->
-        <div class="col-md-6 col-lg-5th wow fadeIn" data-wow-delay="0.1s">
-          <div class="team-item product-item position-relative overflow-hidden" data-price="2490"
-            data-added="2025-10-01"
-            data-desc="Rack-mount edge platform that centralizes vibration and temperature sensing for rotating assets. Performs envelope/spectral feature extraction on-device and feeds RUL models so you can act before failure. Integrates with existing SCADA/historians via OPC-UA/Modbus/MQTT and buffers weeks of data to NVMe for automatic backfill after outages."
-            data-sku="PMC-24" data-cats="Data,Sensors">
-            <h4 class="visually-hidden">Predictive Maintenance Platform</h4>
-            <img class="img-fluid w-100" src="img/product-1.png" alt="Predictive Maintenance Platform" role="button"
-              tabindex="0" aria-label="View details: Predictive Maintenance Platform" data-bs-toggle="modal"
-              data-bs-target="#productModal">
-
-            <div class="product-specs">
-              <span class="chip">24ch IEPE</span>
-              <span class="chip">OPC-UA</span>
-              <span class="chip">RUL Models</span>
-              <span class="chip">1U Rack</span>
-            </div>
-
-            <div class="team-overlay product-overlay text-center">
-              <small class="text-uppercase d-block mb-1">Data</small>
-              <div class="h5 text-light mb-3">₱2,490</div>
-              <div class="d-flex justify-content-center gap-2">
-                <button type="button" class="btn btn-outline-light btn-sm btn-details" data-bs-toggle="modal"
-                  data-bs-target="#productModal">Details</button>
-                <a class="btn btn-primary btn-sm btn-inquire" href="contact.html">Inquire</a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Product 2 -->
-        <div class="col-md-6 col-lg-5th wow fadeIn" data-wow-delay="0.2s">
-          <div class="team-item product-item position-relative overflow-hidden" data-price="1890"
-            data-added="2025-09-28"
-            data-desc="Control-room application that fuses dozens of street cameras into a live picture of city traffic. Streams counts, speed, dwell and congestion heatmaps in real time with GPU overlays. Federates across districts, exports GeoJSON/CSV, and supports SSO for ops and planning teams."
-            data-sku="UFA-55" data-cats="Data,Vision">
-            <h4 class="visually-hidden">Smart City Traffic Flow Analytics</h4>
-            <img class="img-fluid w-100" src="img/product-2.png" alt="Smart City Traffic Flow Analytics" role="button"
-              tabindex="0" aria-label="View details: Smart City Traffic Flow Analytics" data-bs-toggle="modal"
-              data-bs-target="#productModal">
-
-            <div class="product-specs">
-              <span class="chip">64 RTSP</span>
-              <span class="chip">Heatmaps</span>
-              <span class="chip">GPU Overlays</span>
-              <span class="chip">SSO</span>
-            </div>
-
-            <div class="team-overlay product-overlay text-center">
-              <small class="text-uppercase d-block mb-1">Data</small>
-              <div class="h5 text-light mb-3">₱1,890</div>
-              <div class="d-flex justify-content-center gap-2">
-                <button type="button" class="btn btn-outline-light btn-sm btn-details" data-bs-toggle="modal"
-                  data-bs-target="#productModal">Details</button>
-                <a class="btn btn-primary btn-sm btn-inquire" href="contact.html">Inquire</a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Product 3 -->
-        <div class="col-md-6 col-lg-5th wow FadeIn" data-wow-delay="0.3s">
-          <div class="team-item product-item position-relative overflow-hidden" data-price="1490"
-            data-added="2025-09-10"
-            data-desc="Research-grade prosthetic/robotic hand with multi-channel sEMG and closed-loop haptics. Prototype gestures and control strategies rapidly; access low-level streams for custom ML, with ROS 2 drivers and logging tools for reproducible experiments."
-            data-sku="H5-DEV" data-cats="Bionic,Data">
-            <h4 class="visually-hidden">IoT-Enabled Bionic Prosthetic Hand</h4>
-            <img class="img-fluid w-100" src="img/product-3.png" alt="IoT-Enabled Bionic Prosthetic Hand" role="button"
-              tabindex="0" aria-label="View details: IoT-Enabled Bionic Prosthetic Hand" data-bs-toggle="modal"
-              data-bs-target="#productModal">
-
-            <div class="product-specs">
-              <span class="chip">12 DOF</span>
-              <span class="chip">8-ch sEMG</span>
-              <span class="chip">Haptics</span>
-              <span class="chip">ROS 2</span>
-            </div>
-
-            <div class="team-overlay product-overlay text-center">
-              <small class="text-uppercase d-block mb-1">Bionic</small>
-              <div class="h5 text-light mb-3">₱1,490</div>
-              <div class="d-flex justify-content-center gap-2">
-                <button type="button" class="btn btn-outline-light btn-sm btn-details" data-bs-toggle="modal"
-                  data-bs-target="#productModal">Details</button>
-                <a class="btn btn-primary btn-sm btn-inquire" href="contact.html">Inquire</a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Product 4 -->
-        <div class="col-md-6 col-lg-5th wow fadeIn" data-wow-delay="0.4s">
-          <div class="team-item product-item position-relative overflow-hidden" data-price="990" data-added="2025-08-25"
-            data-desc="Powered assist exosuit that reduces strain during repetitive lifts. IMUs and pressure pads infer intent and adapt torque in real time. Hot-swap battery keeps shifts moving; passive failsafe ensures support even when power is off."
-            data-sku="X1-EXO" data-cats="Bionic">
-            <h4 class="visually-hidden">Smart Exoskeleton for Industry</h4>
-            <img class="img-fluid w-100" src="img/product-4.png" alt="Smart Exoskeleton for Industry" role="button"
-              tabindex="0" aria-label="View details: Smart Exoskeleton for Industry" data-bs-toggle="modal"
-              data-bs-target="#productModal">
-
-            <div class="product-specs">
-              <span class="chip">25 Nm Assist</span>
-              <span class="chip">Hot-swap</span>
-              <span class="chip">IP54</span>
-              <span class="chip">Failsafe</span>
-            </div>
-
-            <div class="team-overlay product-overlay text-center">
-              <small class="text-uppercase d-block mb-1">Bionic</small>
-              <div class="h5 text-light mb-3">₱990</div>
-              <div class="d-flex justify-content-center gap-2">
-                <button type="button" class="btn btn-outline-light btn-sm btn-details" data-bs-toggle="modal"
-                  data-bs-target="#productModal">Details</button>
-                <a class="btn btn-primary btn-sm btn-inquire" href="contact.html">Inquire</a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Product 5 -->
-        <div class="col-md-6 col-lg-5th wow fadeIn" data-wow-delay="0.5s">
-          <div class="team-item product-item position-relative overflow-hidden" data-price="3290"
-            data-added="2025-10-03"
-            data-desc="Privacy-aware voice node for rooms and kiosks. Local wake-word and on-device intents give instant responses; optionally route full STT/TTS to your provider. LED ring and mic-mute switch make the privacy state obvious; OTA keeps fleets current."
-            data-sku="EVN-V2" data-cats="Listen,Control">
-            <h4 class="visually-hidden">Smart Home Voice Assistant / Speaker</h4>
-            <img class="img-fluid w-100" src="img/product-5.png" alt="Smart Home Voice Assistant / Speaker"
-              role="button" tabindex="0" aria-label="View details: Smart Home Voice Assistant / Speaker"
-              data-bs-toggle="modal" data-bs-target="#productModal">
-
-            <div class="product-specs">
-              <span class="chip">4-Mic AEC</span>
-              <span class="chip">Wake-word</span>
-              <span class="chip">Wi-Fi 5</span>
-              <span class="chip">OTA</span>
-            </div>
-
-            <div class="team-overlay product-overlay text-center">
-              <small class="text-uppercase d-block mb-1">Listen</small>
-              <div class="h5 text-light mb-3">₱3,290</div>
-              <div class="d-flex justify-content-center gap-2">
-                <button type="button" class="btn btn-outline-light btn-sm btn-details" data-bs-toggle="modal"
-                  data-bs-target="#productModal">Details</button>
-                <a class="btn btn-primary btn-sm btn-inquire" href="contact.html">Inquire</a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Product 6 -->
-        <div class="col-md-6 col-lg-5th wow fadeIn" data-wow-delay="0.1s">
-          <div class="team-item product-item position-relative overflow-hidden" data-price="1190"
-            data-added="2025-08-05"
-            data-desc="Edge listening hub for machine-health analytics. Learns the acoustic fingerprint of bearings, pumps and gearboxes, then flags deviations before vibration trends shift. PoE simplifies deployment and MQTT/REST stream alerts into your CMMS or chat."
-            data-sku="A1-HUB" data-cats="Listen,Data">
-            <h4 class="visually-hidden">Industrial Acoustic Monitoring System</h4>
-            <img class="img-fluid w-100" src="img/product-6.png" alt="Industrial Acoustic Monitoring System"
-              role="button" tabindex="0" aria-label="View details: Industrial Acoustic Monitoring System"
-              data-bs-toggle="modal" data-bs-target="#productModal">
-
-            <div class="product-specs">
-              <span class="chip">8-Mic Array</span>
-              <span class="chip">4096-pt FFT</span>
-              <span class="chip">PoE</span>
-              <span class="chip">MQTT</span>
-            </div>
-
-            <div class="team-overlay product-overlay text-center">
-              <small class="text-uppercase d-block mb-1">Listen</small>
-              <div class="h5 text-light mb-3">₱1,190</div>
-              <div class="d-flex justify-content-center gap-2">
-                <button type="button" class="btn btn-outline-light btn-sm btn-details" data-bs-toggle="modal"
-                  data-bs-target="#productModal">Details</button>
-                <a class="btn btn-primary btn-sm btn-inquire" href="contact.html">Inquire</a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Product 7 -->
-        <div class="col-md-6 col-lg-5th wow fadeIn" data-wow-delay="0.2s">
-          <div class="team-item product-item position-relative overflow-hidden" data-price="2790"
-            data-added="2025-09-20"
-            data-desc="Inline inspection cell for PCB/parts with synchronized dual cameras and on-edge inference. PWM-dimmable lighting ensures consistent exposure; encoder/photoeye sync ties capture to conveyor motion. Web labeler + SDK shorten new-SKU ramp-up."
-            data-sku="AVS-12" data-cats="Vision,Control">
-            <h4 class="visually-hidden">AI-Powered Industrial Inspection Camera</h4>
-            <img class="img-fluid w-100" src="img/product-7.png" alt="AI-Powered Industrial Inspection Camera"
-              role="button" tabindex="0" aria-label="View details: AI-Powered Industrial Inspection Camera"
-              data-bs-toggle="modal" data-bs-target="#productModal">
-
-            <div class="product-specs">
-              <span class="chip">12MP Global</span>
-              <span class="chip">100+ TOPS</span>
-              <span class="chip">120 FPS</span>
-              <span class="chip">24V I/O</span>
-            </div>
-
-            <div class="team-overlay product-overlay text-center">
-              <small class="text-uppercase d-block mb-1">Vision</small>
-              <div class="h5 text-light mb-3">₱2,790</div>
-              <div class="d-flex justify-content-center gap-2">
-                <button type="button" class="btn btn-outline-light btn-sm btn-details" data-bs-toggle="modal"
-                  data-bs-target="#productModal">Details</button>
-                <a class="btn btn-primary btn-sm btn-inquire" href="contact.html">Inquire</a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-
-      </div>
+      <!-- EMPTY grid; will be populated from SQL via JS -->
+      <div id="productGrid" class="row g-4"></div>
     </div>
   </div>
   <!-- Products End -->
@@ -465,27 +242,15 @@
   </div>
   <!-- Product Modal End -->
 
-  <!-- Testimonial Start -->
-  <div class="container-xxl pb-5">
-
-  </div>
-  <!-- Testimonial End -->
-
   <!-- Footer Start -->
   <div class="container-fluid bg-dark text-white-50 footer pt-5">
     <div class="container py-5">
       <div class="row g-5 text-center text-lg-start">
-
-        <!-- Column 1: NEXORA -->
         <div class="col-lg-4">
           <h1 class="text-white mb-3">NEXORA</h1>
-          <p class="mb-0">
-            We deliver smart IoT solutions that simplify life and work by connecting devices and data seamlessly for
-            smarter living.
-          </p>
+          <p class="mb-0">We deliver smart IoT solutions that simplify life and work by connecting devices and data
+            seamlessly for smarter living.</p>
         </div>
-
-        <!-- Column 2: Get In Touch -->
         <div class="col-lg-4">
           <h5 class="text-white mb-4">Get In Touch</h5>
           <p><i class="fa fa-map-marker-alt me-3"></i>123 Street, Pasig City, Philippines</p>
@@ -496,8 +261,6 @@
             <a class="btn btn-outline-primary btn-square border-2 me-2" href="#"><i class="fab fa-instagram"></i></a>
           </div>
         </div>
-
-        <!-- Column 3: Popular Link -->
         <div class="col-lg-4">
           <h5 class="text-white mb-4">Popular Link</h5>
           <a class="btn btn-link" href="about.html">About Us</a>
@@ -507,16 +270,10 @@
       </div>
     </div>
   </div>
-
   <!-- Footer End -->
-
-
-
-
 
   <!-- Back to Top -->
   <a href="#!" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
-
 
   <!-- JavaScript Libraries -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
@@ -529,6 +286,137 @@
   <!-- Template Javascript -->
   <script src="js/main.js"></script>
   <script src="js/auth-nav.js"></script>
+
+  <!-- Loader that fetches products from SQL and renders them -->
+  <script>
+    (function () {
+      const $ = (s, r = document) => r.querySelector(s);
+      const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+
+      const base = '/Cognate3/';
+      const LIST_URL = base + 'api/products/list.php';
+
+      const grid = $('#productGrid');
+      const filtersWrap = $('#filters');
+      const clearBtn = $('#clearFilters');
+
+      const modalTitle = $('#productModalTitle');
+      const modalImg = $('#productModalImg');
+      const modalCat = $('#productModalCat');
+      const modalPrice = $('#productModalPrice');
+      const modalDesc = $('#productModalDesc');
+      const modalCTA = $('#productModalCTA');
+
+      const peso = (v) => {
+        const n = Number(v);
+        if (Number.isNaN(n)) return '₱0.00';
+        return '₱' + n.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      };
+      const esc = (s) => (s == null ? '' : String(s));
+
+      function cardHTML(p, idx) {
+        const cats = (p.categories || '').split(',').map(s => s.trim()).filter(Boolean);
+        const catAttr = cats.join(',');
+        const catLabel = cats[0] || '';
+        const img = p.image || 'img/product-1.png';
+        const specs = (p.specs || '').split(',').map(s => s.trim()).filter(Boolean).slice(0, 4);
+
+        return `
+          <div class="col-md-6 col-lg-5th wow fadeIn" data-wow-delay="${0.1 + (idx % 6) * 0.1}s">
+            <div class="team-item product-item position-relative overflow-hidden"
+                data-price="${esc(p.price)}"
+                data-added="${esc(p.date_added || '')}"
+                data-desc="${esc(p.description || '')}"
+                data-sku="${esc(p.sku || '')}"
+                data-cats="${esc(catAttr)}"
+                data-name="${esc(p.name || '')}"
+                data-image="${esc(img)}"
+                data-video="${esc(p.video_url || p.video || '')}">
+              <h4 class="visually-hidden">${esc(p.name || '')}</h4>
+              <img class="img-fluid w-100" src="${esc(img)}" alt="${esc(p.name || '')}" role="button"
+                  tabindex="0" aria-label="View details: ${esc(p.name || '')}" data-bs-toggle="modal"
+                  data-bs-target="#productModal">
+              ${specs.length ? `
+                <div class="product-specs">
+                  ${specs.map(s => `<span class="chip">${esc(s)}</span>`).join('')}
+                </div>` : ''}
+              <div class="team-overlay product-overlay text-center">
+                <small class="text-uppercase d-block mb-1">${esc(catLabel)}</small>
+                <div class="h5 text-light mb-3">${peso(p.price)}</div>
+                <div class="d-flex justify-content-center gap-2">
+                  <button type="button" class="btn btn-outline-light btn-sm btn-details" data-bs-toggle="modal"
+                          data-bs-target="#productModal">Details</button>
+                  <a class="btn btn-primary btn-sm btn-inquire" href="contact.html">Inquire</a>
+                </div>
+              </div>
+            </div>
+          </div>`;
+      }
+
+      function render(items) {
+        if (!items || items.length === 0) {
+          grid.innerHTML = `<div class="col-12 text-center text-muted">No products available</div>`;
+          return;
+        }
+        grid.innerHTML = items.map((p, i) => cardHTML(p, i)).join('');
+      }
+
+      function attachModalHandlers() {
+        grid.addEventListener('click', (ev) => {
+          const card = ev.target.closest('.product-item');
+          if (!card) return;
+          const name = card.getAttribute('data-name') || card.querySelector('h4')?.textContent || '';
+          const img = card.getAttribute('data-image') || card.querySelector('img')?.src || '';
+          const cats = card.getAttribute('data-cats') || '';
+          const price = card.getAttribute('data-price') || '0';
+          const desc = card.getAttribute('data-desc') || '';
+
+          modalTitle.textContent = name;
+          modalImg.src = img;
+          modalImg.alt = name;
+          modalCat.textContent = cats;
+          modalPrice.textContent = peso(price);
+          modalDesc.textContent = desc;
+          modalCTA.href = 'contact.html';
+        });
+      }
+
+      function activeCategories() {
+        return $$('#filters input[type="checkbox"]:checked').map(cb => cb.value);
+      }
+      function applyFilters() {
+        const act = activeCategories();
+        const cards = $$('#productGrid .product-item');
+        cards.forEach(card => {
+          const cats = (card.getAttribute('data-cats') || '').split(',').map(s => s.trim());
+          const show = act.length === 0 || act.some(c => cats.includes(c));
+          card.closest('.col-md-6, .col-lg-5th, .col').style.display = show ? '' : 'none';
+        });
+      }
+      if (filtersWrap) filtersWrap.addEventListener('change', applyFilters);
+      if (clearBtn) {
+        clearBtn.addEventListener('click', () => {
+          $$('#filters input[type="checkbox"]').forEach(cb => cb.checked = false);
+          applyFilters();
+        });
+      }
+
+      (async function load() {
+        try {
+          const res = await fetch(LIST_URL, { method: 'GET', credentials: 'include' });
+          if (!res.ok) throw new Error('Failed to load products');
+          const json = await res.json();
+          const items = (json && json.items) ? json.items : [];
+          render(items);
+          attachModalHandlers();
+          applyFilters();
+        } catch (e) {
+          console.error(e);
+          render([]);
+        }
+      })();
+    })();
+  </script>
 </body>
 
 </html>
