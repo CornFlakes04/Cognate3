@@ -41,6 +41,6 @@ cd Cognate3
 - **Alejandra Maraasin** - Documentation & Testing 
 
 
-*Last updated: October 6 2025*  
+*Last updated: October 17 2025*  
 *Developed with ❤️ by the Cognate3 Team for educational use.*
 
