@@ -27,8 +27,9 @@
     .admin-hero { min-height: 36vh; }
     .drag-area {
       border: 2px dashed #cbd5e1; border-radius: .75rem; padding: 1.25rem; text-align: center; cursor: pointer;
-      background: #fafafa;
+      background: #fafafa; transition: .15s ease-in-out;
     }
+    .drag-area.dragover { background:#eef6ff; border-color:#60a5fa; }
     .drag-area i { font-size: 1.6rem; display:block; margin-bottom:.25rem; }
     .thumb { max-width: 100%; height: auto; border-radius: .5rem; border:1px solid #e5e7eb; }
     .search-input{min-width:260px}
@@ -129,14 +130,16 @@
                 <input id="adminSpecs" class="form-control" placeholder="Comma-separated (e.g., 12 DOF, 8-ch sEMG, Haptics)" />
               </div>
 
+              <!-- Drag & drop image uploader -->
               <div class="col-12">
-                <label class="form-label">Product Image URL (absolute or /Cognate3/img/...)</label>
-                <input id="adminImageUrl" class="form-control" placeholder="/Cognate3/img/product-1.png or https://..." />
-              </div>
-
-              <div class="col-12">
-                <label class="form-label">Public Video URL (optional)</label>
-                <input id="adminVideo" class="form-control" placeholder="e.g., /Cognate3/img/data.mp4 or https://…" />
+                <label class="form-label">Product Image</label>
+                <div id="adminDragArea" class="drag-area">
+                  <i class="bi bi-cloud-arrow-up"></i>
+                  <div>Drag & drop an image here, or click to select</div>
+                  <small class="text-muted d-block mt-1">PNG, JPG, or GIF — max ~10MB</small>
+                  <input id="adminImage" type="file" accept="image/*" class="d-none" />
+                </div>
+                <img id="adminPreview" class="thumb mt-3 d-none" alt="Preview" />
               </div>
 
               <div class="col-12 d-flex gap-2">
@@ -229,15 +232,25 @@
       const $ = (s, r = document) => r.querySelector(s);
       const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 
-      // ===== CONFIG =====
-      // CHANGE THIS if your site isn't served from /Cognate3/
-      const base = '/Cognate3/';
+      // ===== SMART BASE DETECTION =====
+      function detectBase() {
+        // if path contains /Cognate3/, use that; else keep first segment
+        const m = location.pathname.match(/\/Cognate3\/?/i);
+        if (m) return m[0].replace(/\/?$/, '/');
+        // fallback: root + first folder
+        const parts = location.pathname.split('/').filter(Boolean);
+        return parts.length ? '/' + parts[0] + '/' : '/';
+      }
+      const base = detectBase();
+
+      // ===== ENDPOINTS =====
       const endpoints = {
-        health:         base + 'api/health.php',
-        list:           base + 'api/products/list.php',
-        create:         base + 'api/products/create.php',
-        update:         base + 'api/products/update.php',
-        remove:         base + 'api/products/delete.php'
+        health: base + 'api/health.php',
+        upload: base + 'api/upload.php',              // server saves into /Cognate3/uploads
+        list:   base + 'api/products/list.php',
+        create: base + 'api/products/create.php',
+        update: base + 'api/products/update.php',
+        remove: base + 'api/products/delete.php'
       };
 
       // ===== ELEMENTS =====
@@ -258,8 +271,10 @@
         added:$('#adminAdded'),
         desc: $('#adminDesc'),
         specs:$('#adminSpecs'),
-        img:  $('#adminImageUrl'),
-        video:$('#adminVideo'),
+        // drag-drop image
+        drag: $('#adminDragArea'),
+        file: $('#adminImage'),
+        preview: $('#adminPreview'),
         cData: $('#cData'), cBionic: $('#cBionic'), cListen: $('#cListen'),
         cVision: $('#cVision'), cControl: $('#cControl'), cSensors: $('#cSensors'),
         resetBtn: $('#adminBtnReset')
@@ -267,7 +282,9 @@
 
       // ===== STATE =====
       let apiUp = false;
-      let products = []; // live list from API or localStorage
+      let products = [];
+      let pendingFile = null;     // File object selected via drag/click
+      let pendingImagePath = '';  // Uploaded path returned by server
 
       // ===== HELPERS =====
       function setSpinner(on) { if (!spinner) return; spinner.classList[on ? 'add' : 'remove']('show'); }
@@ -304,6 +321,11 @@
         f.cControl.checked = set.has('Control');
         f.cSensors.checked = set.has('Sensors');
       }
+      function escapeHtml(s){
+        return (s==null?'':String(s)).replace(/[&<>"']/g, c=>({
+          '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+        }[c]));
+      }
 
       function rowHTML(p, i) {
         return `<tr data-id="${p.id}">
@@ -312,19 +334,13 @@
           <td><code>${escapeHtml(p.sku || '')}</code></td>
           <td>${peso(p.price)}</td>
           <td>${escapeHtml(p.categories || '')}</td>
-          <td>${escapeHtml(p.date_added || '')}</td>
+          <td>${escapeHtml((p.date_added || '').slice(0,10))}</td>
           <td class="text-end">
             <button class="btn btn-sm btn-outline-primary me-1" data-act="edit"><i class="bi bi-pencil"></i></button>
             <button class="btn btn-sm btn-outline-danger" data-act="del"><i class="bi bi-trash"></i></button>
           </td>
         </tr>`;
       }
-      function escapeHtml(s){
-        return (s==null?'':String(s)).replace(/[&<>"']/g, c=>({
-          '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
-        }[c]));
-      }
-
       function render(list) {
         const q = (qEl.value || '').toLowerCase();
         const filtered = list.filter(p => {
@@ -338,16 +354,78 @@
         rowsEl.innerHTML = filtered.map((p,i)=>rowHTML(p,i)).join('');
       }
 
-      // ===== API DETECTION =====
+      // ===== IMAGE: drag & drop + preview =====
+      function setPreviewFromFile(file){
+        const reader = new FileReader();
+        reader.onload = e => {
+          f.preview.src = e.target.result;
+          f.preview.classList.remove('d-none');
+        };
+        reader.readAsDataURL(file);
+      }
+      function pickFiles() { f.file.click(); }
+      function acceptFileList(fileList){
+        const file = fileList && fileList[0];
+        if (!file) return;
+        if (!file.type.startsWith('image/')) { flash('warning','Please select an image file.'); return; }
+        if (file.size > 10 * 1024 * 1024) { flash('warning','Image is too large (max 10 MB).'); return; }
+        pendingFile = file;
+        pendingImagePath = ''; // reset until upload completes
+        setPreviewFromFile(file);
+      }
+      // drag UI
+      ['dragenter','dragover'].forEach(evt=>{
+        f.drag.addEventListener(evt, (e)=>{ e.preventDefault(); e.stopPropagation(); f.drag.classList.add('dragover'); });
+      });
+      ['dragleave','drop'].forEach(evt=>{
+        f.drag.addEventListener(evt, (e)=>{ e.preventDefault(); e.stopPropagation(); f.drag.classList.remove('dragover'); });
+      });
+      f.drag.addEventListener('click', pickFiles);
+      f.drag.addEventListener('drop', (e)=> acceptFileList(e.dataTransfer.files));
+      f.file.addEventListener('change', (e)=> acceptFileList(e.target.files));
+
+      // upload to server (returns path like /Cognate3/uploads/xxx.png)
+      async function uploadImageIfNeeded(){
+        if (!pendingFile) return pendingImagePath || ''; // nothing new
+        if (!apiUp) {
+          // demo mode: store a data URL in image field
+          return new Promise((resolve)=>{
+            const r = new FileReader();
+            r.onload = e => resolve(String(e.target.result||'')); // data URL
+            r.readAsDataURL(pendingFile);
+          });
+        }
+        const fd = new FormData();
+        fd.append('image', pendingFile);
+        const r = await fetch(endpoints.upload, { method:'POST', body: fd });
+        const j = await r.json().catch(()=>({}));
+        if (!r.ok || j.ok !== true || !j.path) throw new Error(j.message || 'Image upload failed');
+        pendingImagePath = j.path;   // e.g., /Cognate3/uploads/file.png
+        return pendingImagePath;
+      }
+
+      // ===== API DETECTION (tolerant) =====
       async function checkApi() {
+        // Try health first; treat any 2xx as "probably up"
         try {
           const r = await fetch(endpoints.health, { method:'GET', cache:'no-store', credentials:'include' });
-          if (!r.ok) { apiUp = false; setMode(); return; }
-          const j = await r.json().catch(()=> ({}));
-          apiUp = !!(j && j.ok === true);
+          if (r.ok) {
+            try {
+              const j = await r.json();
+              apiUp = j && j.ok === true ? true : true; // JSON ok OR plain 200 -> up
+            } catch {
+              apiUp = true; // 200 without JSON is still fine
+            }
+            setMode(); return;
+          }
+        } catch { /* ignore */ }
+
+        // Fallback: probe list.php (200 or 405 => up)
+        try {
+          const r2 = await fetch(endpoints.list, { method:'GET', cache:'no-store', credentials:'include' });
+          apiUp = r2.ok || r2.status === 405;
         } catch { apiUp = false; }
         setMode();
-        console.log('Health probe:', endpoints.health, '=>', apiUp);
       }
 
       // ===== LOAD LIST =====
@@ -356,7 +434,7 @@
         try {
           if (apiUp) {
             const r = await fetch(endpoints.list, {method:'GET', credentials:'include', cache:'no-store'});
-            const text = await r.text(); // for easier debug if backend echoes errors
+            const text = await r.text();
             let j = {};
             try { j = JSON.parse(text); } catch { j = {}; }
             if (!r.ok || !j.items) throw new Error('List failed');
@@ -374,7 +452,6 @@
           setSpinner(false);
         }
       }
-
       function saveLocal() {
         localStorage.setItem('nexora_products', JSON.stringify(products));
       }
@@ -383,6 +460,11 @@
       async function upsertProduct(payload, isEdit) {
         setSpinner(true);
         try {
+          // 1) Ensure image uploaded (if any)
+          const imgPathOrDataUrl = await uploadImageIfNeeded();
+          if (imgPathOrDataUrl) payload.image = imgPathOrDataUrl;
+
+          // 2) Persist
           if (apiUp) {
             const url = isEdit ? endpoints.update : endpoints.create;
             const r = await fetch(url, {
@@ -403,6 +485,11 @@
             saveLocal();
             flash('success', isEdit ? 'Updated (demo)' : 'Created (demo)');
           }
+
+          // 3) Reset image pending
+          pendingFile = null; pendingImagePath = '';
+          f.preview.classList.add('d-none'); f.preview.src = '';
+
           await loadList();
           f.form.reset(); f.id.value='';
           setCategoriesToForm('');
@@ -447,8 +534,7 @@
           categories: getCategoriesFromForm(),
           description: (f.desc.value || '').trim(),
           specs: (f.specs.value || '').trim(),
-          image: (f.img.value || '').trim(),
-          video_url: (f.video.value || '').trim()
+          image: '' // will be set by uploadImageIfNeeded if present
         };
         if (!payload.name || !payload.sku || !payload.categories || isNaN(payload.price)) {
           flash('warning','Please fill out required fields.'); return;
@@ -459,6 +545,8 @@
       f.resetBtn.addEventListener('click', ()=>{
         f.form.reset(); f.id.value='';
         setCategoriesToForm('');
+        pendingFile = null; pendingImagePath = '';
+        f.preview.classList.add('d-none'); f.preview.src = '';
       });
 
       qEl.addEventListener('input', ()=> render(products));
@@ -488,8 +576,16 @@
           f.added.value = (item.date_added || '').slice(0,10);
           f.desc.value = item.description || '';
           f.specs.value = item.specs || '';
-          f.img.value = item.image || '';
-          f.video.value = item.video_url || item.video || '';
+
+          // show preview if image present
+          if (item.image) {
+            f.preview.src = item.image;
+            f.preview.classList.remove('d-none');
+          } else {
+            f.preview.classList.add('d-none'); f.preview.src = '';
+          }
+          pendingFile = null; pendingImagePath = ''; // reset, unless they re-upload
+
           setCategoriesToForm(item.categories || '');
           window.scrollTo({top:0, behavior:'smooth'});
         }
