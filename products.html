@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8" />
   <title>Nexora Tech — Admin · Products</title>
@@ -14,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Space+Grotesk&display=swap" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
 
   <!-- Libraries -->
   <link href="lib/animate/animate.min.css" rel="stylesheet" />
@@ -23,12 +22,25 @@
   <!-- Your site CSS (single file) -->
   <link href="css/bootstrap.min.css" rel="stylesheet" />
   <link href="css/style.css" rel="stylesheet" />
+
+  <style>
+    .admin-hero { min-height: 36vh; }
+    .drag-area {
+      border: 2px dashed #cbd5e1; border-radius: .75rem; padding: 1.25rem; text-align: center; cursor: pointer;
+      background: #fafafa;
+    }
+    .drag-area i { font-size: 1.6rem; display:block; margin-bottom:.25rem; }
+    .thumb { max-width: 100%; height: auto; border-radius: .5rem; border:1px solid #e5e7eb; }
+    .search-input{min-width:260px}
+    .chip { display:inline-block; padding:.15rem .5rem; border-radius:999px; border:1px solid #dee2e6; font-size:.75rem; margin-right:.25rem; }
+    .table td, .table th { vertical-align: middle; }
+  </style>
 </head>
 
 <body>
   <!-- Spinner -->
   <div id="spinner"
-    class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+       class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
     <div class="spinner-grow text-primary" style="width: 3rem; height: 3rem;" role="status">
       <span class="sr-only">Loading...</span>
     </div>
@@ -42,7 +54,7 @@
           <h1>Nexora Tech <span class="text-primary">Admin</span></h1>
         </a>
         <button class="navbar-toggler ms-auto me-0" type="button" data-bs-toggle="collapse"
-          data-bs-target="#navbarCollapse">
+                data-bs-target="#navbarCollapse">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -98,46 +110,33 @@
               <div class="col-12">
                 <label class="form-label required">Categories</label>
                 <div class="d-flex flex-wrap gap-2">
-                  <div class="form-check"><input class="form-check-input" type="checkbox" value="Data" id="cData"><label
-                      class="form-check-label" for="cData">Data</label></div>
-                  <div class="form-check"><input class="form-check-input" type="checkbox" value="Bionic"
-                      id="cBionic"><label class="form-check-label" for="cBionic">Bionic</label></div>
-                  <div class="form-check"><input class="form-check-input" type="checkbox" value="Listen"
-                      id="cListen"><label class="form-check-label" for="cListen">Listen</label></div>
-                  <div class="form-check"><input class="form-check-input" type="checkbox" value="Vision"
-                      id="cVision"><label class="form-check-label" for="cVision">Vision</label></div>
-                  <div class="form-check"><input class="form-check-input" type="checkbox" value="Control"
-                      id="cControl"><label class="form-check-label" for="cControl">Control</label></div>
-                  <div class="form-check"><input class="form-check-input" type="checkbox" value="Sensors"
-                      id="cSensors"><label class="form-check-label" for="cSensors">Sensors</label></div>
+                  <div class="form-check"><input class="form-check-input" type="checkbox" value="Data" id="cData"><label class="form-check-label" for="cData">Data</label></div>
+                  <div class="form-check"><input class="form-check-input" type="checkbox" value="Bionic" id="cBionic"><label class="form-check-label" for="cBionic">Bionic</label></div>
+                  <div class="form-check"><input class="form-check-input" type="checkbox" value="Listen" id="cListen"><label class="form-check-label" for="cListen">Listen</label></div>
+                  <div class="form-check"><input class="form-check-input" type="checkbox" value="Vision" id="cVision"><label class="form-check-label" for="cVision">Vision</label></div>
+                  <div class="form-check"><input class="form-check-input" type="checkbox" value="Control" id="cControl"><label class="form-check-label" for="cControl">Control</label></div>
+                  <div class="form-check"><input class="form-check-input" type="checkbox" value="Sensors" id="cSensors"><label class="form-check-label" for="cSensors">Sensors</label></div>
                 </div>
               </div>
 
               <div class="col-12">
                 <label class="form-label required">Short Description</label>
-                <textarea id="adminDesc" class="form-control" rows="4" required
-                  placeholder="What makes this product compelling…"></textarea>
+                <textarea id="adminDesc" class="form-control" rows="4" required placeholder="What makes this product compelling…"></textarea>
               </div>
 
               <div class="col-12">
                 <label class="form-label">Specs (optional)</label>
-                <input id="adminSpecs" class="form-control"
-                  placeholder="Comma-separated (e.g., 12 DOF, 8-ch sEMG, Haptics)" />
+                <input id="adminSpecs" class="form-control" placeholder="Comma-separated (e.g., 12 DOF, 8-ch sEMG, Haptics)" />
               </div>
 
               <div class="col-12">
-                <label class="form-label">Product Image</label>
-                <div id="adminDragArea" class="drag-area">
-                  <i class="bi bi-cloud-arrow-up"></i>
-                  <div>Drag & drop an image here, or click to select</div>
-                  <input id="adminImage" type="file" accept="image/*" class="d-none" />
-                </div>
-                <img id="adminPreview" class="thumb mt-3 d-none" alt="Preview" />
+                <label class="form-label">Product Image URL (absolute or /Cognate3/img/...)</label>
+                <input id="adminImageUrl" class="form-control" placeholder="/Cognate3/img/product-1.png or https://..." />
               </div>
 
               <div class="col-12">
                 <label class="form-label">Public Video URL (optional)</label>
-                <input id="adminVideo" class="form-control" placeholder="e.g., img/data.mp4 or https://…" />
+                <input id="adminVideo" class="form-control" placeholder="e.g., /Cognate3/img/data.mp4 or https://…" />
               </div>
 
               <div class="col-12 d-flex gap-2">
@@ -150,6 +149,7 @@
               <div class="fw-bold mb-1">Storage mode</div>
               <small id="adminStorageMode">Checking…</small>
             </div>
+            <div id="adminAlert" class="alert d-none mt-3 mb-0" role="alert"></div>
           </div>
         </div>
       </div>
@@ -161,10 +161,8 @@
             <div class="d-flex flex-wrap align-items-center justify-content-between mb-3 gap-2">
               <h4 class="section-title mb-0">Products</h4>
               <div class="d-flex align-items-center gap-2">
-                <input id="adminQ" class="form-control form-control-sm search-input"
-                  placeholder="Search name, SKU, category…" />
-                <button id="adminBtnExport" class="btn btn-outline-secondary btn-sm"><i
-                    class="bi bi-download me-1"></i>Export JSON</button>
+                <input id="adminQ" class="form-control form-control-sm search-input" placeholder="Search name, SKU, category…" />
+                <button id="adminBtnExport" class="btn btn-outline-secondary btn-sm"><i class="bi bi-download me-1"></i>Export JSON</button>
               </div>
             </div>
             <div class="table-responsive">
@@ -181,9 +179,7 @@
                   </tr>
                 </thead>
                 <tbody id="adminRows">
-                  <tr>
-                    <td colspan="7" class="text-center text-muted">No products yet</td>
-                  </tr>
+                  <tr><td colspan="7" class="text-center text-muted">Loading…</td></tr>
                 </tbody>
               </table>
             </div>
@@ -209,7 +205,7 @@
         </div>
         <div class="col-lg-4">
           <h5 class="text-white mb-4">Data</h5>
-          <p class="mb-1">This page posts to <code>/api/products</code> if available, else uses localStorage (demo).</p>
+          <p class="mb-1">This page posts to <code>/Cognate3/api/products/*.php</code> or uses localStorage (demo).</p>
         </div>
       </div>
     </div>
@@ -227,120 +223,287 @@
   <script src="lib/owlcarousel/owl.carousel.min.js"></script>
 
   <script src="js/main.js"></script>
-  <!-- main.js already contains the product modal/filter code; admin logic is appended at bottom per instructions -->
+
   <script>
     (function () {
       const $ = (s, r = document) => r.querySelector(s);
+      const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 
-      const base = '/Cognate3/';            // adjust if your site path differs
-      const LIST_URL = base + 'api/products/list.php';
+      // ===== CONFIG =====
+      // CHANGE THIS if your site isn't served from /Cognate3/
+      const base = '/Cognate3/';
+      const endpoints = {
+        health:         base + 'api/health.php',
+        list:           base + 'api/products/list.php',
+        create:         base + 'api/products/create.php',
+        update:         base + 'api/products/update.php',
+        remove:         base + 'api/products/delete.php'
+      };
 
+      // ===== ELEMENTS =====
+      const spinner = $('#spinner');
+      const modeEl = $('#adminStorageMode');
+      const alertEl = $('#adminAlert');
       const rowsEl = $('#adminRows');
-      const modeEl = $('#adminStorageMode'); // the “Storage mode” small label (if you kept it)
+      const qEl = $('#adminQ');
+      const exportBtn = $('#adminBtnExport');
 
-      const peso = (v) => {
-        // Safe formatting (your prices are DECIMAL(10,2))
-        const n = Number(v);
-        if (Number.isNaN(n)) return v;
-        return `₱${n.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+      // Form
+      const f = {
+        form: $('#adminProductForm'),
+        id:   $('#adminProdId'),
+        name: $('#adminName'),
+        sku:  $('#adminSku'),
+        price:$('#adminPrice'),
+        added:$('#adminAdded'),
+        desc: $('#adminDesc'),
+        specs:$('#adminSpecs'),
+        img:  $('#adminImageUrl'),
+        video:$('#adminVideo'),
+        cData: $('#cData'), cBionic: $('#cBionic'), cListen: $('#cListen'),
+        cVision: $('#cVision'), cControl: $('#cControl'), cSensors: $('#cSensors'),
+        resetBtn: $('#adminBtnReset')
       };
 
-      const fmtDate = (d) => {
-        if (!d) return '';
-        // date_added is DATE; keep it simple (YYYY-MM-DD)
-        return d;
-      };
+      // ===== STATE =====
+      let apiUp = false;
+      let products = []; // live list from API or localStorage
 
-      const renderEmpty = () => {
-        rowsEl.innerHTML = `
-      <tr>
-        <td colspan="7" class="text-center text-muted">No products yet</td>
-      </tr>`;
-      };
+      // ===== HELPERS =====
+      function setSpinner(on) { if (!spinner) return; spinner.classList[on ? 'add' : 'remove']('show'); }
+      function setMode() {
+        if (modeEl) modeEl.textContent = apiUp
+          ? 'Connected to backend API (SQL).'
+          : 'No backend detected — using browser localStorage (demo)';
+      }
+      function flash(type, msg) {
+        if (!alertEl) return;
+        alertEl.className = 'alert alert-' + type;
+        alertEl.textContent = msg;
+        alertEl.classList.remove('d-none');
+        setTimeout(() => alertEl.classList.add('d-none'), 2500);
+      }
+      const peso = v => '₱' + Number(v||0).toLocaleString('en-PH', {minimumFractionDigits:2, maximumFractionDigits:2});
 
-      const renderRows = (items) => {
-        if (!items || items.length === 0) return renderEmpty();
+      function getCategoriesFromForm() {
+        const cats = [];
+        if (f.cData.checked) cats.push('Data');
+        if (f.cBionic.checked) cats.push('Bionic');
+        if (f.cListen.checked) cats.push('Listen');
+        if (f.cVision.checked) cats.push('Vision');
+        if (f.cControl.checked) cats.push('Control');
+        if (f.cSensors.checked) cats.push('Sensors');
+        return cats.join(',');
+      }
+      function setCategoriesToForm(csv) {
+        const set = new Set((csv || '').split(',').map(s => s.trim()).filter(Boolean));
+        f.cData.checked = set.has('Data');
+        f.cBionic.checked = set.has('Bionic');
+        f.cListen.checked = set.has('Listen');
+        f.cVision.checked = set.has('Vision');
+        f.cControl.checked = set.has('Control');
+        f.cSensors.checked = set.has('Sensors');
+      }
 
-        rowsEl.innerHTML = items.map((p, i) => {
-          // categories is a MySQL SET => comes back as comma-separated string (e.g. "Data,Vision")
-          const cats = (p.categories || '').split(',').map(s => s.trim()).filter(Boolean).join(', ');
-          return `
-        <tr data-id="${p.id}">
-          <td>${i + 1}</td>
-          <td>${p.name ?? ''}</td>
-          <td>${p.sku ?? ''}</td>
+      function rowHTML(p, i) {
+        return `<tr data-id="${p.id}">
+          <td>${i+1}</td>
+          <td>${escapeHtml(p.name || '')}</td>
+          <td><code>${escapeHtml(p.sku || '')}</code></td>
           <td>${peso(p.price)}</td>
-          <td>${cats}</td>
-          <td>${fmtDate(p.date_added)}</td>
+          <td>${escapeHtml(p.categories || '')}</td>
+          <td>${escapeHtml(p.date_added || '')}</td>
           <td class="text-end">
-            <button type="button" class="btn btn-sm btn-outline-primary" data-action="edit">Edit</button>
-            <button type="button" class="btn btn-sm btn-outline-danger ms-1" data-action="delete" disabled>Delete</button>
+            <button class="btn btn-sm btn-outline-primary me-1" data-act="edit"><i class="bi bi-pencil"></i></button>
+            <button class="btn btn-sm btn-outline-danger" data-act="del"><i class="bi bi-trash"></i></button>
           </td>
         </tr>`;
-        }).join('');
-      };
-
-      // Fetch from backend
-      (async function load() {
-        try {
-          // Include credentials if your endpoint relies on PHP sessions
-          const res = await fetch(LIST_URL, { method: 'GET', credentials: 'include' });
-          if (!res.ok) {
-            if (modeEl) modeEl.textContent = 'API error while loading products.';
-            renderEmpty();
-            return;
-          }
-          const json = await res.json();
-          if (!json || !json.ok) {
-            if (modeEl) modeEl.textContent = 'Invalid API response.';
-            renderEmpty();
-            return;
-          }
-          if (modeEl) modeEl.textContent = 'Connected to backend API endpoints.';
-          renderRows(json.items || []);
-        } catch (e) {
-          if (modeEl) modeEl.textContent = 'Demo mode: failed to reach backend.';
-          renderEmpty();
-        }
-      })();
-
-      // OPTIONAL: wire “Edit” button to your form (if/when you implement save/update)
-      const form = document.getElementById('adminProductForm');
-      if (form && rowsEl) {
-        rowsEl.addEventListener('click', (ev) => {
-          const btn = ev.target.closest('button[data-action]');
-          if (!btn) return;
-          const tr = ev.target.closest('tr');
-          if (!tr) return;
-          const id = tr.getAttribute('data-id');
-          if (!id) return;
-
-          if (btn.dataset.action === 'edit') {
-            // Fill form with cells (simplest approach; adjust to your form fields)
-            const tds = tr.querySelectorAll('td');
-            // tds: [#, name, sku, price, categories, added, actions]
-            document.getElementById('adminProdId').value = id;
-            document.getElementById('adminName').value = tds[1].textContent.trim();
-            document.getElementById('adminSku').value = tds[2].textContent.trim();
-            document.getElementById('adminPrice').value = (tds[3].textContent || '0').replace(/[₱,]/g, '');
-            document.getElementById('adminAdded').value = tds[5].textContent.trim();
-
-            // categories: clear all then re-check
-            const cats = (tds[4].textContent || '').split(',').map(s => s.trim());
-            ['Data', 'Bionic', 'Listen', 'Vision', 'Control', 'Sensors'].forEach(label => {
-              const cb = document.getElementById('c' + label);
-              if (cb) cb.checked = cats.includes(label);
-            });
-
-            // description/specs/image/video would need a re-fetch by ID to fill precisely
-            // (not included in table markup). You can extend list.php to return them and
-            // keep them in a local Map by id.
-          }
-        });
       }
+      function escapeHtml(s){
+        return (s==null?'':String(s)).replace(/[&<>"']/g, c=>({
+          '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+        }[c]));
+      }
+
+      function render(list) {
+        const q = (qEl.value || '').toLowerCase();
+        const filtered = list.filter(p => {
+          const hay = [p.name, p.sku, p.categories, p.description].map(x => (x||'').toLowerCase()).join('|');
+          return hay.includes(q);
+        });
+        if (!filtered.length) {
+          rowsEl.innerHTML = `<tr><td colspan="7" class="text-center text-muted">No products</td></tr>`;
+          return;
+        }
+        rowsEl.innerHTML = filtered.map((p,i)=>rowHTML(p,i)).join('');
+      }
+
+      // ===== API DETECTION =====
+      async function checkApi() {
+        try {
+          const r = await fetch(endpoints.health, { method:'GET', cache:'no-store', credentials:'include' });
+          if (!r.ok) { apiUp = false; setMode(); return; }
+          const j = await r.json().catch(()=> ({}));
+          apiUp = !!(j && j.ok === true);
+        } catch { apiUp = false; }
+        setMode();
+        console.log('Health probe:', endpoints.health, '=>', apiUp);
+      }
+
+      // ===== LOAD LIST =====
+      async function loadList() {
+        setSpinner(true);
+        try {
+          if (apiUp) {
+            const r = await fetch(endpoints.list, {method:'GET', credentials:'include', cache:'no-store'});
+            const text = await r.text(); // for easier debug if backend echoes errors
+            let j = {};
+            try { j = JSON.parse(text); } catch { j = {}; }
+            if (!r.ok || !j.items) throw new Error('List failed');
+            products = Array.isArray(j.items)? j.items : [];
+          } else {
+            const raw = localStorage.getItem('nexora_products');
+            products = raw ? JSON.parse(raw) : [];
+          }
+          render(products);
+        } catch (e) {
+          products = [];
+          render(products);
+          flash('danger','Failed to load products.');
+        } finally {
+          setSpinner(false);
+        }
+      }
+
+      function saveLocal() {
+        localStorage.setItem('nexora_products', JSON.stringify(products));
+      }
+
+      // ===== CREATE/UPDATE/DELETE =====
+      async function upsertProduct(payload, isEdit) {
+        setSpinner(true);
+        try {
+          if (apiUp) {
+            const url = isEdit ? endpoints.update : endpoints.create;
+            const r = await fetch(url, {
+              method:'POST', headers:{'Content-Type':'application/json'},
+              body: JSON.stringify(payload)
+            });
+            const j = await r.json().catch(()=>({}));
+            if (!r.ok || j.ok === false) throw new Error(j.message || 'Server error');
+            flash('success', isEdit ? 'Updated' : 'Created');
+          } else {
+            if (isEdit) {
+              const idx = products.findIndex(p => String(p.id) === String(payload.id));
+              if (idx >= 0) products[idx] = {...products[idx], ...payload};
+            } else {
+              payload.id = Date.now();
+              products.push(payload);
+            }
+            saveLocal();
+            flash('success', isEdit ? 'Updated (demo)' : 'Created (demo)');
+          }
+          await loadList();
+          f.form.reset(); f.id.value='';
+          setCategoriesToForm('');
+        } catch (e) {
+          flash('danger', e.message || 'Save failed');
+        } finally { setSpinner(false); }
+      }
+
+      async function deleteProduct(id) {
+        setSpinner(true);
+        try {
+          if (apiUp) {
+            const r = await fetch(endpoints.remove, {
+              method:'POST', headers:{'Content-Type':'application/json'},
+              body: JSON.stringify({ id })
+            });
+            const j = await r.json().catch(()=>({}));
+            if (!r.ok || j.ok === false) throw new Error(j.message || 'Delete failed');
+            flash('success','Deleted');
+          } else {
+            products = products.filter(p => String(p.id) !== String(id));
+            saveLocal();
+            flash('success','Deleted (demo)');
+          }
+          await loadList();
+        } catch (e) {
+          flash('danger', e.message || 'Delete failed');
+        } finally { setSpinner(false); }
+      }
+
+      // ===== EVENTS =====
+      window.addEventListener('load', ()=> spinner?.classList.remove('show'));
+
+      f.form.addEventListener('submit', (ev)=>{
+        ev.preventDefault();
+        const payload = {
+          id: (f.id.value || '').trim() || undefined,
+          name: (f.name.value || '').trim(),
+          sku: (f.sku.value || '').trim(),
+          price: Number(f.price.value || 0),
+          date_added: (f.added.value || '').trim(),
+          categories: getCategoriesFromForm(),
+          description: (f.desc.value || '').trim(),
+          specs: (f.specs.value || '').trim(),
+          image: (f.img.value || '').trim(),
+          video_url: (f.video.value || '').trim()
+        };
+        if (!payload.name || !payload.sku || !payload.categories || isNaN(payload.price)) {
+          flash('warning','Please fill out required fields.'); return;
+        }
+        upsertProduct(payload, !!payload.id);
+      });
+
+      f.resetBtn.addEventListener('click', ()=>{
+        f.form.reset(); f.id.value='';
+        setCategoriesToForm('');
+      });
+
+      qEl.addEventListener('input', ()=> render(products));
+
+      exportBtn.addEventListener('click', ()=>{
+        const blob = new Blob([JSON.stringify(products, null, 2)], {type:'application/json'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = 'products.json';
+        document.body.appendChild(a); a.click();
+        a.remove(); URL.revokeObjectURL(url);
+      });
+
+      rowsEl.addEventListener('click', (ev)=>{
+        const btn = ev.target.closest('button[data-act]');
+        if (!btn) return;
+        const tr = ev.target.closest('tr'); if (!tr) return;
+        const id = tr.getAttribute('data-id');
+        const item = products.find(p => String(p.id) === String(id));
+        if (!item) return;
+
+        if (btn.dataset.act === 'edit') {
+          f.id.value = item.id;
+          f.name.value = item.name || '';
+          f.sku.value = item.sku || '';
+          f.price.value = item.price || 0;
+          f.added.value = (item.date_added || '').slice(0,10);
+          f.desc.value = item.description || '';
+          f.specs.value = item.specs || '';
+          f.img.value = item.image || '';
+          f.video.value = item.video_url || item.video || '';
+          setCategoriesToForm(item.categories || '');
+          window.scrollTo({top:0, behavior:'smooth'});
+        }
+        if (btn.dataset.act === 'del') {
+          if (confirm('Delete this product?')) deleteProduct(id);
+        }
+      });
+
+      // ===== INIT =====
+      (async function init(){
+        await checkApi();
+        await loadList();
+      })();
     })();
   </script>
-
 </body>
-
 </html>
