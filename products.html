@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Nexora Tech — Admin · Products</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Favicon -->
+  <link href="img/favicon.ico" rel="icon" />
+
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Space+Grotesk&display=swap" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet" />
+
+  <!-- Libraries -->
+  <link href="lib/animate/animate.min.css" rel="stylesheet" />
+  <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet" />
+
+  <!-- Your site CSS (single file) -->
+  <link href="css/bootstrap.min.css" rel="stylesheet" />
+  <link href="css/style.css" rel="stylesheet" />
+</head>
+
+<body>
+  <!-- Spinner -->
+  <div id="spinner"
+    class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+    <div class="spinner-grow text-primary" style="width: 3rem; height: 3rem;" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
+
+  <!-- Navbar -->
+  <div class="container-fluid sticky-top">
+    <div class="container">
+      <nav class="navbar navbar-expand-lg navbar-light border-bottom border-2 border-white">
+        <a href="index.html" class="navbar-brand">
+          <h1>Nexora Tech <span class="text-primary">Admin</span></h1>
+        </a>
+        <button class="navbar-toggler ms-auto me-0" type="button" data-bs-toggle="collapse"
+          data-bs-target="#navbarCollapse">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+          <div class="navbar-nav ms-auto">
+            <a href="index.html" class="nav-item nav-link">Website</a>
+            <a href="project.html" class="nav-item nav-link">Projects</a>
+            <a href="#" class="nav-item nav-link active">Admin</a>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Hero -->
+  <div class="container-fluid bg-primary hero-header d-flex align-items-center admin-hero">
+    <div class="container text-white">
+      <div class="d-flex align-items-center gap-3">
+        <span class="admin-badge bg-light text-primary fw-bold">Products</span>
+        <h1 class="mb-0">Admin Console</h1>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <div class="container my-5">
+    <div class="row g-4">
+      <!-- Form -->
+      <div class="col-lg-5">
+        <div class="card shadow-sm border-0">
+          <div class="card-body p-4">
+            <h4 class="section-title mb-3">Add / Edit Product</h4>
+            <form id="adminProductForm" class="row g-3" autocomplete="off">
+              <input type="hidden" id="adminProdId" />
+
+              <div class="col-md-8">
+                <label class="form-label required">Name</label>
+                <input type="text" id="adminName" class="form-control" required />
+              </div>
+              <div class="col-md-4">
+                <label class="form-label required">SKU</label>
+                <input type="text" id="adminSku" class="form-control" required />
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label required">Price (₱)</label>
+                <input type="number" id="adminPrice" class="form-control" min="0" step="0.01" required />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Date Added</label>
+                <input type="date" id="adminAdded" class="form-control" />
+              </div>
+
+              <div class="col-12">
+                <label class="form-label required">Categories</label>
+                <div class="d-flex flex-wrap gap-2">
+                  <div class="form-check"><input class="form-check-input" type="checkbox" value="Data" id="cData"><label
+                      class="form-check-label" for="cData">Data</label></div>
+                  <div class="form-check"><input class="form-check-input" type="checkbox" value="Bionic"
+                      id="cBionic"><label class="form-check-label" for="cBionic">Bionic</label></div>
+                  <div class="form-check"><input class="form-check-input" type="checkbox" value="Listen"
+                      id="cListen"><label class="form-check-label" for="cListen">Listen</label></div>
+                  <div class="form-check"><input class="form-check-input" type="checkbox" value="Vision"
+                      id="cVision"><label class="form-check-label" for="cVision">Vision</label></div>
+                  <div class="form-check"><input class="form-check-input" type="checkbox" value="Control"
+                      id="cControl"><label class="form-check-label" for="cControl">Control</label></div>
+                  <div class="form-check"><input class="form-check-input" type="checkbox" value="Sensors"
+                      id="cSensors"><label class="form-check-label" for="cSensors">Sensors</label></div>
+                </div>
+              </div>
+
+              <div class="col-12">
+                <label class="form-label required">Short Description</label>
+                <textarea id="adminDesc" class="form-control" rows="4" required
+                  placeholder="What makes this product compelling…"></textarea>
+              </div>
+
+              <div class="col-12">
+                <label class="form-label">Specs (optional)</label>
+                <input id="adminSpecs" class="form-control"
+                  placeholder="Comma-separated (e.g., 12 DOF, 8-ch sEMG, Haptics)" />
+              </div>
+
+              <div class="col-12">
+                <label class="form-label">Product Image</label>
+                <div id="adminDragArea" class="drag-area">
+                  <i class="bi bi-cloud-arrow-up"></i>
+                  <div>Drag & drop an image here, or click to select</div>
+                  <input id="adminImage" type="file" accept="image/*" class="d-none" />
+                </div>
+                <img id="adminPreview" class="thumb mt-3 d-none" alt="Preview" />
+              </div>
+
+              <div class="col-12">
+                <label class="form-label">Public Video URL (optional)</label>
+                <input id="adminVideo" class="form-control" placeholder="e.g., img/data.mp4 or https://…" />
+              </div>
+
+              <div class="col-12 d-flex gap-2">
+                <button type="submit" class="btn btn-primary"><i class="bi bi-save me-1"></i>Save</button>
+                <button type="button" id="adminBtnReset" class="btn btn-outline-secondary">Clear</button>
+              </div>
+            </form>
+
+            <div class="alert alert-info mt-3 mb-0">
+              <div class="fw-bold mb-1">Storage mode</div>
+              <small id="adminStorageMode">Checking…</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="col-lg-7">
+        <div class="card shadow-sm border-0">
+          <div class="card-body p-4">
+            <div class="d-flex flex-wrap align-items-center justify-content-between mb-3 gap-2">
+              <h4 class="section-title mb-0">Products</h4>
+              <div class="d-flex align-items-center gap-2">
+                <input id="adminQ" class="form-control form-control-sm search-input"
+                  placeholder="Search name, SKU, category…" />
+                <button id="adminBtnExport" class="btn btn-outline-secondary btn-sm"><i
+                    class="bi bi-download me-1"></i>Export JSON</button>
+              </div>
+            </div>
+            <div class="table-responsive">
+              <table class="table align-middle">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>SKU</th>
+                    <th>Price</th>
+                    <th>Categories</th>
+                    <th>Added</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="adminRows">
+                  <tr>
+                    <td colspan="7" class="text-center text-muted">No products yet</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="container-fluid bg-dark text-white-50 footer pt-5">
+    <div class="container py-5">
+      <div class="row g-5 text-center text-lg-start">
+        <div class="col-lg-4">
+          <h1 class="text-white mb-3">NEXORA</h1>
+          <p class="mb-0">Internal admin — manage catalog data used by the public pages.</p>
+        </div>
+        <div class="col-lg-4">
+          <h5 class="text-white mb-4">Links</h5>
+          <a class="btn btn-link" href="project.html">Public Projects</a>
+          <a class="btn btn-link" href="contact.html">Contact</a>
+        </div>
+        <div class="col-lg-4">
+          <h5 class="text-white mb-4">Data</h5>
+          <p class="mb-1">This page posts to <code>/api/products</code> if available, else uses localStorage (demo).</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Back to Top -->
+  <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+
+  <!-- JS libs + your single JS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="lib/wow/wow.min.js"></script>
+  <script src="lib/easing/easing.min.js"></script>
+  <script src="lib/waypoints/waypoints.min.js"></script>
+  <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+
+  <script src="js/main.js"></script>
+  <!-- main.js already contains the product modal/filter code; admin logic is appended at bottom per instructions -->
+</body>
+
+</html>

@@ -617,6 +617,52 @@
 
 /* PRODUCTS DESIGN END*/
 
+/* === Admin (products) additions === */
+.admin-badge {
+  font-size: .85rem;
+  padding: .35rem .5rem;
+  border-radius: .5rem;
+}
+
+.section-title {
+  letter-spacing: .02em;
+}
+
+.required::after {
+  content: " *";
+  color: #ef4444;
+}
+
+.admin-hero {
+  min-height: 32vh;
+}
+
+.thumb {
+  width: 100%;
+  aspect-ratio: 16/10;
+  object-fit: cover;
+  border-radius: .5rem;
+  border: 1px solid rgba(255, 255, 255, .1);
+}
+
+/* Drag & drop image area */
+.drag-area {
+  border: 2px dashed rgba(148, 163, 184, .4);
+  border-radius: .75rem;
+  padding: 1rem;
+  text-align: center;
+  cursor: pointer;
+}
+
+.drag-area.dragover {
+  background: rgba(59, 130, 246, .08);
+  border-color: rgba(59, 130, 246, .6);
+}
+
+.search-input {
+  max-width: 340px;
+}
+
 
 
 /* Custom 5-column layout for large screens */

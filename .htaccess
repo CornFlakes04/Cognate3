@@ -1,0 +1,5 @@
+RewriteEngine On
+RewriteBase /Cognate3/
+
+RewriteRule ^api/auth/login$  api/auth/login.php  [L,QSA]
+RewriteRule ^api/auth/signup$ api/auth/signup.php [L,QSA]

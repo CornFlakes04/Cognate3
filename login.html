@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Nexora Tech — Admin · Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Favicon -->
+  <link href="img/favicon.ico" rel="icon" />
+
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Space+Grotesk&display=swap" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet" />
+
+  <!-- Libraries -->
+  <link href="lib/animate/animate.min.css" rel="stylesheet" />
+  <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet" />
+
+  <!-- Your site CSS -->
+  <link href="css/bootstrap.min.css" rel="stylesheet" />
+  <link href="css/style.css" rel="stylesheet" />
+  <style>
+    .auth-hero {
+      min-height: 36vh;
+    }
+
+    .auth-card {
+      border: 0;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+    }
+
+    .auth-tabs .nav-link {
+      border-radius: 999px;
+    }
+
+    .form-label.required::after {
+      content: " *";
+      color: #dc3545;
+      font-weight: 700;
+    }
+
+    .pwd-toggle {
+      cursor: pointer;
+    }
+
+    .admin-badge {
+      border-radius: 999px;
+      padding: .35rem .75rem;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Spinner -->
+  <div id="spinner"
+    class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+    <div class="spinner-grow text-primary" style="width: 3rem; height: 3rem;" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
+
+  <!-- Navbar -->
+  <div class="container-fluid sticky-top">
+    <div class="container">
+      <nav class="navbar navbar-expand-lg navbar-light border-bottom border-2 border-white">
+        <a href="index.html" class="navbar-brand">
+          <h1 class="mb-0">Nexora <span class="text-primary">Tech</span></h1>
+        </a>
+
+        <button class="navbar-toggler ms-auto me-0" type="button" data-bs-toggle="collapse"
+          data-bs-target="#navbarCollapse">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+          <div class="ms-auto d-flex align-items-center">
+            <span class="admin-badge bg-light text-primary fw-bold">Secure</span>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Hero Start -->
+  <div class="container-fluid bg-primary hero-header min-vh-50 d-flex align-items-center">
+    <div class="container">
+    </div>
+  </div>
+  <!-- Hero End -->
+
+  <!-- Auth -->
+  <div class="container my-5" style="max-width: 860px;">
+    <div class="card auth-card">
+      <div class="card-body p-4 p-md-5">
+        <!-- Tabs -->
+        <ul class="nav nav-pills justify-content-center gap-2 auth-tabs mb-4" id="authTabs" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="login-tab" data-bs-toggle="pill" data-bs-target="#login-pane"
+              type="button" role="tab" aria-controls="login-pane" aria-selected="true">
+              <i class="bi bi-box-arrow-in-right me-1"></i> Login
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="signup-tab" data-bs-toggle="pill" data-bs-target="#signup-pane" type="button"
+              role="tab" aria-controls="signup-pane" aria-selected="false">
+              <i class="bi bi-person-plus me-1"></i> Sign Up
+            </button>
+          </li>
+        </ul>
+
+        <div class="tab-content">
+          <!-- Login -->
+          <div class="tab-pane fade show active" id="login-pane" role="tabpanel" aria-labelledby="login-tab">
+            <form id="formLogin" class="row g-3" autocomplete="off">
+              <div class="col-12">
+                <label class="form-label required">Username</label>
+                <input type="text" name="username" class="form-control" required />
+              </div>
+              <div class="col-12">
+                <label class="form-label required">Password</label>
+                <div class="input-group">
+                  <input type="password" name="password" class="form-control" required />
+                  <span class="input-group-text pwd-toggle" data-target="#formLogin input[name='password']">
+                    <i class="bi bi-eye"></i>
+                  </span>
+                </div>
+              </div>
+
+              <!-- Row with Remember me, Forgot password, and Login -->
+              <div class="col-12 d-flex align-items-center gap-3">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="rememberMe">
+                  <label class="form-check-label" for="rememberMe">Remember me</label>
+                </div>
+
+                <a href="forgot.html" class="text-decoration-none small text-muted">Forgot password?</a>
+
+                <button class="btn btn-primary ms-auto" type="submit">
+                  <i class="bi bi-box-arrow-in-right me-1"></i> Login
+                </button>
+              </div>
+
+              <div class="col-12">
+                <div id="loginAlert" class="alert d-none mb-0" role="alert"></div>
+              </div>
+            </form>
+          </div>
+
+          <!-- Sign Up -->
+          <div class="tab-pane fade" id="signup-pane" role="tabpanel" aria-labelledby="signup-tab">
+            <form id="formSignup" class="row g-3" autocomplete="off">
+              <div class="col-md-6">
+                <label class="form-label required">Full Name</label>
+                <input type="text" name="name" class="form-control" required />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label required">Username</label>
+                <input type="text" name="username" class="form-control" required />
+              </div>
+              <div class="col-12">
+                <label class="form-label required">Email</label>
+                <input type="email" name="email" class="form-control" required />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label required">Password</label>
+                <div class="input-group">
+                  <input type="password" name="password" class="form-control" minlength="6" required />
+                  <span class="input-group-text pwd-toggle" data-target="#formSignup input[name='password']">
+                    <i class="bi bi-eye"></i>
+                  </span>
+                </div>
+                <small class="text-muted">Minimum 6 characters.</small>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label required">Confirm Password</label>
+                <div class="input-group">
+                  <input type="password" name="confirm" class="form-control" minlength="6" required />
+                  <span class="input-group-text pwd-toggle" data-target="#formSignup input[name='confirm']">
+                    <i class="bi bi-eye"></i>
+                  </span>
+                </div>
+              </div>
+              <div class="col-12 d-flex align-items-center justify-content-end">
+                <button class="btn btn-primary" type="submit">
+                  <i class="bi bi-person-plus me-1"></i> Create Account
+                </button>
+              </div>
+              <div class="col-12">
+                <div id="signupAlert" class="alert d-none mb-0" role="alert"></div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Storage/Mode Info -->
+        <div class="alert alert-info mt-4 mb-0">
+          <div class="fw-bold mb-1">Auth mode</div>
+          <small id="authStorageMode">Checking…</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="container-fluid bg-dark text-white-50 footer pt-5">
+    <div class="container py-5">
+      <div class="row g-5 text-center text-lg-start">
+        <div class="col-lg-4">
+          <h1 class="text-white mb-3">NEXORA</h1>
+          <p class="mb-0">Internal admin — sign in to manage catalog data.</p>
+        </div>
+
+        <!-- Column 2: Get In Touch -->
+        <div class="col-lg-4">
+          <h5 class="text-white mb-4">Get In Touch</h5>
+          <p><i class="fa fa-map-marker-alt me-3"></i>123 Street, Pasig City, Philippines</p>
+          <p><i class="fa fa-phone-alt me-3"></i>+63 912 345 6789</p>
+          <p><i class="fa fa-envelope me-3"></i>nexora@tech.com</p>
+          <div class="d-flex justify-content-center justify-content-lg-start pt-2">
+            <a class="btn btn-outline-primary btn-square border-2 me-2" href="https://www.facebook.com/"><i
+                class="fab fa-facebook-f"></i></a>
+            <a class="btn btn-outline-primary btn-square border-2 me-2" href="https://www.instagram.com/sample"><i
+                class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Back to Top -->
+  <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+
+  <!-- JS libs -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="lib/wow/wow.min.js"></script>
+  <script src="lib/easing/easing.min.js"></script>
+  <script src="lib/waypoints/waypoints.min.js"></script>
+  <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+
+  <!-- Page-specific auth logic -->
+  <script>
+    (function () {
+      const $ = (s, r = document) => r.querySelector(s);
+      const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+
+      // ---- Config ----
+      const base = '/Cognate3/'; // change if your site path differs
+      const endpoints = {
+        login: base + 'api/auth/login.php',
+        signup: base + 'api/auth/signup.php' // optional; we'll probe but not require
+      };
+      const urls = {
+        admin: base + 'products.html',
+        user: base + 'index.html'
+      };
+
+      // ---- Spinner off after load ----
+      window.addEventListener('load', () => {
+        const sp = $('#spinner');
+        if (sp) sp.classList.remove('show');
+      });
+
+      // ---- Show/hide password ----
+      $$('.pwd-toggle').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const targetSel = btn.getAttribute('data-target');
+          const input = $(targetSel);
+          if (!input) return;
+          input.type = input.type === 'password' ? 'text' : 'password';
+          const icon = btn.querySelector('i');
+          if (icon) icon.className = input.type === 'password' ? 'bi bi-eye' : 'bi bi-eye-slash';
+        });
+      });
+
+      // ---- Probe backend (treat 200 or 405 as "up") ----
+      const checkEndpoint = async (url) => {
+        try {
+          const res = await fetch(url, { method: 'GET', credentials: 'include' });
+          return res.ok || res.status === 405;
+        } catch {
+          return false;
+        }
+      };
+
+      // ---- Storage/mode label ----
+      const modeEl = $('#authStorageMode');
+      const setMode = (msg) => { if (modeEl) modeEl.textContent = msg; };
+
+      let loginUp = false;
+      let signupUp = false;
+
+      (async () => {
+        loginUp = await checkEndpoint(endpoints.login);
+        signupUp = await checkEndpoint(endpoints.signup);
+        setMode(
+          loginUp
+            ? (signupUp
+              ? 'Connected to backend API endpoints.'
+              : 'Connected to login API (signup API not found).')
+            : 'Demo mode: localStorage fallback (no backend login API found).'
+        );
+      })();
+
+      // ---- Helpers ----
+      const setAlert = (el, type, msg) => {
+        el.className = 'alert alert-' + type;
+        el.textContent = msg;
+        el.classList.remove('d-none');
+      };
+
+      const redirectAfterLogin = (username) => {
+        const params = new URLSearchParams(location.search);
+        const next = params.get('next'); // e.g., next=products.html
+        if (next) {
+          const target = next.startsWith('/') ? next : (base + next);
+          location.replace(target);
+          return;
+        }
+        const isAdmin = (username || '').trim().toLowerCase() === 'admin';
+        location.replace(isAdmin ? urls.admin : urls.user);
+      };
+
+      // ---- LOGIN (username + password; PHP session; admin redirect) ----
+      const loginForm = $('#formLogin');
+      const loginAlert = $('#loginAlert');
+      if (loginForm) {
+        loginForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          loginAlert.classList.add('d-none');
+
+          const data = Object.fromEntries(new FormData(loginForm));
+          const payload = {
+            username: (data.username || '').trim(),
+            password: data.password || ''
+          };
+          if (!payload.username || !payload.password) {
+            return setAlert(loginAlert, 'danger', 'Please enter username and password.');
+          }
+
+          try {
+            if (loginUp) {
+              // IMPORTANT: include credentials so PHP session cookie is stored
+              const res = await fetch(endpoints.login, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify(payload)
+              });
+              if (!res.ok) {
+                const errJson = await res.json().catch(() => ({}));
+                throw new Error(errJson.message || 'Invalid credentials.');
+              }
+              const json = await res.json();
+
+              // Optional UI hints (not security)
+              localStorage.setItem('nexora_token', 'demo-token');
+              localStorage.setItem('nexora_last_username', payload.username);
+
+              setAlert(loginAlert, 'success', 'Login successful. Redirecting…');
+              setTimeout(() => redirectAfterLogin(payload.username), 500);
+            } else {
+              // Demo login (localStorage fallback)
+              const users = JSON.parse(localStorage.getItem('nexora_users') || '[]');
+              const found = users.find(u => (u.username || '').toLowerCase() === payload.username.toLowerCase());
+              if (!found || found.password !== payload.password) throw new Error('Invalid credentials.');
+              localStorage.setItem('nexora_token', 'demo-token');
+              localStorage.setItem('nexora_last_username', payload.username);
+              setAlert(loginAlert, 'success', 'Login successful. Redirecting…');
+              setTimeout(() => redirectAfterLogin(payload.username), 500);
+            }
+          } catch (err) {
+            setAlert(loginAlert, 'danger', err.message || 'Login failed.');
+          }
+        });
+      }
+
+      // ---- SIGNUP (username + email). Uses API only if signup.php exists; else demo localStorage. ----
+      const signupForm = $('#formSignup');
+      const signupAlert = $('#signupAlert');
+      if (signupForm) {
+        signupForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          signupAlert.classList.add('d-none');
+
+          const data = Object.fromEntries(new FormData(signupForm));
+          const payload = {
+            name: (data.name || '').trim(),
+            username: (data.username || '').trim(),
+            email: (data.email || '').trim(),
+            password: data.password || '',
+            confirm: data.confirm || ''
+          };
+
+          if (!payload.name || !payload.username || !payload.email || !payload.password || !payload.confirm) {
+            return setAlert(signupAlert, 'danger', 'Please fill out all required fields.');
+          }
+          if (payload.password.length < 6) {
+            return setAlert(signupAlert, 'danger', 'Password must be at least 6 characters.');
+          }
+          if (payload.password !== payload.confirm) {
+            return setAlert(signupAlert, 'danger', 'Passwords do not match.');
+          }
+
+          try {
+            if (signupUp) {
+              const res = await fetch(endpoints.signup, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify({
+                  name: payload.name,
+                  username: payload.username,
+                  email: payload.email,
+                  password: payload.password
+                })
+              });
+              if (!res.ok) {
+                const errJson = await res.json().catch(() => ({}));
+                throw new Error(errJson.message || 'Sign up failed.');
+              }
+              setAlert(signupAlert, 'success', 'Account created. You can now log in.');
+              const loginTab = document.querySelector('#login-tab');
+              if (loginTab && window.bootstrap?.Tab) new bootstrap.Tab(loginTab).show();
+            } else {
+              // Demo: localStorage
+              const users = JSON.parse(localStorage.getItem('nexora_users') || '[]');
+              const exists = users.some(u =>
+                (u.username || '').toLowerCase() === payload.username.toLowerCase() ||
+                (u.email || '').toLowerCase() === payload.email.toLowerCase()
+              );
+              if (exists) throw new Error('Email or username already exists.');
+              users.push({
+                name: payload.name,
+                username: payload.username,
+                email: payload.email,
+                password: payload.password
+              });
+              localStorage.setItem('nexora_users', JSON.stringify(users));
+              setAlert(signupAlert, 'success', 'Account created (demo). You can now log in.');
+              const loginTab = document.querySelector('#login-tab');
+              if (loginTab && window.bootstrap?.Tab) new bootstrap.Tab(loginTab).show();
+            }
+          } catch (err) {
+            setAlert(signupAlert, 'danger', err.message || 'Sign up failed.');
+          }
+        });
+      }
+
+      // ---- Remember me (store last username) ----
+      const remember = $('#rememberMe');
+      if (remember && loginForm) {
+        const saved = localStorage.getItem('nexora_last_username');
+        if (saved) loginForm.querySelector("input[name='username']").value = saved;
+        remember.addEventListener('change', () => {
+          const u = loginForm.querySelector("input[name='username']").value.trim();
+          if (remember.checked && u) localStorage.setItem('nexora_last_username', u);
+          else localStorage.removeItem('nexora_last_username');
+        });
+      }
+    })();
+  </script>
+
+
+</body>
+
+</html>

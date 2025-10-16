@@ -71,7 +71,7 @@ $theme = $stmt->fetchColumn() ?: 'system';
           <?php if (isset($_SESSION['loggedin'])): ?>
               <a href="logout.php" class="btn btn-primary rounded-pill py-2 px-4 ms-lg-5">Logout</a>
           <?php else: ?>
-              <a href="login.php" class="btn btn-primary rounded-pill py-2 px-4 ms-lg-5">Login</a>
+              <a href="login.html" class="btn btn-primary rounded-pill py-2 px-4 ms-lg-5">Login</a>
           <?php endif; ?>
 
         </div>

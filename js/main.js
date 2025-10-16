@@ -395,6 +395,224 @@
         }
     })();
 
+    // === Nexora Admin (Products) ===
+    (function () {
+        const $id = (s) => document.getElementById(s);
+        const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+
+        const state = {
+            items: [],
+            useAPI: false
+        };
+        const STORAGE_KEY = 'nexora.products';
+
+        function fmtPrice(v) {
+            const n = Number(v || 0);
+            return '₱' + n.toLocaleString(undefined, { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 });
+        }
+
+        function readForm() {
+            const cats = $$('input[id^="c"]').filter(i => i.checked).map(i => i.value);
+            return {
+                id: $id('adminProdId').value || (crypto.randomUUID ? crypto.randomUUID() : String(Date.now())),
+                name: $id('adminName').value.trim(),
+                sku: $id('adminSku').value.trim(),
+                price: parseFloat($id('adminPrice').value || '0'),
+                added: $id('adminAdded').value || new Date().toISOString().slice(0, 10),
+                categories: cats,
+                desc: $id('adminDesc').value.trim(),
+                specs: $id('adminSpecs').value.trim(),
+                video: $id('adminVideo').value.trim(),
+                imageData: ($id('adminPreview').dataset.src || '')
+            };
+        }
+
+        function fillForm(p) {
+            $id('adminProdId').value = p.id || '';
+            $id('adminName').value = p.name || '';
+            $id('adminSku').value = p.sku || '';
+            $id('adminPrice').value = p.price ?? '';
+            $id('adminAdded').value = p.added || '';
+            $$('input[id^="c"]').forEach(i => i.checked = (p.categories || []).includes(i.value));
+            $id('adminDesc').value = p.desc || '';
+            $id('adminSpecs').value = p.specs || '';
+            $id('adminVideo').value = p.video || '';
+            if (p.imageData) {
+                const img = $id('adminPreview');
+                img.src = p.imageData; img.dataset.src = p.imageData; img.classList.remove('d-none');
+            } else {
+                $id('adminPreview').classList.add('d-none');
+                $id('adminPreview').removeAttribute('data-src');
+            }
+        }
+
+        function clearForm() {
+            const form = $id('adminProductForm');
+            if (form) form.reset();
+            $id('adminProdId').value = '';
+            $$('input[id^="c"]').forEach(i => i.checked = false);
+            $id('adminPreview').classList.add('d-none');
+            $id('adminPreview').removeAttribute('data-src');
+        }
+
+        function saveLocal() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state.items)); }
+        function loadLocal() {
+            try { state.items = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
+            catch { state.items = []; }
+        }
+
+        function render() {
+            const q = ($id('adminQ')?.value || '').trim().toLowerCase();
+            const tbody = $id('adminRows');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+            const filtered = state.items.filter(p => {
+                const hay = [p.name, p.sku, (p.categories || []).join(','), p.desc].join(' ').toLowerCase();
+                return !q || hay.includes(q);
+            });
+            if (!filtered.length) {
+                tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted">No products yet</td></tr>';
+                return;
+            }
+            filtered.sort((a, b) => (b.added || '').localeCompare(a.added || ''));
+            filtered.forEach((p, idx) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+        <td>${idx + 1}</td>
+        <td class="fw-semibold">${p.name}</td>
+        <td><code>${p.sku}</code></td>
+        <td>${fmtPrice(p.price)}</td>
+        <td>${(p.categories || []).map(c => `<span class="chip">${c}</span>`).join('')}</td>
+        <td>${p.added || ''}</td>
+        <td class="text-end">
+          <div class="btn-group btn-group-sm" role="group">
+            <button class="btn btn-outline-secondary" data-action="edit" data-id="${p.id}"><i class="bi bi-pencil"></i></button>
+            <button class="btn btn-outline-danger" data-action="del" data-id="${p.id}"><i class="bi bi-trash"></i></button>
+          </div>
+        </td>`;
+                tbody.appendChild(tr);
+            });
+        }
+
+        async function detectAPI() {
+            try {
+                const res = await fetch('/api/health', { method: 'GET' });
+                state.useAPI = res.ok;
+            } catch { state.useAPI = false; }
+        }
+
+        async function upsertProduct(p) {
+            if (state.useAPI) {
+                const res = await fetch('/api/products', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(p)
+                });
+                if (!res.ok) throw new Error('API save failed');
+                return await res.json();
+            } else {
+                const i = state.items.findIndex(x => x.id === p.id || x.sku === p.sku);
+                if (i >= 0) state.items[i] = { ...state.items[i], ...p }; else state.items.push(p);
+                saveLocal();
+                return p;
+            }
+        }
+
+        async function deleteProduct(id) {
+            if (state.useAPI) {
+                const res = await fetch(`/api/products/${encodeURIComponent(id)}`, { method: 'DELETE' });
+                if (!res.ok) throw new Error('API delete failed');
+            } else {
+                state.items = state.items.filter(p => p.id !== id);
+                saveLocal();
+            }
+        }
+
+        // Image drag-drop
+        function readFile(file) {
+            return new Promise((resolve, reject) => {
+                const fr = new FileReader();
+                fr.onload = () => resolve(fr.result);
+                fr.onerror = reject;
+                fr.readAsDataURL(file);
+            });
+        }
+        function initImageDrag() {
+            const area = $id('adminDragArea');
+            const input = $id('adminImage');
+            if (!area || !input) return;
+
+            area.addEventListener('click', () => input.click());
+            area.addEventListener('dragover', e => { e.preventDefault(); area.classList.add('dragover'); });
+            area.addEventListener('dragleave', () => area.classList.remove('dragover'));
+            area.addEventListener('drop', async e => {
+                e.preventDefault(); area.classList.remove('dragover');
+                const f = e.dataTransfer.files?.[0]; if (!f) return;
+                const dataURL = await readFile(f);
+                const img = $id('adminPreview');
+                img.src = dataURL; img.dataset.src = dataURL; img.classList.remove('d-none');
+            });
+            input.addEventListener('change', async () => {
+                const f = input.files?.[0]; if (!f) return;
+                const dataURL = await readFile(f);
+                const img = $id('adminPreview');
+                img.src = dataURL; img.dataset.src = dataURL; img.classList.remove('d-none');
+                input.value = '';
+            });
+        }
+
+        // Boot
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Allow page to include this block without errors on other pages
+            if (!$id('adminProductForm')) return;
+
+            // Spinner already handled in your main.js; just set a tiny delay to mimic
+            setTimeout(() => document.querySelector('#spinner')?.classList.remove('show'), 200);
+
+            await detectAPI();
+            const modeEl = $id('adminStorageMode');
+            if (modeEl) modeEl.textContent = state.useAPI
+                ? 'Using backend API (POST /api/products)'
+                : 'No backend detected — using browser localStorage (demo)';
+
+            if (!state.useAPI) loadLocal();
+            render();
+            initImageDrag();
+
+            $id('adminProductForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const p = readForm();
+                if (!p.categories || p.categories.length === 0) {
+                    alert('Please select at least one category.');
+                    return;
+                }
+                try { await upsertProduct(p); clearForm(); render(); }
+                catch (err) { alert(err.message || 'Failed to save'); }
+            });
+
+            $id('adminBtnReset').addEventListener('click', clearForm);
+            $id('adminQ').addEventListener('input', render);
+
+            $id('adminRows').addEventListener('click', async (e) => {
+                const btn = e.target.closest('button[data-action]'); if (!btn) return;
+                const id = btn.dataset.id; const action = btn.dataset.action;
+                const prod = state.items.find(x => x.id === id);
+                if (action === 'edit' && prod) { fillForm(prod); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+                if (action === 'del') {
+                    if (confirm('Delete this product?')) { await deleteProduct(id); render(); }
+                }
+            });
+
+            $id('adminBtnExport').addEventListener('click', () => {
+                const blob = new Blob([JSON.stringify(state.items, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url; a.download = 'products.json'; a.click();
+                setTimeout(() => URL.revokeObjectURL(url), 1200);
+            });
+        });
+    })();
+
 
 
 })(jQuery);
