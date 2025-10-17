@@ -1,39 +1,34 @@
 <?php
-declare(strict_types=1);
-require __DIR__ . '/../_db.php';
+require __DIR__ . '/../db.php';
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-  respond(405, ['message' => 'Method not allowed']);
-}
+$input = json_decode(file_get_contents('php://input'), true) ?: [];
+$name = trim($input['name'] ?? '');
+$sku  = trim($input['sku'] ?? '');
+$price = $input['price'] ?? null;
+$date_added = trim($input['date_added'] ?? '');
+$categories = trim($input['categories'] ?? '');
+$desc = trim($input['description'] ?? '');
+$specs = trim($input['specs'] ?? '');
+$image = trim($input['image'] ?? ''); // this is the URL path returned by upload.php
 
-$d = json_input();
-
-$name        = trim($d['name'] ?? '');
-$sku         = trim($d['sku'] ?? '');
-$price       = (float)($d['price'] ?? 0);
-$date_added  = trim($d['date_added'] ?? ''); // 'YYYY-MM-DD' or ''
-$categories  = trim($d['categories'] ?? '');
-$description = trim($d['description'] ?? '');
-
-if ($name === '' || $sku === '') {
-  respond(400, ['message' => 'Name and SKU are required.']);
+if ($name === '' || $sku === '' || $categories === '' || !is_numeric($price)) {
+  json_out(400, ['ok'=>false, 'message'=>'Missing required fields']);
 }
 
 try {
-  $stmt = $pdo->prepare("
-    INSERT INTO products (name, sku, price, date_added, categories, description)
-    VALUES (:name, :sku, :price, NULLIF(:date_added,''), :categories, :description)
-  ");
-  $stmt->execute([
-    ':name' => $name,
-    ':sku' => $sku,
-    ':price' => $price,
-    ':date_added' => $date_added,
-    ':categories' => $categories,
-    ':description' => $description,
+  $sql = "INSERT INTO products
+            (name, sku, price, date_added, categories, short_description, specs, image_path)
+          VALUES
+            (:name, :sku, :price, NULLIF(:date_added,''), :categories, :desc, :specs, NULLIF(:image,''))";
+  $st = db()->prepare($sql);
+  $st->execute([
+    ':name'=>$name, ':sku'=>$sku, ':price'=>$price,
+    ':date_added'=>$date_added, ':categories'=>$categories,
+    ':desc'=>$desc, ':specs'=>$specs, ':image'=>$image
   ]);
-  respond(200, ['message' => 'Created', 'id' => (int)$pdo->lastInsertId()]);
+
+  json_out(200, ['ok'=>true, 'id'=> (int)db()->lastInsertId()]);
 } catch (Throwable $e) {
-  // If you get “Create failed”, temporarily return $e->getMessage() to see the exact SQL error.
-  respond(500, ['message' => 'Create failed']);
+  // Duplicate SKU etc.
+  json_out(400, ['ok'=>false, 'message'=>$e->getMessage()]);
 }

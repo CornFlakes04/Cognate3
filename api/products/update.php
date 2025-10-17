@@ -1,41 +1,37 @@
 <?php
-declare(strict_types=1);
-require __DIR__ . '/../_db.php';
+require __DIR__ . '/../db.php';
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-  respond(405, ['message' => 'Method not allowed']);
+$input = json_decode(file_get_contents('php://input'), true) ?: [];
+$id = (int)($input['id'] ?? 0);
+if ($id <= 0) json_out(400, ['ok'=>false, 'message'=>'Invalid id']);
+
+$name = trim($input['name'] ?? '');
+$sku  = trim($input['sku'] ?? '');
+$price = $input['price'] ?? null;
+$date_added = trim($input['date_added'] ?? '');
+$categories = trim($input['categories'] ?? '');
+$desc = trim($input['description'] ?? '');
+$specs = trim($input['specs'] ?? '');
+$image = trim($input['image'] ?? ''); // optional; keep old if empty
+
+if ($name === '' || $sku === '' || $categories === '' || !is_numeric($price)) {
+  json_out(400, ['ok'=>false, 'message'=>'Missing required fields']);
 }
 
-$d = json_input();
-
-$id          = (int)($d['id'] ?? 0);
-$name        = trim($d['name'] ?? '');
-$sku         = trim($d['sku'] ?? '');
-$price       = (float)($d['price'] ?? 0);
-$date_added  = trim($d['date_added'] ?? '');
-$categories  = trim($d['categories'] ?? '');
-$description = trim($d['description'] ?? '');
-
-if ($id <= 0)                    respond(400, ['message' => 'Invalid id']);
-if ($name === '' || $sku === '') respond(400, ['message' => 'Name and SKU are required.']);
-
 try {
-  $stmt = $pdo->prepare("
-    UPDATE products SET
-      name=:name, sku=:sku, price=:price, date_added=NULLIF(:date_added,''),
-      categories=:categories, description=:description
-    WHERE id=:id
-  ");
-  $stmt->execute([
-    ':id' => $id,
-    ':name' => $name,
-    ':sku' => $sku,
-    ':price' => $price,
-    ':date_added' => $date_added,
-    ':categories' => $categories,
-    ':description' => $description,
+  $sql = "UPDATE products
+          SET name=:name, sku=:sku, price=:price,
+              date_added=NULLIF(:date_added,''), categories=:categories,
+              short_description=:desc, specs=:specs,
+              image_path = CASE WHEN :image='' THEN image_path ELSE :image END
+          WHERE id=:id";
+  $st = db()->prepare($sql);
+  $st->execute([
+    ':name'=>$name, ':sku'=>$sku, ':price'=>$price,
+    ':date_added'=>$date_added, ':categories'=>$categories,
+    ':desc'=>$desc, ':specs'=>$specs, ':image'=>$image, ':id'=>$id
   ]);
-  respond(200, ['message' => 'Updated']);
+  json_out(200, ['ok'=>true]);
 } catch (Throwable $e) {
-  respond(500, ['message' => 'Update failed']);
+  json_out(400, ['ok'=>false, 'message'=>$e->getMessage()]);
 }

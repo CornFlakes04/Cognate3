@@ -1,5 +1,9 @@
 RewriteEngine On
 RewriteBase /Cognate3/
 
-RewriteRule ^api/auth/login$  api/auth/login.php  [L,QSA]
-RewriteRule ^api/auth/signup$ api/auth/signup.php [L,QSA]
+RewriteRule ^api/health$               api/health.php [L,QSA]
+RewriteRule ^api/upload$               api/upload.php [L,QSA]
+RewriteRule ^api/products/list$        api/products/list.php [L,QSA]
+RewriteRule ^api/products/create$      api/products/create.php [L,QSA]
+RewriteRule ^api/products/update$      api/products/update.php [L,QSA]
+RewriteRule ^api/products/delete$      api/products/delete.php [L,QSA]
