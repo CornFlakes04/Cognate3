@@ -1,6 +1,5 @@
 <?php
 declare(strict_types=1);
-
 session_start();
 $_SESSION = [];
 if (ini_get('session.use_cookies')) {
@@ -8,6 +7,6 @@ if (ini_get('session.use_cookies')) {
   setcookie(session_name(), '', time()-42000, $p['path'], $p['domain'], $p['secure'], $p['httponly']);
 }
 session_destroy();
-
-header('Content-Type: application/json');
-echo json_encode(['ok' => true]);
+setcookie('auth_token', '', time()-3600, '/'); // if you ever set one
+header('Location: /Cognate3/login.html');
+exit;

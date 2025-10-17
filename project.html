@@ -5,6 +5,9 @@
   <meta charset="utf-8" />
   <title>Nexora Tech — Projects</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Avoid cached back-button after logout -->
+  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+  <meta http-equiv="Pragma" content="no-cache">
 
   <!-- Favicon -->
   <link href="img/favicon.ico" rel="icon" />
@@ -25,12 +28,26 @@
   <!-- Site CSS -->
   <link href="css/bootstrap.min.css" rel="stylesheet" />
   <link href="css/style.css" rel="stylesheet" />
+
+  <!-- Early guard: if not logged in, bounce to login -->
+  <script>
+    (function () {
+      try {
+        if (!localStorage.getItem('nexora_token')) {
+          window.location.replace('/Cognate3/login.html');
+        }
+      } catch (_) {
+        // If storage not available, be conservative and bounce to login
+        window.location.replace('/Cognate3/login.html');
+      }
+    })();
+  </script>
 </head>
 
 <body>
   <!-- Spinner -->
   <div id="spinner"
-       class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+    class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
     <div class="spinner-grow text-primary" style="width: 3rem; height: 3rem;" role="status">
       <span class="sr-only">Loading...</span>
     </div>
@@ -44,7 +61,8 @@
         <a href="index.html" class="navbar-brand">
           <h1>Nexora Tech</h1>
         </a>
-        <button type="button" class="navbar-toggler ms-auto me-0" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+        <button type="button" class="navbar-toggler ms-auto me-0" data-bs-toggle="collapse"
+          data-bs-target="#navbarCollapse">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -52,10 +70,14 @@
             <a href="index.html" class="nav-item nav-link">Home</a>
             <a href="about.html" class="nav-item nav-link">About</a>
             <a href="service.html" class="nav-item nav-link">Services</a>
-            <a href="project.html" class="nav-item nav-link active">Projects</a>
+            <a href="project.html" class="nav-item nav-link active" data-requires-auth="1">Projects</a>
             <a href="contact.html" class="nav-item nav-link">Contact</a>
-            <a id="loginLink" href="login.html" class="nav-item nav-link">Log in</a>
-            <button id="logoutBtn" type="button" class="btn btn-outline-danger ms-lg-3 d-none">Logout</button>
+
+            <!-- Auth controls -->
+            <a id="loginLink" href="/Cognate3/login.html" class="nav-item nav-link d-none">Log in</a>
+            <!-- Make logout an ANCHOR that hits PHP logout which redirects -->
+            <a id="logoutLink" href="/Cognate3/api/auth/logout.php"
+              class="btn btn-outline-danger ms-lg-3 d-none">Logout</a>
           </div>
         </div>
       </nav>
@@ -69,13 +91,14 @@
   </div>
   <!-- Hero End -->
 
-  <!-- Static Projects (keep these as-is) -->
+  <!-- Static Projects -->
   <div class="container-fluid mt-5">
     <div class="container mt-5">
       <div class="row g-0">
         <div class="col-lg-5 wow fadeIn" data-wow-delay="0.1s">
           <div class="d-flex flex-column justify-content-center bg-primary h-100 p-5">
-            <h1 class="text-white mb-5">Our Latest <span class="text-uppercase text-primary bg-light px-2">Projects</span></h1>
+            <h1 class="text-white mb-5">Our Latest <span
+                class="text-uppercase text-primary bg-light px-2">Projects</span></h1>
             <h4 class="text-white mb-0"><span class="display-1">6</span> of our latest projects</h4>
           </div>
         </div>
@@ -86,7 +109,7 @@
               <div class="project-item position-relative overflow-hidden">
                 <img class="img-fluid w-100" src="img/project-1.jpg" alt="">
                 <a class="project-overlay text-decoration-none" href="#" data-bs-toggle="modal"
-                   data-bs-target="#projectVideoModal" data-video="img/data.mp4" data-title="Data">
+                  data-bs-target="#projectVideoModal" data-video="img/data.mp4" data-title="Data">
                   <h4 class="text-white">Data</h4>
                 </a>
               </div>
@@ -96,7 +119,7 @@
               <div class="project-item position-relative overflow-hidden">
                 <img class="img-fluid w-100" src="img/project-2.jpg" alt="">
                 <a class="project-overlay text-decoration-none" href="#" data-bs-toggle="modal"
-                   data-bs-target="#projectVideoModal" data-video="img/bionic.mp4" data-title="Bionic">
+                  data-bs-target="#projectVideoModal" data-video="img/bionic.mp4" data-title="Bionic">
                   <h4 class="text-white">Bionic</h4>
                 </a>
               </div>
@@ -106,7 +129,7 @@
               <div class="project-item position-relative overflow-hidden">
                 <img class="img-fluid w-100" src="img/project-3.jpg" alt="">
                 <a class="project-overlay text-decoration-none" href="#" data-bs-toggle="modal"
-                   data-bs-target="#projectVideoModal" data-video="img/listen.mp4" data-title="Listen">
+                  data-bs-target="#projectVideoModal" data-video="img/listen.mp4" data-title="Listen">
                   <h4 class="text-white">Listen</h4>
                 </a>
               </div>
@@ -116,7 +139,7 @@
               <div class="project-item position-relative overflow-hidden">
                 <img class="img-fluid w-100" src="img/project-4.jpg" alt="">
                 <a class="project-overlay text-decoration-none" href="#" data-bs-toggle="modal"
-                   data-bs-target="#projectVideoModal" data-video="img/vision.mp4" data-title="Vision">
+                  data-bs-target="#projectVideoModal" data-video="img/vision.mp4" data-title="Vision">
                   <h4 class="text-white">Vision</h4>
                 </a>
               </div>
@@ -126,7 +149,7 @@
               <div class="project-item position-relative overflow-hidden">
                 <img class="img-fluid w-100" src="img/project-5.jpg" alt="">
                 <a class="project-overlay text-decoration-none" href="#" data-bs-toggle="modal"
-                   data-bs-target="#projectVideoModal" data-video="img/control.mp4" data-title="Control">
+                  data-bs-target="#projectVideoModal" data-video="img/control.mp4" data-title="Control">
                   <h4 class="text-white">Control</h4>
                 </a>
               </div>
@@ -136,7 +159,7 @@
               <div class="project-item position-relative overflow-hidden">
                 <img class="img-fluid w-100" src="img/project-6.jpg" alt="">
                 <a class="project-overlay text-decoration-none" href="#" data-bs-toggle="modal"
-                   data-bs-target="#projectVideoModal" data-video="img/sensors.mp4" data-title="Sensors">
+                  data-bs-target="#projectVideoModal" data-video="img/sensors.mp4" data-title="Sensors">
                   <h4 class="text-white">Sensors</h4>
                 </a>
               </div>
@@ -241,7 +264,8 @@
       <div class="row g-5 text-center text-lg-start">
         <div class="col-lg-4">
           <h1 class="text-white mb-3">NEXORA</h1>
-          <p class="mb-0">We deliver smart IoT solutions that simplify life and work by connecting devices and data seamlessly for smarter living.</p>
+          <p class="mb-0">We deliver smart IoT solutions that simplify life and work by connecting devices and data
+            seamlessly for smarter living.</p>
         </div>
         <div class="col-lg-4">
           <h5 class="text-white mb-4">Get In Touch</h5>
@@ -274,32 +298,33 @@
   <script src="lib/easing/easing.min.js"></script>
   <script src="lib/waypoints/waypoints.min.js"></script>
   <script src="lib/owlcarousel/owl.carousel.min.js"></script>
-
-  <!-- Site JS -->
   <script src="js/main.js"></script>
 
-  <!-- Auth nav (show Logout when signed in) -->
+  <!-- Auth/nav + logout behavior -->
   <script>
     (function () {
-      const hasToken = !!localStorage.getItem('nexora_token');
       const loginLink = document.getElementById('loginLink');
-      const logoutBtn = document.getElementById('logoutBtn');
+      const logoutLink = document.getElementById('logoutLink');
+      const hasToken = !!localStorage.getItem('nexora_token');
 
+      // Show/hide nav items
       if (hasToken) {
-        if (loginLink) loginLink.classList.add('d-none');
-        if (logoutBtn) logoutBtn.classList.remove('d-none');
+        loginLink?.classList.add('d-none');
+        logoutLink?.classList.remove('d-none');
       } else {
-        if (loginLink) loginLink.classList.remove('d-none');
-        if (logoutBtn) logoutBtn.classList.add('d-none');
+        loginLink?.classList.remove('d-none');
+        logoutLink?.classList.add('d-none');
       }
 
-      if (logoutBtn) {
-        logoutBtn.addEventListener('click', () => {
-          // Reuse your existing logout behaviour
+      // Clear frontend token on click, then let the anchor navigate to PHP logout
+      logoutLink?.addEventListener('click', function () {
+        try {
           localStorage.removeItem('nexora_token');
-          location.reload();
-        });
-      }
+          sessionStorage.clear();
+        } catch (_) { }
+        // No preventDefault: let browser follow /api/auth/logout.php,
+        // which ends PHP session and redirects to /Cognate3/login.html
+      });
     })();
   </script>
 
@@ -322,7 +347,6 @@
       });
 
       modal?.addEventListener('hidden.bs.modal', () => {
-        // stop video on close
         video.pause();
         video.currentTime = 0;
       });
@@ -335,7 +359,6 @@
       const $ = (s, r = document) => r.querySelector(s);
       const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 
-      // Adjust if your app path differs
       const base = '/Cognate3/';
       const LIST_URL = base + 'api/products/list.php';
 
@@ -344,11 +367,11 @@
       const clearBtn = $('#clearFilters');
 
       const modalTitle = $('#productModalTitle');
-      const modalImg   = $('#productModalImg');
-      const modalCat   = $('#productModalCat');
+      const modalImg = $('#productModalImg');
+      const modalCat = $('#productModalCat');
       const modalPrice = $('#productModalPrice');
-      const modalDesc  = $('#productModalDesc');
-      const modalCTA   = $('#productModalCTA');
+      const modalDesc = $('#productModalDesc');
+      const modalCTA = $('#productModalCTA');
 
       const peso = (v) => {
         const n = Number(v);
@@ -356,7 +379,6 @@
       };
       const esc = (s) => (s == null ? '' : String(s));
 
-      // Fallback image if DB image is empty
       function fallbackImage(p) {
         const name = (p.name || '').toLowerCase();
         if (name.includes('predictive maintenance')) return 'img/product-1.png';
@@ -370,12 +392,12 @@
       }
 
       function cardHTML(p, idx) {
-        const cats     = (p.categories || '').split(',').map(s => s.trim()).filter(Boolean);
-        const catAttr  = cats.join(',');
+        const cats = (p.categories || '').split(',').map(s => s.trim()).filter(Boolean);
+        const catAttr = cats.join(',');
         const catLabel = cats[0] || '';
-        const img      = (p.image && p.image.trim()) ? p.image : fallbackImage(p);
-        const specs    = (p.specs || '').split(',').map(s => s.trim()).filter(Boolean).slice(0, 4);
-        const delay    = (0.1 + (idx % 6) * 0.1).toFixed(1);
+        const img = (p.image && p.image.trim()) ? p.image : fallbackImage(p);
+        const specs = (p.specs || '').split(',').map(s => s.trim()).filter(Boolean).slice(0, 4);
+        const delay = (0.1 + (idx % 6) * 0.1).toFixed(1);
 
         return `
           <div class="col-md-6 col-lg-5th wow fadeIn" data-wow-delay="${delay}s">
@@ -426,11 +448,11 @@
           const card = ev.target.closest('.product-item');
           if (!card) return;
 
-          const name  = card.getAttribute('data-name')  || '';
-          const img   = card.getAttribute('data-image') || '';
-          const cats  = card.getAttribute('data-cats')  || '';
+          const name = card.getAttribute('data-name') || '';
+          const img = card.getAttribute('data-image') || '';
+          const cats = card.getAttribute('data-cats') || '';
           const price = card.getAttribute('data-price') || '0';
-          const desc  = card.getAttribute('data-desc')  || '';
+          const desc = card.getAttribute('data-desc') || '';
 
           if (modalTitle) modalTitle.textContent = name;
           if (modalImg) { modalImg.src = img; modalImg.alt = name; }
@@ -442,23 +464,21 @@
       }
 
       function activeCategories() {
-        return $$('#filters input[type="checkbox"]:checked').map(cb => cb.value);
+        return Array.from(document.querySelectorAll('#filters input[type="checkbox"]:checked')).map(cb => cb.value);
       }
       function applyFilters() {
         const act = activeCategories();
-        $$('#productGrid .product-item').forEach(card => {
+        Array.from(document.querySelectorAll('#productGrid .product-item')).forEach(card => {
           const cats = (card.getAttribute('data-cats') || '').split(',').map(s => s.trim());
           const show = act.length === 0 || act.some(c => cats.includes(c));
           (card.closest('.col-md-6, .col-lg-5th, .col') || card).style.display = show ? '' : 'none';
         });
       }
-      if (filtersWrap) filtersWrap.addEventListener('change', applyFilters);
-      if (clearBtn) {
-        clearBtn.addEventListener('click', () => {
-          $$('#filters input[type="checkbox"]').forEach(cb => (cb.checked = false));
-          applyFilters();
-        });
-      }
+      document.getElementById('filters')?.addEventListener('change', applyFilters);
+      document.getElementById('clearFilters')?.addEventListener('click', () => {
+        Array.from(document.querySelectorAll('#filters input[type="checkbox"]')).forEach(cb => (cb.checked = false));
+        applyFilters();
+      });
 
       // Hide spinner after page load
       window.addEventListener('load', () => {
@@ -484,4 +504,5 @@
     })();
   </script>
 </body>
+
 </html>

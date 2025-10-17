@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8" />
   <title>Nexora Tech — Admin · Products</title>
@@ -24,24 +25,62 @@
   <link href="css/style.css" rel="stylesheet" />
 
   <style>
-    .admin-hero { min-height: 36vh; }
-    .drag-area {
-      border: 2px dashed #cbd5e1; border-radius: .75rem; padding: 1.25rem; text-align: center; cursor: pointer;
-      background: #fafafa; transition: .15s ease-in-out;
+    .admin-hero {
+      min-height: 36vh;
     }
-    .drag-area.dragover { background:#eef6ff; border-color:#60a5fa; }
-    .drag-area i { font-size: 1.6rem; display:block; margin-bottom:.25rem; }
-    .thumb { max-width: 100%; height: auto; border-radius: .5rem; border:1px solid #e5e7eb; }
-    .search-input{min-width:260px}
-    .chip { display:inline-block; padding:.15rem .5rem; border-radius:999px; border:1px solid #dee2e6; font-size:.75rem; margin-right:.25rem; }
-    .table td, .table th { vertical-align: middle; }
+
+    .drag-area {
+      border: 2px dashed #cbd5e1;
+      border-radius: .75rem;
+      padding: 1.25rem;
+      text-align: center;
+      cursor: pointer;
+      background: #fafafa;
+      transition: .15s ease-in-out;
+    }
+
+    .drag-area.dragover {
+      background: #eef6ff;
+      border-color: #60a5fa;
+    }
+
+    .drag-area i {
+      font-size: 1.6rem;
+      display: block;
+      margin-bottom: .25rem;
+    }
+
+    .thumb {
+      max-width: 100%;
+      height: auto;
+      border-radius: .5rem;
+      border: 1px solid #e5e7eb;
+    }
+
+    .search-input {
+      min-width: 260px
+    }
+
+    .chip {
+      display: inline-block;
+      padding: .15rem .5rem;
+      border-radius: 999px;
+      border: 1px solid #dee2e6;
+      font-size: .75rem;
+      margin-right: .25rem;
+    }
+
+    .table td,
+    .table th {
+      vertical-align: middle;
+    }
   </style>
 </head>
 
 <body>
   <!-- Spinner -->
   <div id="spinner"
-       class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+    class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
     <div class="spinner-grow text-primary" style="width: 3rem; height: 3rem;" role="status">
       <span class="sr-only">Loading...</span>
     </div>
@@ -51,33 +90,36 @@
   <div class="container-fluid sticky-top">
     <div class="container">
       <nav class="navbar navbar-expand-lg navbar-light border-bottom border-2 border-white">
-        <a href="index.html" class="navbar-brand">
-          <h1>Nexora Tech <span class="text-primary">Admin</span></h1>
-        </a>
+        <span class="navbar-brand d-flex align-items-center">
+          <h1 class="mb-0">Nexora Tech <span class="text-primary">Admin</span></h1>
+          <span class="navbar-text ms-3 d-none d-lg-inline">Products</span>
+        </span>
+
         <button class="navbar-toggler ms-auto me-0" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarCollapse">
+          data-bs-target="#navbarCollapse">
           <span class="navbar-toggler-icon"></span>
         </button>
+
         <div class="collapse navbar-collapse" id="navbarCollapse">
-          <div class="navbar-nav ms-auto">
-            <a href="index.html" class="nav-item nav-link">Website</a>
-            <a href="project.html" class="nav-item nav-link">Projects</a>
-            <a href="#" class="nav-item nav-link active">Admin</a>
+          <div class="navbar-nav ms-auto align-items-lg-center">
+            <!-- Products label for mobile (since the pill is hidden on small screens) -->
+            <span class="navbar-text fw-semibold d-lg-none me-3">Products</span>
+
+            <!-- Logout -->
+            <a id="logoutLink" href="/Cognate3/api/auth/logout.php" class="btn btn-outline-danger ms-lg-3">Logout</a>
           </div>
         </div>
       </nav>
     </div>
   </div>
 
-  <!-- Hero -->
-  <div class="container-fluid bg-primary hero-header d-flex align-items-center admin-hero">
-    <div class="container text-white">
-      <div class="d-flex align-items-center gap-3">
-        <span class="admin-badge bg-light text-primary fw-bold">Products</span>
-        <h1 class="mb-0">Admin Console</h1>
-      </div>
+
+  <!-- Hero Start -->
+  <div class="container-fluid bg-primary hero-header min-vh-50 d-flex align-items-center">
+    <div class="container">
     </div>
   </div>
+  <!-- Hero End -->
 
   <!-- Main -->
   <div class="container my-5">
@@ -111,23 +153,31 @@
               <div class="col-12">
                 <label class="form-label required">Categories</label>
                 <div class="d-flex flex-wrap gap-2">
-                  <div class="form-check"><input class="form-check-input" type="checkbox" value="Data" id="cData"><label class="form-check-label" for="cData">Data</label></div>
-                  <div class="form-check"><input class="form-check-input" type="checkbox" value="Bionic" id="cBionic"><label class="form-check-label" for="cBionic">Bionic</label></div>
-                  <div class="form-check"><input class="form-check-input" type="checkbox" value="Listen" id="cListen"><label class="form-check-label" for="cListen">Listen</label></div>
-                  <div class="form-check"><input class="form-check-input" type="checkbox" value="Vision" id="cVision"><label class="form-check-label" for="cVision">Vision</label></div>
-                  <div class="form-check"><input class="form-check-input" type="checkbox" value="Control" id="cControl"><label class="form-check-label" for="cControl">Control</label></div>
-                  <div class="form-check"><input class="form-check-input" type="checkbox" value="Sensors" id="cSensors"><label class="form-check-label" for="cSensors">Sensors</label></div>
+                  <div class="form-check"><input class="form-check-input" type="checkbox" value="Data" id="cData"><label
+                      class="form-check-label" for="cData">Data</label></div>
+                  <div class="form-check"><input class="form-check-input" type="checkbox" value="Bionic"
+                      id="cBionic"><label class="form-check-label" for="cBionic">Bionic</label></div>
+                  <div class="form-check"><input class="form-check-input" type="checkbox" value="Listen"
+                      id="cListen"><label class="form-check-label" for="cListen">Listen</label></div>
+                  <div class="form-check"><input class="form-check-input" type="checkbox" value="Vision"
+                      id="cVision"><label class="form-check-label" for="cVision">Vision</label></div>
+                  <div class="form-check"><input class="form-check-input" type="checkbox" value="Control"
+                      id="cControl"><label class="form-check-label" for="cControl">Control</label></div>
+                  <div class="form-check"><input class="form-check-input" type="checkbox" value="Sensors"
+                      id="cSensors"><label class="form-check-label" for="cSensors">Sensors</label></div>
                 </div>
               </div>
 
               <div class="col-12">
                 <label class="form-label required">Short Description</label>
-                <textarea id="adminDesc" class="form-control" rows="4" required placeholder="What makes this product compelling…"></textarea>
+                <textarea id="adminDesc" class="form-control" rows="4" required
+                  placeholder="What makes this product compelling…"></textarea>
               </div>
 
               <div class="col-12">
                 <label class="form-label">Specs (optional)</label>
-                <input id="adminSpecs" class="form-control" placeholder="Comma-separated (e.g., 12 DOF, 8-ch sEMG, Haptics)" />
+                <input id="adminSpecs" class="form-control"
+                  placeholder="Comma-separated (e.g., 12 DOF, 8-ch sEMG, Haptics)" />
               </div>
 
               <!-- Drag & drop image uploader -->
@@ -164,8 +214,10 @@
             <div class="d-flex flex-wrap align-items-center justify-content-between mb-3 gap-2">
               <h4 class="section-title mb-0">Products</h4>
               <div class="d-flex align-items-center gap-2">
-                <input id="adminQ" class="form-control form-control-sm search-input" placeholder="Search name, SKU, category…" />
-                <button id="adminBtnExport" class="btn btn-outline-secondary btn-sm"><i class="bi bi-download me-1"></i>Export JSON</button>
+                <input id="adminQ" class="form-control form-control-sm search-input"
+                  placeholder="Search name, SKU, category…" />
+                <button id="adminBtnExport" class="btn btn-outline-secondary btn-sm"><i
+                    class="bi bi-download me-1"></i>Export JSON</button>
               </div>
             </div>
             <div class="table-responsive">
@@ -182,7 +234,9 @@
                   </tr>
                 </thead>
                 <tbody id="adminRows">
-                  <tr><td colspan="7" class="text-center text-muted">Loading…</td></tr>
+                  <tr>
+                    <td colspan="7" class="text-center text-muted">Loading…</td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -247,7 +301,7 @@
       const endpoints = {
         health: base + 'api/health.php',
         upload: base + 'api/upload.php',              // server saves into /Cognate3/uploads
-        list:   base + 'api/products/list.php',
+        list: base + 'api/products/list.php',
         create: base + 'api/products/create.php',
         update: base + 'api/products/update.php',
         remove: base + 'api/products/delete.php'
@@ -264,13 +318,13 @@
       // Form
       const f = {
         form: $('#adminProductForm'),
-        id:   $('#adminProdId'),
+        id: $('#adminProdId'),
         name: $('#adminName'),
-        sku:  $('#adminSku'),
-        price:$('#adminPrice'),
-        added:$('#adminAdded'),
+        sku: $('#adminSku'),
+        price: $('#adminPrice'),
+        added: $('#adminAdded'),
         desc: $('#adminDesc'),
-        specs:$('#adminSpecs'),
+        specs: $('#adminSpecs'),
         // drag-drop image
         drag: $('#adminDragArea'),
         file: $('#adminImage'),
@@ -300,7 +354,7 @@
         alertEl.classList.remove('d-none');
         setTimeout(() => alertEl.classList.add('d-none'), 2500);
       }
-      const peso = v => '₱' + Number(v||0).toLocaleString('en-PH', {minimumFractionDigits:2, maximumFractionDigits:2});
+      const peso = v => '₱' + Number(v || 0).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
       function getCategoriesFromForm() {
         const cats = [];
@@ -321,20 +375,20 @@
         f.cControl.checked = set.has('Control');
         f.cSensors.checked = set.has('Sensors');
       }
-      function escapeHtml(s){
-        return (s==null?'':String(s)).replace(/[&<>"']/g, c=>({
-          '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+      function escapeHtml(s) {
+        return (s == null ? '' : String(s)).replace(/[&<>"']/g, c => ({
+          '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
         }[c]));
       }
 
       function rowHTML(p, i) {
         return `<tr data-id="${p.id}">
-          <td>${i+1}</td>
+          <td>${i + 1}</td>
           <td>${escapeHtml(p.name || '')}</td>
           <td><code>${escapeHtml(p.sku || '')}</code></td>
           <td>${peso(p.price)}</td>
           <td>${escapeHtml(p.categories || '')}</td>
-          <td>${escapeHtml((p.date_added || '').slice(0,10))}</td>
+          <td>${escapeHtml((p.date_added || '').slice(0, 10))}</td>
           <td class="text-end">
             <button class="btn btn-sm btn-outline-primary me-1" data-act="edit"><i class="bi bi-pencil"></i></button>
             <button class="btn btn-sm btn-outline-danger" data-act="del"><i class="bi bi-trash"></i></button>
@@ -344,18 +398,18 @@
       function render(list) {
         const q = (qEl.value || '').toLowerCase();
         const filtered = list.filter(p => {
-          const hay = [p.name, p.sku, p.categories, p.description].map(x => (x||'').toLowerCase()).join('|');
+          const hay = [p.name, p.sku, p.categories, p.description].map(x => (x || '').toLowerCase()).join('|');
           return hay.includes(q);
         });
         if (!filtered.length) {
           rowsEl.innerHTML = `<tr><td colspan="7" class="text-center text-muted">No products</td></tr>`;
           return;
         }
-        rowsEl.innerHTML = filtered.map((p,i)=>rowHTML(p,i)).join('');
+        rowsEl.innerHTML = filtered.map((p, i) => rowHTML(p, i)).join('');
       }
 
       // ===== IMAGE: drag & drop + preview =====
-      function setPreviewFromFile(file){
+      function setPreviewFromFile(file) {
         const reader = new FileReader();
         reader.onload = e => {
           f.preview.src = e.target.result;
@@ -364,41 +418,41 @@
         reader.readAsDataURL(file);
       }
       function pickFiles() { f.file.click(); }
-      function acceptFileList(fileList){
+      function acceptFileList(fileList) {
         const file = fileList && fileList[0];
         if (!file) return;
-        if (!file.type.startsWith('image/')) { flash('warning','Please select an image file.'); return; }
-        if (file.size > 10 * 1024 * 1024) { flash('warning','Image is too large (max 10 MB).'); return; }
+        if (!file.type.startsWith('image/')) { flash('warning', 'Please select an image file.'); return; }
+        if (file.size > 10 * 1024 * 1024) { flash('warning', 'Image is too large (max 10 MB).'); return; }
         pendingFile = file;
         pendingImagePath = ''; // reset until upload completes
         setPreviewFromFile(file);
       }
       // drag UI
-      ['dragenter','dragover'].forEach(evt=>{
-        f.drag.addEventListener(evt, (e)=>{ e.preventDefault(); e.stopPropagation(); f.drag.classList.add('dragover'); });
+      ['dragenter', 'dragover'].forEach(evt => {
+        f.drag.addEventListener(evt, (e) => { e.preventDefault(); e.stopPropagation(); f.drag.classList.add('dragover'); });
       });
-      ['dragleave','drop'].forEach(evt=>{
-        f.drag.addEventListener(evt, (e)=>{ e.preventDefault(); e.stopPropagation(); f.drag.classList.remove('dragover'); });
+      ['dragleave', 'drop'].forEach(evt => {
+        f.drag.addEventListener(evt, (e) => { e.preventDefault(); e.stopPropagation(); f.drag.classList.remove('dragover'); });
       });
       f.drag.addEventListener('click', pickFiles);
-      f.drag.addEventListener('drop', (e)=> acceptFileList(e.dataTransfer.files));
-      f.file.addEventListener('change', (e)=> acceptFileList(e.target.files));
+      f.drag.addEventListener('drop', (e) => acceptFileList(e.dataTransfer.files));
+      f.file.addEventListener('change', (e) => acceptFileList(e.target.files));
 
       // upload to server (returns path like /Cognate3/uploads/xxx.png)
-      async function uploadImageIfNeeded(){
+      async function uploadImageIfNeeded() {
         if (!pendingFile) return pendingImagePath || ''; // nothing new
         if (!apiUp) {
           // demo mode: store a data URL in image field
-          return new Promise((resolve)=>{
+          return new Promise((resolve) => {
             const r = new FileReader();
-            r.onload = e => resolve(String(e.target.result||'')); // data URL
+            r.onload = e => resolve(String(e.target.result || '')); // data URL
             r.readAsDataURL(pendingFile);
           });
         }
         const fd = new FormData();
         fd.append('image', pendingFile);
-        const r = await fetch(endpoints.upload, { method:'POST', body: fd });
-        const j = await r.json().catch(()=>({}));
+        const r = await fetch(endpoints.upload, { method: 'POST', body: fd });
+        const j = await r.json().catch(() => ({}));
         if (!r.ok || j.ok !== true || !j.path) throw new Error(j.message || 'Image upload failed');
         pendingImagePath = j.path;   // e.g., /Cognate3/uploads/file.png
         return pendingImagePath;
@@ -408,7 +462,7 @@
       async function checkApi() {
         // Try health first; treat any 2xx as "probably up"
         try {
-          const r = await fetch(endpoints.health, { method:'GET', cache:'no-store', credentials:'include' });
+          const r = await fetch(endpoints.health, { method: 'GET', cache: 'no-store', credentials: 'include' });
           if (r.ok) {
             try {
               const j = await r.json();
@@ -422,7 +476,7 @@
 
         // Fallback: probe list.php (200 or 405 => up)
         try {
-          const r2 = await fetch(endpoints.list, { method:'GET', cache:'no-store', credentials:'include' });
+          const r2 = await fetch(endpoints.list, { method: 'GET', cache: 'no-store', credentials: 'include' });
           apiUp = r2.ok || r2.status === 405;
         } catch { apiUp = false; }
         setMode();
@@ -433,12 +487,12 @@
         setSpinner(true);
         try {
           if (apiUp) {
-            const r = await fetch(endpoints.list, {method:'GET', credentials:'include', cache:'no-store'});
+            const r = await fetch(endpoints.list, { method: 'GET', credentials: 'include', cache: 'no-store' });
             const text = await r.text();
             let j = {};
             try { j = JSON.parse(text); } catch { j = {}; }
             if (!r.ok || !j.items) throw new Error('List failed');
-            products = Array.isArray(j.items)? j.items : [];
+            products = Array.isArray(j.items) ? j.items : [];
           } else {
             const raw = localStorage.getItem('nexora_products');
             products = raw ? JSON.parse(raw) : [];
@@ -447,7 +501,7 @@
         } catch (e) {
           products = [];
           render(products);
-          flash('danger','Failed to load products.');
+          flash('danger', 'Failed to load products.');
         } finally {
           setSpinner(false);
         }
@@ -468,16 +522,16 @@
           if (apiUp) {
             const url = isEdit ? endpoints.update : endpoints.create;
             const r = await fetch(url, {
-              method:'POST', headers:{'Content-Type':'application/json'},
+              method: 'POST', headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify(payload)
             });
-            const j = await r.json().catch(()=>({}));
+            const j = await r.json().catch(() => ({}));
             if (!r.ok || j.ok === false) throw new Error(j.message || 'Server error');
             flash('success', isEdit ? 'Updated' : 'Created');
           } else {
             if (isEdit) {
               const idx = products.findIndex(p => String(p.id) === String(payload.id));
-              if (idx >= 0) products[idx] = {...products[idx], ...payload};
+              if (idx >= 0) products[idx] = { ...products[idx], ...payload };
             } else {
               payload.id = Date.now();
               products.push(payload);
@@ -491,7 +545,7 @@
           f.preview.classList.add('d-none'); f.preview.src = '';
 
           await loadList();
-          f.form.reset(); f.id.value='';
+          f.form.reset(); f.id.value = '';
           setCategoriesToForm('');
         } catch (e) {
           flash('danger', e.message || 'Save failed');
@@ -503,16 +557,16 @@
         try {
           if (apiUp) {
             const r = await fetch(endpoints.remove, {
-              method:'POST', headers:{'Content-Type':'application/json'},
+              method: 'POST', headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ id })
             });
-            const j = await r.json().catch(()=>({}));
+            const j = await r.json().catch(() => ({}));
             if (!r.ok || j.ok === false) throw new Error(j.message || 'Delete failed');
-            flash('success','Deleted');
+            flash('success', 'Deleted');
           } else {
             products = products.filter(p => String(p.id) !== String(id));
             saveLocal();
-            flash('success','Deleted (demo)');
+            flash('success', 'Deleted (demo)');
           }
           await loadList();
         } catch (e) {
@@ -521,9 +575,9 @@
       }
 
       // ===== EVENTS =====
-      window.addEventListener('load', ()=> spinner?.classList.remove('show'));
+      window.addEventListener('load', () => spinner?.classList.remove('show'));
 
-      f.form.addEventListener('submit', (ev)=>{
+      f.form.addEventListener('submit', (ev) => {
         ev.preventDefault();
         const payload = {
           id: (f.id.value || '').trim() || undefined,
@@ -537,22 +591,22 @@
           image: '' // will be set by uploadImageIfNeeded if present
         };
         if (!payload.name || !payload.sku || !payload.categories || isNaN(payload.price)) {
-          flash('warning','Please fill out required fields.'); return;
+          flash('warning', 'Please fill out required fields.'); return;
         }
         upsertProduct(payload, !!payload.id);
       });
 
-      f.resetBtn.addEventListener('click', ()=>{
-        f.form.reset(); f.id.value='';
+      f.resetBtn.addEventListener('click', () => {
+        f.form.reset(); f.id.value = '';
         setCategoriesToForm('');
         pendingFile = null; pendingImagePath = '';
         f.preview.classList.add('d-none'); f.preview.src = '';
       });
 
-      qEl.addEventListener('input', ()=> render(products));
+      qEl.addEventListener('input', () => render(products));
 
-      exportBtn.addEventListener('click', ()=>{
-        const blob = new Blob([JSON.stringify(products, null, 2)], {type:'application/json'});
+      exportBtn.addEventListener('click', () => {
+        const blob = new Blob([JSON.stringify(products, null, 2)], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url; a.download = 'products.json';
@@ -560,7 +614,7 @@
         a.remove(); URL.revokeObjectURL(url);
       });
 
-      rowsEl.addEventListener('click', (ev)=>{
+      rowsEl.addEventListener('click', (ev) => {
         const btn = ev.target.closest('button[data-act]');
         if (!btn) return;
         const tr = ev.target.closest('tr'); if (!tr) return;
@@ -573,7 +627,7 @@
           f.name.value = item.name || '';
           f.sku.value = item.sku || '';
           f.price.value = item.price || 0;
-          f.added.value = (item.date_added || '').slice(0,10);
+          f.added.value = (item.date_added || '').slice(0, 10);
           f.desc.value = item.description || '';
           f.specs.value = item.specs || '';
 
@@ -587,7 +641,7 @@
           pendingFile = null; pendingImagePath = ''; // reset, unless they re-upload
 
           setCategoriesToForm(item.categories || '');
-          window.scrollTo({top:0, behavior:'smooth'});
+          window.scrollTo({ top: 0, behavior: 'smooth' });
         }
         if (btn.dataset.act === 'del') {
           if (confirm('Delete this product?')) deleteProduct(id);
@@ -595,11 +649,12 @@
       });
 
       // ===== INIT =====
-      (async function init(){
+      (async function init() {
         await checkApi();
         await loadList();
       })();
     })();
   </script>
 </body>
+
 </html>
