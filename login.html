@@ -24,32 +24,19 @@
   <link href="css/bootstrap.min.css" rel="stylesheet" />
   <link href="css/style.css" rel="stylesheet" />
   <style>
-    .auth-hero {
-      min-height: 36vh;
-    }
+    .auth-hero { min-height: 36vh; }
+    .auth-card { border: 0; box-shadow: 0 10px 30px rgba(0, 0, 0, .08); }
+    .auth-tabs .nav-link { border-radius: 999px; }
+    .form-label.required::after { content: " *"; color: #dc3545; font-weight: 700; }
+    .pwd-toggle { cursor: pointer; }
+    .admin-badge { border-radius: 999px; padding: .35rem .75rem; }
 
-    .auth-card {
-      border: 0;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
-    }
-
-    .auth-tabs .nav-link {
-      border-radius: 999px;
-    }
-
-    .form-label.required::after {
-      content: " *";
-      color: #dc3545;
-      font-weight: 700;
-    }
-
-    .pwd-toggle {
-      cursor: pointer;
-    }
-
-    .admin-badge {
-      border-radius: 999px;
-      padding: .35rem .75rem;
+    /* Toast container (fixed, top-right) */
+    .toast-container {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      z-index: 1080;
     }
   </style>
 </head>
@@ -87,8 +74,7 @@
 
   <!-- Hero Start -->
   <div class="container-fluid bg-primary hero-header min-vh-50 d-flex align-items-center">
-    <div class="container">
-    </div>
+    <div class="container"></div>
   </div>
   <!-- Hero End -->
 
@@ -130,14 +116,13 @@
                 </div>
               </div>
 
-              <!-- Row with Remember me, Forgot password, and Login -->
               <div class="col-12 d-flex align-items-center gap-3">
                 <div class="form-check">
                   <input class="form-check-input" type="checkbox" id="rememberMe">
                   <label class="form-check-label" for="rememberMe">Remember me</label>
                 </div>
 
-                <a href="forgot.html" class="text-decoration-none small text-muted">Forgot password?</a>
+                
 
                 <button class="btn btn-primary ms-auto" type="submit">
                   <i class="bi bi-box-arrow-in-right me-1"></i> Login
@@ -214,7 +199,6 @@
           <p class="mb-0">Internal admin — sign in to manage catalog data.</p>
         </div>
 
-        <!-- Column 2: Get In Touch -->
         <div class="col-lg-4">
           <h5 class="text-white mb-4">Get In Touch</h5>
           <p><i class="fa fa-map-marker-alt me-3"></i>123 Street, Pasig City, Philippines</p>
@@ -233,6 +217,19 @@
 
   <!-- Back to Top -->
   <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+
+  <!-- Toast container -->
+  <div class="toast-container" aria-live="polite" aria-atomic="true">
+    <div id="signupToast" class="toast align-items-center border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="2500">
+      <div class="d-flex">
+        <div class="toast-body">
+          <i class="bi bi-check-circle me-2"></i>
+          <span id="signupToastMsg">Account created. You can now log in.</span>
+        </div>
+        <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+    </div>
+  </div>
 
   <!-- JS libs -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
@@ -325,7 +322,17 @@
         location.replace(isAdmin ? urls.admin : urls.user);
       };
 
-      // ---- LOGIN (username + password; PHP session; admin redirect) ----
+      // ---- Toast helper (success signup) ----
+      const showSignupToast = (message = 'Account created. You can now log in.') => {
+        const toastEl = $('#signupToast');
+        const msgEl = $('#signupToastMsg');
+        if (msgEl) msgEl.textContent = message;
+        if (toastEl && window.bootstrap?.Toast) {
+          new bootstrap.Toast(toastEl).show();
+        }
+      };
+
+      // ---- LOGIN ----
       const loginForm = $('#formLogin');
       const loginAlert = $('#loginAlert');
       if (loginForm) {
@@ -344,7 +351,6 @@
 
           try {
             if (loginUp) {
-              // IMPORTANT: include credentials so PHP session cookie is stored
               const res = await fetch(endpoints.login, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -355,16 +361,12 @@
                 const errJson = await res.json().catch(() => ({}));
                 throw new Error(errJson.message || 'Invalid credentials.');
               }
-              const json = await res.json();
-
-              // Optional UI hints (not security)
+              await res.json();
               localStorage.setItem('nexora_token', 'demo-token');
               localStorage.setItem('nexora_last_username', payload.username);
-
               setAlert(loginAlert, 'success', 'Login successful. Redirecting…');
               setTimeout(() => redirectAfterLogin(payload.username), 500);
             } else {
-              // Demo login (localStorage fallback)
               const users = JSON.parse(localStorage.getItem('nexora_users') || '[]');
               const found = users.find(u => (u.username || '').toLowerCase() === payload.username.toLowerCase());
               if (!found || found.password !== payload.password) throw new Error('Invalid credentials.');
@@ -379,9 +381,18 @@
         });
       }
 
-      // ---- SIGNUP (username + email). Uses API only if signup.php exists; else demo localStorage. ----
+      // ---- SIGNUP ----
       const signupForm = $('#formSignup');
       const signupAlert = $('#signupAlert');
+
+      // focus helper after switching tab
+      const focusLoginUsernameSoon = () => {
+        setTimeout(() => {
+          const u = document.querySelector("#formLogin input[name='username']");
+          if (u) u.focus();
+        }, 80);
+      };
+
       if (signupForm) {
         signupForm.addEventListener('submit', async (e) => {
           e.preventDefault();
@@ -423,9 +434,15 @@
                 const errJson = await res.json().catch(() => ({}));
                 throw new Error(errJson.message || 'Sign up failed.');
               }
+
+              // SUCCESS (API)
               setAlert(signupAlert, 'success', 'Account created. You can now log in.');
+              showSignupToast('Account created. You can now log in.');
+              signupForm.reset();                     // <<< clear all fields
               const loginTab = document.querySelector('#login-tab');
               if (loginTab && window.bootstrap?.Tab) new bootstrap.Tab(loginTab).show();
+              focusLoginUsernameSoon();
+
             } else {
               // Demo: localStorage
               const users = JSON.parse(localStorage.getItem('nexora_users') || '[]');
@@ -434,6 +451,7 @@
                 (u.email || '').toLowerCase() === payload.email.toLowerCase()
               );
               if (exists) throw new Error('Email or username already exists.');
+
               users.push({
                 name: payload.name,
                 username: payload.username,
@@ -441,9 +459,14 @@
                 password: payload.password
               });
               localStorage.setItem('nexora_users', JSON.stringify(users));
+
+              // SUCCESS (demo)
               setAlert(signupAlert, 'success', 'Account created (demo). You can now log in.');
+              showSignupToast('Account created (demo). You can now log in.');
+              signupForm.reset();                     // <<< clear all fields
               const loginTab = document.querySelector('#login-tab');
               if (loginTab && window.bootstrap?.Tab) new bootstrap.Tab(loginTab).show();
+              focusLoginUsernameSoon();
             }
           } catch (err) {
             setAlert(signupAlert, 'danger', err.message || 'Sign up failed.');
@@ -453,19 +476,17 @@
 
       // ---- Remember me (store last username) ----
       const remember = $('#rememberMe');
-      if (remember && loginForm) {
+      const loginFormEl = $('#formLogin');
+      if (remember && loginFormEl) {
         const saved = localStorage.getItem('nexora_last_username');
-        if (saved) loginForm.querySelector("input[name='username']").value = saved;
+        if (saved) loginFormEl.querySelector("input[name='username']").value = saved;
         remember.addEventListener('change', () => {
-          const u = loginForm.querySelector("input[name='username']").value.trim();
+          const u = loginFormEl.querySelector("input[name='username']").value.trim();
           if (remember.checked && u) localStorage.setItem('nexora_last_username', u);
           else localStorage.removeItem('nexora_last_username');
         });
       }
     })();
   </script>
-
-
 </body>
-
 </html>
