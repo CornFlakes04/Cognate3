@@ -92,7 +92,7 @@
       <nav class="navbar navbar-expand-lg navbar-light border-bottom border-2 border-white">
         <span class="navbar-brand d-flex align-items-center">
           <h1 class="mb-0">Nexora Tech <span class="text-primary">Admin</span></h1>
-          <span class="navbar-text ms-3 d-none d-lg-inline">Products</span>
+          <span class="navbar-text ms-3 d-none d-lg-inline">Dashboard</span>
         </span>
 
         <button class="navbar-toggler ms-auto me-0" type="button" data-bs-toggle="collapse"
@@ -102,10 +102,6 @@
 
         <div class="collapse navbar-collapse" id="navbarCollapse">
           <div class="navbar-nav ms-auto align-items-lg-center">
-            <!-- Products label for mobile (since the pill is hidden on small screens) -->
-            <span class="navbar-text fw-semibold d-lg-none me-3">Products</span>
-
-            <!-- Logout -->
             <a id="logoutLink" href="/Cognate3/api/auth/logout.php" class="btn btn-outline-danger ms-lg-3">Logout</a>
           </div>
         </div>
@@ -113,138 +109,268 @@
     </div>
   </div>
 
-
   <!-- Hero Start -->
   <div class="container-fluid bg-primary hero-header min-vh-50 d-flex align-items-center">
-    <div class="container">
-    </div>
+    <div class="container"></div>
   </div>
   <!-- Hero End -->
 
   <!-- Main -->
   <div class="container my-5">
-    <div class="row g-4">
-      <!-- Form -->
-      <div class="col-lg-5">
-        <div class="card shadow-sm border-0">
-          <div class="card-body p-4">
-            <h4 class="section-title mb-3">Add / Edit Product</h4>
-            <form id="adminProductForm" class="row g-3" autocomplete="off">
-              <input type="hidden" id="adminProdId" />
 
-              <div class="col-md-8">
-                <label class="form-label required">Name</label>
-                <input type="text" id="adminName" class="form-control" required />
-              </div>
-              <div class="col-md-4">
-                <label class="form-label required">SKU</label>
-                <input type="text" id="adminSku" class="form-control" required />
-              </div>
+    <!-- Tabs -->
+    <ul class="nav nav-pills mb-4" id="adminTabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="tab-products-btn" data-bs-toggle="tab" data-bs-target="#tab-products"
+          type="button" role="tab" aria-controls="tab-products" aria-selected="true">
+          <i class="bi bi-box-seam me-1"></i> Products
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="tab-users-btn" data-bs-toggle="tab" data-bs-target="#tab-users" type="button"
+          role="tab" aria-controls="tab-users" aria-selected="false">
+          <i class="bi bi-people me-1"></i> Users
+        </button>
+      </li>
+    </ul>
 
-              <div class="col-md-6">
-                <label class="form-label required">Price (₱)</label>
-                <input type="number" id="adminPrice" class="form-control" min="0" step="0.01" required />
-              </div>
-              <div class="col-md-6">
-                <label class="form-label">Date Added</label>
-                <input type="date" id="adminAdded" class="form-control" />
-              </div>
+    <div class="tab-content">
 
-              <div class="col-12">
-                <label class="form-label required">Categories</label>
-                <div class="d-flex flex-wrap gap-2">
-                  <div class="form-check"><input class="form-check-input" type="checkbox" value="Data" id="cData"><label
-                      class="form-check-label" for="cData">Data</label></div>
-                  <div class="form-check"><input class="form-check-input" type="checkbox" value="Bionic"
-                      id="cBionic"><label class="form-check-label" for="cBionic">Bionic</label></div>
-                  <div class="form-check"><input class="form-check-input" type="checkbox" value="Listen"
-                      id="cListen"><label class="form-check-label" for="cListen">Listen</label></div>
-                  <div class="form-check"><input class="form-check-input" type="checkbox" value="Vision"
-                      id="cVision"><label class="form-check-label" for="cVision">Vision</label></div>
-                  <div class="form-check"><input class="form-check-input" type="checkbox" value="Control"
-                      id="cControl"><label class="form-check-label" for="cControl">Control</label></div>
-                  <div class="form-check"><input class="form-check-input" type="checkbox" value="Sensors"
-                      id="cSensors"><label class="form-check-label" for="cSensors">Sensors</label></div>
+      <!-- PRODUCTS TAB -->
+      <div class="tab-pane fade show active" id="tab-products" role="tabpanel" aria-labelledby="tab-products-btn">
+        <div class="row g-4">
+          <!-- Form -->
+          <div class="col-lg-5">
+            <div class="card shadow-sm border-0">
+              <div class="card-body p-4">
+                <h4 class="section-title mb-3">Add / Edit Product</h4>
+                <form id="adminProductForm" class="row g-3" autocomplete="off">
+                  <input type="hidden" id="adminProdId" />
+
+                  <div class="col-md-8">
+                    <label class="form-label required">Name</label>
+                    <input type="text" id="adminName" class="form-control" required />
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label required">SKU</label>
+                    <input type="text" id="adminSku" class="form-control" required />
+                  </div>
+
+                  <div class="col-md-6">
+                    <label class="form-label required">Price (₱)</label>
+                    <input type="number" id="adminPrice" class="form-control" min="0" step="0.01" required />
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label">Date Added</label>
+                    <input type="date" id="adminAdded" class="form-control" />
+                  </div>
+
+                  <div class="col-12">
+                    <label class="form-label required">Categories</label>
+                    <div class="d-flex flex-wrap gap-2">
+                      <div class="form-check"><input class="form-check-input" type="checkbox" value="Data"
+                          id="cData"><label class="form-check-label" for="cData">Data</label></div>
+                      <div class="form-check"><input class="form-check-input" type="checkbox" value="Bionic"
+                          id="cBionic"><label class="form-check-label" for="cBionic">Bionic</label></div>
+                      <div class="form-check"><input class="form-check-input" type="checkbox" value="Listen"
+                          id="cListen"><label class="form-check-label" for="cListen">Listen</label></div>
+                      <div class="form-check"><input class="form-check-input" type="checkbox" value="Vision"
+                          id="cVision"><label class="form-check-label" for="cVision">Vision</label></div>
+                      <div class="form-check"><input class="form-check-input" type="checkbox" value="Control"
+                          id="cControl"><label class="form-check-label" for="cControl">Control</label></div>
+                      <div class="form-check"><input class="form-check-input" type="checkbox" value="Sensors"
+                          id="cSensors"><label class="form-check-label" for="cSensors">Sensors</label></div>
+                    </div>
+                  </div>
+
+                  <div class="col-12">
+                    <label class="form-label required">Short Description</label>
+                    <textarea id="adminDesc" class="form-control" rows="4" required
+                      placeholder="What makes this product compelling…"></textarea>
+                  </div>
+
+                  <div class="col-12">
+                    <label class="form-label">Specs (optional)</label>
+                    <input id="adminSpecs" class="form-control"
+                      placeholder="Comma-separated (e.g., 12 DOF, 8-ch sEMG, Haptics)" />
+                  </div>
+
+                  <!-- Drag & drop image uploader -->
+                  <div class="col-12">
+                    <label class="form-label">Product Image</label>
+                    <div id="adminDragArea" class="drag-area">
+                      <i class="bi bi-cloud-arrow-up"></i>
+                      <div>Drag & drop an image here, or click to select</div>
+                      <small class="text-muted d-block mt-1">PNG, JPG, or GIF — max ~10MB</small>
+                      <input id="adminImage" type="file" accept="image/*" class="d-none" />
+                    </div>
+                    <img id="adminPreview" class="thumb mt-3 d-none" alt="Preview" />
+                  </div>
+
+                  <div class="col-12 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary"><i class="bi bi-save me-1"></i>Save</button>
+                    <button type="button" id="adminBtnReset" class="btn btn-outline-secondary">Clear</button>
+                  </div>
+                </form>
+
+                <div class="alert alert-info mt-3 mb-0">
+                  <div class="fw-bold mb-1">Storage mode</div>
+                  <small id="adminStorageMode">Checking…</small>
                 </div>
+                <div id="adminAlert" class="alert d-none mt-3 mb-0" role="alert"></div>
               </div>
-
-              <div class="col-12">
-                <label class="form-label required">Short Description</label>
-                <textarea id="adminDesc" class="form-control" rows="4" required
-                  placeholder="What makes this product compelling…"></textarea>
-              </div>
-
-              <div class="col-12">
-                <label class="form-label">Specs (optional)</label>
-                <input id="adminSpecs" class="form-control"
-                  placeholder="Comma-separated (e.g., 12 DOF, 8-ch sEMG, Haptics)" />
-              </div>
-
-              <!-- Drag & drop image uploader -->
-              <div class="col-12">
-                <label class="form-label">Product Image</label>
-                <div id="adminDragArea" class="drag-area">
-                  <i class="bi bi-cloud-arrow-up"></i>
-                  <div>Drag & drop an image here, or click to select</div>
-                  <small class="text-muted d-block mt-1">PNG, JPG, or GIF — max ~10MB</small>
-                  <input id="adminImage" type="file" accept="image/*" class="d-none" />
-                </div>
-                <img id="adminPreview" class="thumb mt-3 d-none" alt="Preview" />
-              </div>
-
-              <div class="col-12 d-flex gap-2">
-                <button type="submit" class="btn btn-primary"><i class="bi bi-save me-1"></i>Save</button>
-                <button type="button" id="adminBtnReset" class="btn btn-outline-secondary">Clear</button>
-              </div>
-            </form>
-
-            <div class="alert alert-info mt-3 mb-0">
-              <div class="fw-bold mb-1">Storage mode</div>
-              <small id="adminStorageMode">Checking…</small>
             </div>
-            <div id="adminAlert" class="alert d-none mt-3 mb-0" role="alert"></div>
           </div>
+
+          <!-- Table -->
+          <div class="col-lg-7">
+            <div class="card shadow-sm border-0">
+              <div class="card-body p-4">
+                <div class="d-flex flex-wrap align-items-center justify-content-between mb-3 gap-2">
+                  <h4 class="section-title mb-0">Products</h4>
+                  <div class="d-flex align-items-center gap-2">
+                    <input id="adminQ" class="form-control form-control-sm search-input"
+                      placeholder="Search name, SKU, category…" />
+                    <button id="adminBtnExport" class="btn btn-outline-secondary btn-sm"><i
+                        class="bi bi-download me-1"></i>Export JSON</button>
+                  </div>
+                </div>
+                <div class="table-responsive">
+                  <table class="table align-middle">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>SKU</th>
+                        <th>Price</th>
+                        <th>Categories</th>
+                        <th>Added</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody id="adminRows">
+                      <tr>
+                        <td colspan="7" class="text-center text-muted">Loading…</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
 
-      <!-- Table -->
-      <div class="col-lg-7">
-        <div class="card shadow-sm border-0">
-          <div class="card-body p-4">
-            <div class="d-flex flex-wrap align-items-center justify-content-between mb-3 gap-2">
-              <h4 class="section-title mb-0">Products</h4>
-              <div class="d-flex align-items-center gap-2">
-                <input id="adminQ" class="form-control form-control-sm search-input"
-                  placeholder="Search name, SKU, category…" />
-                <button id="adminBtnExport" class="btn btn-outline-secondary btn-sm"><i
-                    class="bi bi-download me-1"></i>Export JSON</button>
+      <!-- USERS TAB (now fully wired for your JS IDs) -->
+      <div class="tab-pane fade" id="tab-users" role="tabpanel" aria-labelledby="tab-users-btn">
+        <div class="row g-4">
+          <!-- Users Form -->
+          <div class="col-lg-5">
+            <div class="card shadow-sm border-0">
+              <div class="card-body p-4">
+                <h4 class="section-title mb-3">Add / Edit User</h4>
+                <form id="usersForm" class="row g-3" autocomplete="off">
+                  <input type="hidden" id="uId" />
+
+                  <div class="col-12">
+                    <label class="form-label required">Full name</label>
+                    <input type="text" id="uFull" class="form-control" required />
+                  </div>
+
+                  <div class="col-md-6">
+                    <label class="form-label required">Username</label>
+                    <input type="text" id="uUser" class="form-control" required />
+                  </div>
+
+                  <div class="col-md-6">
+                    <label class="form-label required">Email</label>
+                    <input type="email" id="uEmail" class="form-control" required />
+                  </div>
+
+                  <div class="col-md-6">
+                    <label class="form-label required">Role</label>
+                    <select id="uRole" class="form-select" required>
+                      <option value="" selected disabled>Choose role…</option>
+                      <option value="admin">Admin</option>
+                      <option value="editor">Editor</option>
+                      <option value="user">User</option>
+                    </select>
+                  </div>
+
+                    <div class="col-md-6">
+                      <label class="form-label required">Status</label>
+                      <select id="uStatus" class="form-select" required>
+                        <option value="">Choose…</option>
+                        <option value="active">Active</option>
+                        <option value="disabled">Disabled</option>
+                      </select>
+                    </div>
+
+                    <div class="col-12">
+                      <label class="form-label">Password <small class="text-muted">(leave blank to keep
+                          current)</small></label>
+                      <input type="password" id="uPass" class="form-control" />
+                    </div>
+
+                    <div class="col-12 d-flex gap-2">
+                      <button type="submit" class="btn btn-primary"><i class="bi bi-save me-1"></i>Save</button>
+                      <button type="button" id="uBtnReset" class="btn btn-outline-secondary">Clear</button>
+                    </div>
+                </form>
+
+                <div class="alert alert-info mt-3 mb-0">
+                  <div class="fw-bold mb-1">Storage mode</div>
+                  <small id="uStorageMode">Checking…</small>
+                </div>
+                <div id="uAlert" class="alert d-none mt-3 mb-0" role="alert"></div>
               </div>
             </div>
-            <div class="table-responsive">
-              <table class="table align-middle">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Name</th>
-                    <th>SKU</th>
-                    <th>Price</th>
-                    <th>Categories</th>
-                    <th>Added</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody id="adminRows">
-                  <tr>
-                    <td colspan="7" class="text-center text-muted">Loading…</td>
-                  </tr>
-                </tbody>
-              </table>
+          </div>
+
+          <!-- Users Table -->
+          <div class="col-lg-7">
+            <div class="card shadow-sm border-0">
+              <div class="card-body p-4">
+                <div class="d-flex flex-wrap align-items-center justify-content-between mb-3 gap-2">
+                  <h4 class="section-title mb-0">Users</h4>
+                  <div class="d-flex align-items-center gap-2">
+                    <input id="uQ" class="form-control form-control-sm search-input"
+                      placeholder="Search name, username, email…" />
+                    <button id="uBtnExport" class="btn btn-outline-secondary btn-sm">
+                      <i class="bi bi-download me-1"></i>Export JSON
+                    </button>
+                  </div>
+                </div>
+                <div class="table-responsive">
+                  <table class="table align-middle">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Full name</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody id="uRows">
+                      <tr>
+                        <td colspan="7" class="text-center text-muted">Loading…</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+              </div>
             </div>
           </div>
         </div>
       </div>
 
     </div>
+    <!-- /.tab-content -->
   </div>
 
   <!-- Footer -->
@@ -255,7 +381,6 @@
           <h1 class="text-white mb-3">NEXORA</h1>
           <p class="mb-0">Internal admin — manage catalog data used by the public pages.</p>
         </div>
-        <!-- Column 2: Get In Touch -->
         <div class="col-lg-4">
           <h5 class="text-white mb-4">Get In Touch</h5>
           <p><i class="fa fa-map-marker-alt me-3"></i>123 Street, Pasig City, Philippines</p>
@@ -285,6 +410,7 @@
 
   <script src="js/main.js"></script>
 
+  <!-- PRODUCTS logic -->
   <script>
     (function () {
       const $ = (s, r = document) => r.querySelector(s);
@@ -292,10 +418,8 @@
 
       // ===== SMART BASE DETECTION =====
       function detectBase() {
-        // if path contains /Cognate3/, use that; else keep first segment
         const m = location.pathname.match(/\/Cognate3\/?/i);
         if (m) return m[0].replace(/\/?$/, '/');
-        // fallback: root + first folder
         const parts = location.pathname.split('/').filter(Boolean);
         return parts.length ? '/' + parts[0] + '/' : '/';
       }
@@ -304,7 +428,7 @@
       // ===== ENDPOINTS =====
       const endpoints = {
         health: base + 'api/health.php',
-        upload: base + 'api/upload.php',              // server saves into /Cognate3/uploads
+        upload: base + 'api/upload.php',
         list: base + 'api/products/list.php',
         create: base + 'api/products/create.php',
         update: base + 'api/products/update.php',
@@ -329,7 +453,6 @@
         added: $('#adminAdded'),
         desc: $('#adminDesc'),
         specs: $('#adminSpecs'),
-        // drag-drop image
         drag: $('#adminDragArea'),
         file: $('#adminImage'),
         preview: $('#adminPreview'),
@@ -341,8 +464,8 @@
       // ===== STATE =====
       let apiUp = false;
       let products = [];
-      let pendingFile = null;     // File object selected via drag/click
-      let pendingImagePath = '';  // Uploaded path returned by server
+      let pendingFile = null;
+      let pendingImagePath = '';
 
       // ===== HELPERS =====
       function setSpinner(on) { if (!spinner) return; spinner.classList[on ? 'add' : 'remove']('show'); }
@@ -380,9 +503,9 @@
         f.cSensors.checked = set.has('Sensors');
       }
       function escapeHtml(s) {
-        return (s == null ? '' : String(s)).replace(/[&<>"']/g, c => ({
-          '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
-        }[c]));
+        return (s == null ? '' : String(s)).replace(/[&<>"']/g, c => (
+          { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
+        ));
       }
 
       function rowHTML(p, i) {
@@ -400,11 +523,12 @@
         </tr>`;
       }
       function render(list) {
-        const q = (qEl.value || '').toLowerCase();
+        const q = (qEl?.value || '').toLowerCase();
         const filtered = list.filter(p => {
           const hay = [p.name, p.sku, p.categories, p.description].map(x => (x || '').toLowerCase()).join('|');
           return hay.includes(q);
         });
+        if (!rowsEl) return;
         if (!filtered.length) {
           rowsEl.innerHTML = `<tr><td colspan="7" class="text-center text-muted">No products</td></tr>`;
           return;
@@ -428,28 +552,27 @@
         if (!file.type.startsWith('image/')) { flash('warning', 'Please select an image file.'); return; }
         if (file.size > 10 * 1024 * 1024) { flash('warning', 'Image is too large (max 10 MB).'); return; }
         pendingFile = file;
-        pendingImagePath = ''; // reset until upload completes
+        pendingImagePath = '';
         setPreviewFromFile(file);
       }
-      // drag UI
-      ['dragenter', 'dragover'].forEach(evt => {
-        f.drag.addEventListener(evt, (e) => { e.preventDefault(); e.stopPropagation(); f.drag.classList.add('dragover'); });
-      });
-      ['dragleave', 'drop'].forEach(evt => {
-        f.drag.addEventListener(evt, (e) => { e.preventDefault(); e.stopPropagation(); f.drag.classList.remove('dragover'); });
-      });
-      f.drag.addEventListener('click', pickFiles);
-      f.drag.addEventListener('drop', (e) => acceptFileList(e.dataTransfer.files));
-      f.file.addEventListener('change', (e) => acceptFileList(e.target.files));
+      if (f.drag) {
+        ['dragenter', 'dragover'].forEach(evt => {
+          f.drag.addEventListener(evt, (e) => { e.preventDefault(); e.stopPropagation(); f.drag.classList.add('dragover'); });
+        });
+        ['dragleave', 'drop'].forEach(evt => {
+          f.drag.addEventListener(evt, (e) => { e.preventDefault(); e.stopPropagation(); f.drag.classList.remove('dragover'); });
+        });
+        f.drag.addEventListener('click', pickFiles);
+        f.drag.addEventListener('drop', (e) => acceptFileList(e.dataTransfer.files));
+      }
+      f.file?.addEventListener('change', (e) => acceptFileList(e.target.files));
 
-      // upload to server (returns path like /Cognate3/uploads/xxx.png)
       async function uploadImageIfNeeded() {
-        if (!pendingFile) return pendingImagePath || ''; // nothing new
+        if (!pendingFile) return pendingImagePath || '';
         if (!apiUp) {
-          // demo mode: store a data URL in image field
           return new Promise((resolve) => {
             const r = new FileReader();
-            r.onload = e => resolve(String(e.target.result || '')); // data URL
+            r.onload = e => resolve(String(e.target.result || ''));
             r.readAsDataURL(pendingFile);
           });
         }
@@ -458,27 +581,20 @@
         const r = await fetch(endpoints.upload, { method: 'POST', body: fd });
         const j = await r.json().catch(() => ({}));
         if (!r.ok || j.ok !== true || !j.path) throw new Error(j.message || 'Image upload failed');
-        pendingImagePath = j.path;   // e.g., /Cognate3/uploads/file.png
+        pendingImagePath = j.path;
         return pendingImagePath;
       }
 
-      // ===== API DETECTION (tolerant) =====
+      // ===== API DETECTION =====
       async function checkApi() {
-        // Try health first; treat any 2xx as "probably up"
         try {
           const r = await fetch(endpoints.health, { method: 'GET', cache: 'no-store', credentials: 'include' });
           if (r.ok) {
-            try {
-              const j = await r.json();
-              apiUp = j && j.ok === true ? true : true; // JSON ok OR plain 200 -> up
-            } catch {
-              apiUp = true; // 200 without JSON is still fine
-            }
+            try { const j = await r.json(); apiUp = j && j.ok === true ? true : true; }
+            catch { apiUp = true; }
             setMode(); return;
           }
-        } catch { /* ignore */ }
-
-        // Fallback: probe list.php (200 or 405 => up)
+        } catch { }
         try {
           const r2 = await fetch(endpoints.list, { method: 'GET', cache: 'no-store', credentials: 'include' });
           apiUp = r2.ok || r2.status === 405;
@@ -518,11 +634,9 @@
       async function upsertProduct(payload, isEdit) {
         setSpinner(true);
         try {
-          // 1) Ensure image uploaded (if any)
           const imgPathOrDataUrl = await uploadImageIfNeeded();
           if (imgPathOrDataUrl) payload.image = imgPathOrDataUrl;
 
-          // 2) Persist
           if (apiUp) {
             const url = isEdit ? endpoints.update : endpoints.create;
             const r = await fetch(url, {
@@ -544,12 +658,11 @@
             flash('success', isEdit ? 'Updated (demo)' : 'Created (demo)');
           }
 
-          // 3) Reset image pending
           pendingFile = null; pendingImagePath = '';
-          f.preview.classList.add('d-none'); f.preview.src = '';
+          f.preview?.classList.add('d-none'); if (f.preview) f.preview.src = '';
 
           await loadList();
-          f.form.reset(); f.id.value = '';
+          f.form?.reset(); if (f.id) f.id.value = '';
           setCategoriesToForm('');
         } catch (e) {
           flash('danger', e.message || 'Save failed');
@@ -581,7 +694,7 @@
       // ===== EVENTS =====
       window.addEventListener('load', () => spinner?.classList.remove('show'));
 
-      f.form.addEventListener('submit', (ev) => {
+      f.form?.addEventListener('submit', (ev) => {
         ev.preventDefault();
         const payload = {
           id: (f.id.value || '').trim() || undefined,
@@ -592,7 +705,7 @@
           categories: getCategoriesFromForm(),
           description: (f.desc.value || '').trim(),
           specs: (f.specs.value || '').trim(),
-          image: '' // will be set by uploadImageIfNeeded if present
+          image: ''
         };
         if (!payload.name || !payload.sku || !payload.categories || isNaN(payload.price)) {
           flash('warning', 'Please fill out required fields.'); return;
@@ -600,16 +713,16 @@
         upsertProduct(payload, !!payload.id);
       });
 
-      f.resetBtn.addEventListener('click', () => {
-        f.form.reset(); f.id.value = '';
+      f.resetBtn?.addEventListener('click', () => {
+        f.form?.reset(); if (f.id) f.id.value = '';
         setCategoriesToForm('');
         pendingFile = null; pendingImagePath = '';
-        f.preview.classList.add('d-none'); f.preview.src = '';
+        f.preview?.classList.add('d-none'); if (f.preview) f.preview.src = '';
       });
 
-      qEl.addEventListener('input', () => render(products));
+      qEl?.addEventListener('input', () => render(products));
 
-      exportBtn.addEventListener('click', () => {
+      exportBtn?.addEventListener('click', () => {
         const blob = new Blob([JSON.stringify(products, null, 2)], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -618,7 +731,7 @@
         a.remove(); URL.revokeObjectURL(url);
       });
 
-      rowsEl.addEventListener('click', (ev) => {
+      rowsEl?.addEventListener('click', (ev) => {
         const btn = ev.target.closest('button[data-act]');
         if (!btn) return;
         const tr = ev.target.closest('tr'); if (!tr) return;
@@ -635,14 +748,13 @@
           f.desc.value = item.description || '';
           f.specs.value = item.specs || '';
 
-          // show preview if image present
           if (item.image) {
             f.preview.src = item.image;
             f.preview.classList.remove('d-none');
           } else {
             f.preview.classList.add('d-none'); f.preview.src = '';
           }
-          pendingFile = null; pendingImagePath = ''; // reset, unless they re-upload
+          pendingFile = null; pendingImagePath = '';
 
           setCategoriesToForm(item.categories || '');
           window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -653,6 +765,270 @@
       });
 
       // ===== INIT =====
+      (async function init() {
+        await checkApi();
+        await loadList();
+      })();
+    })();
+  </script>
+
+  <!-- USERS logic -->
+  <script>
+    (function () {
+      // ===== Small helpers (scoped to Users only) =====
+      const $ = (s, r = document) => r.querySelector(s);
+      const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+      const escapeHtml = (s) => (s == null ? '' : String(s)).replace(/[&<>"']/g, c => (
+        { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
+      ));
+
+      function detectBase() {
+        const m = location.pathname.match(/\/Cognate3\/?/i);
+        if (m) return m[0].replace(/\/?$/, '/');
+        const parts = location.pathname.split('/').filter(Boolean);
+        return parts.length ? '/' + parts[0] + '/' : '/';
+      }
+      const base = detectBase();
+
+      // ===== Endpoints (Users) =====
+      const endpoints = {
+        health: base + 'api/health.php',
+        list: base + 'api/users/list.php',
+        create: base + 'api/users/create.php',
+        update: base + 'api/users/update.php',
+        remove: base + 'api/users/delete.php',
+      };
+
+      // ===== Elements =====
+      const storageModeEl = $('#uStorageMode');
+      const alertEl = $('#uAlert');
+      const rowsEl = $('#uRows');
+      const qEl = $('#uQ');
+      const exportBtn = $('#uBtnExport');
+
+      const f = {
+        form: $('#usersForm'),
+        id: $('#uId'),
+        full: $('#uFull'),
+        user: $('#uUser'),
+        email: $('#uEmail'),
+        role: $('#uRole'),
+        pass: $('#uPass'),
+        status: $('#uStatus'),
+        reset: $('#uBtnReset')
+      };
+
+      // ===== State =====
+      let apiUp = false;
+      let users = [];
+
+      // ===== UI helpers =====
+      function setMode() {
+        if (!storageModeEl) return;
+        storageModeEl.textContent = apiUp
+          ? 'Connected to backend API (SQL).'
+          : 'No backend detected — using browser localStorage (demo)';
+      }
+      function flash(type, msg) {
+        if (!alertEl) return;
+        alertEl.className = 'alert alert-' + type;
+        alertEl.textContent = msg;
+        alertEl.classList.remove('d-none');
+        setTimeout(() => alertEl.classList.add('d-none'), 2500);
+      }
+
+      // ===== API detection =====
+      async function checkApi() {
+        try {
+          const r = await fetch(endpoints.health, { method: 'GET', cache: 'no-store', credentials: 'include' });
+          if (r.ok) {
+            try { const j = await r.json(); apiUp = j && j.ok === true ? true : true; }
+            catch { apiUp = true; }
+            setMode(); return;
+          }
+        } catch { }
+        try {
+          const r2 = await fetch(endpoints.list, { method: 'GET', cache: 'no-store', credentials: 'include' });
+          apiUp = r2.ok || r2.status === 405;
+        } catch { apiUp = false; }
+        setMode();
+      }
+
+      // ===== Render =====
+      function rowHTML(u, i) {
+        return `<tr data-id="${u.id}">
+        <td>${i + 1}</td>
+        <td>${escapeHtml(u.full_name || '')}</td>
+        <td><code>${escapeHtml(u.username || '')}</code></td>
+        <td>${escapeHtml(u.email || '')}</td>
+        <td><span class="badge bg-light text-dark">${escapeHtml(u.role || '')}</span></td>
+        <td>
+          ${u.status === 'active'
+            ? '<span class="badge bg-success">Active</span>'
+            : '<span class="badge bg-secondary">Disabled</span>'}
+        </td>
+        <td class="text-end">
+          <button class="btn btn-sm btn-outline-primary me-1" data-act="edit"><i class="bi bi-pencil"></i></button>
+          <button class="btn btn-sm btn-outline-danger" data-act="del"><i class="bi bi-trash"></i></button>
+        </td>
+      </tr>`;
+      }
+
+      function render(list) {
+        if (!rowsEl) return;
+        const q = (qEl?.value || '').toLowerCase();
+        const filtered = list.filter(u => {
+          const hay = [u.full_name, u.username, u.email, u.role, u.status]
+            .map(x => (x || '').toLowerCase()).join('|');
+          return hay.includes(q);
+        });
+        if (!filtered.length) {
+          rowsEl.innerHTML = `<tr><td colspan="7" class="text-center text-muted">No users</td></tr>`;
+          return;
+        }
+        rowsEl.innerHTML = filtered.map((u, i) => rowHTML(u, i)).join('');
+      }
+
+      // ===== Load / Save =====
+      async function loadList() {
+        try {
+          if (apiUp) {
+            const r = await fetch(endpoints.list, { method: 'GET', credentials: 'include', cache: 'no-store' });
+            const text = await r.text();
+            let j = {};
+            try { j = JSON.parse(text); } catch { j = {}; }
+            if (!r.ok || !Array.isArray(j.items)) throw new Error('List failed');
+            users = j.items;
+          } else {
+            const raw = localStorage.getItem('nexora_users');
+            users = raw ? JSON.parse(raw) : [];
+          }
+          render(users);
+        } catch (e) {
+          users = [];
+          render(users);
+          flash('danger', 'Failed to load users.');
+        }
+      }
+      function saveLocal() {
+        localStorage.setItem('nexora_users', JSON.stringify(users));
+      }
+
+      // ===== Create / Update / Delete =====
+      async function upsertUser(payload, isEdit) {
+        try {
+          if (apiUp) {
+            const url = isEdit ? endpoints.update : endpoints.create;
+            const r = await fetch(url, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              credentials: 'include',
+              body: JSON.stringify(payload)
+            });
+            const j = await r.json().catch(() => ({}));
+            if (!r.ok || j.ok === false) throw new Error(j.message || 'Server error');
+            flash('success', isEdit ? 'Updated' : 'Created');
+          } else {
+            if (isEdit) {
+              const idx = users.findIndex(u => String(u.id) === String(payload.id));
+              if (idx >= 0) users[idx] = { ...users[idx], ...payload };
+            } else {
+              payload.id = Date.now();
+              users.push(payload);
+            }
+            saveLocal();
+            flash('success', isEdit ? 'Updated (demo)' : 'Created (demo)');
+          }
+          await loadList();
+          f.form?.reset(); if (f.id) f.id.value = '';
+        } catch (e) {
+          flash('danger', e.message || 'Save failed');
+        }
+      }
+
+      async function deleteUser(id) {
+        try {
+          if (apiUp) {
+            const r = await fetch(endpoints.remove, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              credentials: 'include',
+              body: JSON.stringify({ id })
+            });
+            const j = await r.json().catch(() => ({}));
+            if (!r.ok || j.ok === false) throw new Error(j.message || 'Delete failed');
+            flash('success', 'Deleted');
+          } else {
+            users = users.filter(u => String(u.id) !== String(id));
+            saveLocal();
+            flash('success', 'Deleted (demo)');
+          }
+          await loadList();
+        } catch (e) {
+          flash('danger', e.message || 'Delete failed');
+        }
+      }
+
+      // ===== Events =====
+      qEl?.addEventListener('input', () => render(users));
+
+      exportBtn?.addEventListener('click', () => {
+        const blob = new Blob([JSON.stringify(users, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = 'users.json';
+        document.body.appendChild(a); a.click();
+        a.remove(); URL.revokeObjectURL(url);
+      });
+
+      f.reset?.addEventListener('click', () => {
+        f.form?.reset(); if (f.id) f.id.value = '';
+      });
+
+      f.form?.addEventListener('submit', (ev) => {
+        ev.preventDefault();
+        const payload = {
+          id: (f.id.value || '').trim() || undefined,
+          full_name: (f.full.value || '').trim(),
+          username: (f.user.value || '').trim(),
+          email: (f.email.value || '').trim(),
+          role: (f.role.value || '').trim(),
+          status: (f.status.value || '').trim()
+          // password handled below
+        };
+        const pass = (f.pass.value || '').trim();
+        if (pass) payload.password = pass; // only send if provided
+
+        if (!payload.full_name || !payload.username || !payload.email || !payload.role || !payload.status) {
+          flash('warning', 'Please fill out required fields.'); return;
+        }
+        upsertUser(payload, !!payload.id);
+      });
+
+      rowsEl?.addEventListener('click', (ev) => {
+        const btn = ev.target.closest('button[data-act]');
+        if (!btn) return;
+        const tr = ev.target.closest('tr'); if (!tr) return;
+        const id = tr.getAttribute('data-id');
+        const item = users.find(u => String(u.id) === String(id));
+        if (!item) return;
+
+        if (btn.dataset.act === 'edit') {
+          f.id.value = item.id;
+          f.full.value = item.full_name || '';
+          f.user.value = item.username || '';
+          f.email.value = item.email || '';
+          f.role.value = item.role || '';
+          f.status.value = item.status || 'active';
+          f.pass.value = ''; // never prefill password
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        if (btn.dataset.act === 'del') {
+          if (confirm('Delete this user?')) deleteUser(id);
+        }
+      });
+
+      // ===== Init =====
       (async function init() {
         await checkApi();
         await loadList();
