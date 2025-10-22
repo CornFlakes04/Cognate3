@@ -24,12 +24,33 @@
   <link href="css/bootstrap.min.css" rel="stylesheet" />
   <link href="css/style.css" rel="stylesheet" />
   <style>
-    .auth-hero { min-height: 36vh; }
-    .auth-card { border: 0; box-shadow: 0 10px 30px rgba(0, 0, 0, .08); }
-    .auth-tabs .nav-link { border-radius: 999px; }
-    .form-label.required::after { content: " *"; color: #dc3545; font-weight: 700; }
-    .pwd-toggle { cursor: pointer; }
-    .admin-badge { border-radius: 999px; padding: .35rem .75rem; }
+    .auth-hero {
+      min-height: 36vh;
+    }
+
+    .auth-card {
+      border: 0;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+    }
+
+    .auth-tabs .nav-link {
+      border-radius: 999px;
+    }
+
+    .form-label.required::after {
+      content: " *";
+      color: #dc3545;
+      font-weight: 700;
+    }
+
+    .pwd-toggle {
+      cursor: pointer;
+    }
+
+    .admin-badge {
+      border-radius: 999px;
+      padding: .35rem .75rem;
+    }
 
     /* Toast container (fixed, top-right) */
     .toast-container {
@@ -122,7 +143,7 @@
                   <label class="form-check-label" for="rememberMe">Remember me</label>
                 </div>
 
-                
+
 
                 <button class="btn btn-primary ms-auto" type="submit">
                   <i class="bi bi-box-arrow-in-right me-1"></i> Login
@@ -220,7 +241,8 @@
 
   <!-- Toast container -->
   <div class="toast-container" aria-live="polite" aria-atomic="true">
-    <div id="signupToast" class="toast align-items-center border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="2500">
+    <div id="signupToast" class="toast align-items-center border-0" role="alert" aria-live="assertive"
+      aria-atomic="true" data-bs-delay="2500">
       <div class="d-flex">
         <div class="toast-body">
           <i class="bi bi-check-circle me-2"></i>
@@ -274,14 +296,12 @@
         });
       });
 
-      // ---- Probe backend (treat 200 or 405 as "up") ----
-      const checkEndpoint = async (url) => {
+      // ---- Probe endpoints (200 or 405 => "up") ----
+      const probe = async (url) => {
         try {
           const res = await fetch(url, { method: 'GET', credentials: 'include' });
           return res.ok || res.status === 405;
-        } catch {
-          return false;
-        }
+        } catch { return false; }
       };
 
       // ---- Storage/mode label ----
@@ -292,8 +312,8 @@
       let signupUp = false;
 
       (async () => {
-        loginUp = await checkEndpoint(endpoints.login);
-        signupUp = await checkEndpoint(endpoints.signup);
+        loginUp = await probe(endpoints.login);
+        signupUp = await probe(endpoints.signup);
         setMode(
           loginUp
             ? (signupUp
@@ -312,7 +332,7 @@
 
       const redirectAfterLogin = (username) => {
         const params = new URLSearchParams(location.search);
-        const next = params.get('next'); // e.g., next=products.html
+        const next = params.get('next');
         if (next) {
           const target = next.startsWith('/') ? next : (base + next);
           location.replace(target);
@@ -322,14 +342,9 @@
         location.replace(isAdmin ? urls.admin : urls.user);
       };
 
-      // ---- Toast helper (success signup) ----
-      const showSignupToast = (message = 'Account created. You can now log in.') => {
-        const toastEl = $('#signupToast');
-        const msgEl = $('#signupToastMsg');
-        if (msgEl) msgEl.textContent = message;
-        if (toastEl && window.bootstrap?.Toast) {
-          new bootstrap.Toast(toastEl).show();
-        }
+      // small debounce helper
+      const debounce = (fn, ms = 350) => {
+        let t; return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms); };
       };
 
       // ---- LOGIN ----
@@ -367,6 +382,7 @@
               setAlert(loginAlert, 'success', 'Login successful. Redirecting…');
               setTimeout(() => redirectAfterLogin(payload.username), 500);
             } else {
+              // Demo mode
               const users = JSON.parse(localStorage.getItem('nexora_users') || '[]');
               const found = users.find(u => (u.username || '').toLowerCase() === payload.username.toLowerCase());
               if (!found || found.password !== payload.password) throw new Error('Invalid credentials.');
@@ -381,9 +397,76 @@
         });
       }
 
-      // ---- SIGNUP ----
+      // ---- SIGNUP (with username availability check) ----
       const signupForm = $('#formSignup');
       const signupAlert = $('#signupAlert');
+
+      // Try an API pre-check by POSTing {check_only:true, username} to signup.php.
+      // If your PHP doesn’t support it, we’ll fall back.
+      const apiUsernameExists = async (username) => {
+        if (!signupUp) return null; // unknown in demo/no-API case
+        try {
+          const res = await fetch(endpoints.signup, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ check_only: true, username })
+          });
+          // If your PHP returns {ok:true, exists:true/false}
+          if (res.ok) {
+            const j = await res.json().catch(() => ({}));
+            if (typeof j.exists === 'boolean') return j.exists;
+            // If it returns {ok:false, message:"Username already exists"}
+            if (j && j.ok === false && /exists|taken/i.test(j.message || '')) return true;
+            return null;
+          }
+          // If PHP uses 409 Conflict for taken usernames
+          if (res.status === 409) return true;
+          return null;
+        } catch {
+          return null;
+        }
+      };
+
+      // Live (debounced) availability check while typing
+      const usernameInput = signupForm ? signupForm.querySelector("input[name='username']") : null;
+      const emailInput = signupForm ? signupForm.querySelector("input[name='email']") : null;
+
+      const showInlineNotice = (msg) => {
+        if (!signupAlert) return;
+        setAlert(signupAlert, 'warning', msg);
+      };
+      const clearInlineNotice = () => {
+        if (!signupAlert) return;
+        signupAlert.classList.add('d-none');
+      };
+
+      const checkUsernameLive = debounce(async () => {
+        const u = (usernameInput?.value || '').trim();
+        if (!u) { clearInlineNotice(); return; }
+
+        // First try API check
+        const exists = await apiUsernameExists(u);
+        if (exists === true) {
+          showInlineNotice('That username is already taken.');
+          return;
+        }
+        if (exists === false) {
+          clearInlineNotice();
+          return;
+        }
+
+        // Fallbacks (no API or unknown)
+        // 1) If you want, you could call a public users list here (not recommended if protected).
+        // 2) Demo mode: check localStorage
+        const users = JSON.parse(localStorage.getItem('nexora_users') || '[]');
+        const takenLocal = users.some(x => (x.username || '').toLowerCase() === u.toLowerCase());
+        if (takenLocal) showInlineNotice('That username is already taken (demo).');
+        else clearInlineNotice();
+      }, 400);
+
+      usernameInput?.addEventListener('input', checkUsernameLive);
+      usernameInput?.addEventListener('blur', checkUsernameLive);
 
       // focus helper after switching tab
       const focusLoginUsernameSoon = () => {
@@ -391,6 +474,16 @@
           const u = document.querySelector("#formLogin input[name='username']");
           if (u) u.focus();
         }, 80);
+      };
+
+      // Toast helper
+      const showSignupToast = (message = 'Account created. You can now log in.') => {
+        const toastEl = $('#signupToast');
+        const msgEl = $('#signupToastMsg');
+        if (msgEl) msgEl.textContent = message;
+        if (toastEl && window.bootstrap?.Toast) {
+          new bootstrap.Toast(toastEl).show();
+        }
       };
 
       if (signupForm) {
@@ -417,6 +510,18 @@
             return setAlert(signupAlert, 'danger', 'Passwords do not match.');
           }
 
+          // Double-check BEFORE submit
+          const exists = await apiUsernameExists(payload.username);
+          if (exists === true) {
+            return setAlert(signupAlert, 'danger', 'That username is already taken.');
+          }
+          if (exists === null && !signupUp) {
+            // Demo/local check
+            const users = JSON.parse(localStorage.getItem('nexora_users') || '[]');
+            const takenLocal = users.some(u => (u.username || '').toLowerCase() === payload.username.toLowerCase());
+            if (takenLocal) return setAlert(signupAlert, 'danger', 'That username is already taken (demo).');
+          }
+
           try {
             if (signupUp) {
               const res = await fetch(endpoints.signup, {
@@ -430,27 +535,35 @@
                   password: payload.password
                 })
               });
+
               if (!res.ok) {
+                // If backend signals duplicate with 409 or message text
+                if (res.status === 409) {
+                  throw new Error('That username is already taken.');
+                }
                 const errJson = await res.json().catch(() => ({}));
-                throw new Error(errJson.message || 'Sign up failed.');
+                const msg = (errJson && /exists|taken/i.test(errJson.message || ''))
+                  ? 'That username is already taken.'
+                  : (errJson.message || 'Sign up failed.');
+                throw new Error(msg);
               }
 
               // SUCCESS (API)
               setAlert(signupAlert, 'success', 'Account created. You can now log in.');
               showSignupToast('Account created. You can now log in.');
-              signupForm.reset();                     // <<< clear all fields
+              signupForm.reset();
               const loginTab = document.querySelector('#login-tab');
               if (loginTab && window.bootstrap?.Tab) new bootstrap.Tab(loginTab).show();
               focusLoginUsernameSoon();
 
             } else {
-              // Demo: localStorage
+              // Demo/localStorage
               const users = JSON.parse(localStorage.getItem('nexora_users') || '[]');
-              const exists = users.some(u =>
+              const existsLocal = users.some(u =>
                 (u.username || '').toLowerCase() === payload.username.toLowerCase() ||
                 (u.email || '').toLowerCase() === payload.email.toLowerCase()
               );
-              if (exists) throw new Error('Email or username already exists.');
+              if (existsLocal) throw new Error('Email or username already exists (demo).');
 
               users.push({
                 name: payload.name,
@@ -460,10 +573,9 @@
               });
               localStorage.setItem('nexora_users', JSON.stringify(users));
 
-              // SUCCESS (demo)
               setAlert(signupAlert, 'success', 'Account created (demo). You can now log in.');
               showSignupToast('Account created (demo). You can now log in.');
-              signupForm.reset();                     // <<< clear all fields
+              signupForm.reset();
               const loginTab = document.querySelector('#login-tab');
               if (loginTab && window.bootstrap?.Tab) new bootstrap.Tab(loginTab).show();
               focusLoginUsernameSoon();
@@ -488,5 +600,7 @@
       }
     })();
   </script>
+
 </body>
+
 </html>
