@@ -60,12 +60,11 @@
             <a href="index.html" class="nav-item nav-link active">Home</a>
             <a href="about.html" class="nav-item nav-link">About</a>
             <a href="service.html" class="nav-item nav-link">Services</a>
-            <a href="project.html" class="nav-item nav-link" data-requires-auth="1">Projects</a>
+            <a href="project.html" class="nav-item nav-link">Projects</a>
             <a href="contact.html" class="nav-item nav-link">Contact</a>
             <!-- Optional placeholders -->
             <a id="loginLink" href="login.html" class="nav-item nav-link">Log in</a>
             <button id="logoutBtn" type="button" class="btn btn-outline-danger ms-lg-3 d-none">Logout</button>
-
           </div>
         </div>
       </nav>
@@ -478,6 +477,25 @@
   </div>
 
   <!-- Footer End -->
+
+  <!-- Login required modal -->
+  <div class="modal fade" id="loginRequiredModal" tabindex="-1" aria-labelledby="loginRequiredLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow">
+        <div class="modal-header">
+          <h5 class="modal-title" id="loginRequiredLabel">Please sign in to inquire</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          To send an inquiry, you need a Nexora account. It’s quick and free.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+          <a id="loginRedirectBtn" class="btn btn-primary" href="#">Login / Sign up</a>
+        </div>
+      </div>
+    </div>
+  </div>
 
 
   <!-- Back to Top -->

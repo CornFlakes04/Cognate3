@@ -29,19 +29,18 @@
   <link href="css/bootstrap.min.css" rel="stylesheet" />
   <link href="css/style.css" rel="stylesheet" />
 
-  <!-- Early guard: if not logged in, bounce to login -->
-  <script>
-    (function () {
-      try {
-        if (!localStorage.getItem('nexora_token')) {
-          window.location.replace('/Cognate3/login.html');
-        }
-      } catch (_) {
-        // If storage not available, be conservative and bounce to login
-        window.location.replace('/Cognate3/login.html');
-      }
-    })();
-  </script>
+  <style>
+    /* chips used for specs (cards + modal) */
+    .chip {
+      display: inline-block;
+      padding: .15rem .5rem;
+      border: 1px solid #dee2e6;
+      border-radius: 999px;
+      font-size: .8rem;
+      line-height: 1.2;
+      background: #fff;
+    }
+  </style>
 </head>
 
 <body>
@@ -65,19 +64,17 @@
           data-bs-target="#navbarCollapse">
           <span class="navbar-toggler-icon"></span>
         </button>
+
         <div class="collapse navbar-collapse" id="navbarCollapse">
           <div class="navbar-nav ms-auto">
-            <a href="index.html" class="nav-item nav-link">Home</a>
+            <a href="index.html" class="nav-item nav-link active">Home</a>
             <a href="about.html" class="nav-item nav-link">About</a>
             <a href="service.html" class="nav-item nav-link">Services</a>
-            <a href="project.html" class="nav-item nav-link active" data-requires-auth="1">Projects</a>
+            <a href="project.html" class="nav-item nav-link">Projects</a>
             <a href="contact.html" class="nav-item nav-link">Contact</a>
-
-            <!-- Auth controls -->
-            <a id="loginLink" href="/Cognate3/login.html" class="nav-item nav-link d-none">Log in</a>
-            <!-- Make logout an ANCHOR that hits PHP logout which redirects -->
-            <a id="logoutLink" href="/Cognate3/api/auth/logout.php"
-              class="btn btn-outline-danger ms-lg-3 d-none">Logout</a>
+            <!-- Optional placeholders -->
+            <a id="loginLink" href="login.html" class="nav-item nav-link">Log in</a>
+            <button id="logoutBtn" type="button" class="btn btn-outline-danger ms-lg-3 d-none">Logout</button>
           </div>
         </div>
       </nav>
@@ -245,18 +242,44 @@
             </div>
             <div class="col-md-7">
               <small id="productModalCat" class="text-muted d-block mb-2"></small>
-              <div id="productModalPrice" class="h4 mb-3"></div>
+              <div id="productModalPrice" class="h4 mb-2"></div>
               <p id="productModalDesc" class="mb-0"></p>
+
+              <!-- SPECS -->
+              <div id="productModalSpecsWrap" class="mt-3 d-none">
+                <h6 class="mb-2">Specifications</h6>
+                <div id="productModalSpecs" class="d-flex flex-wrap gap-2"></div>
+              </div>
             </div>
           </div>
         </div>
         <div class="modal-footer">
-          <a id="productModalCTA" class="btn btn-primary" href="#">Inquire</a>
+          <!-- Add requires-auth only for inquiries -->
+          <a id="productModalCTA" class="btn btn-primary" href="contact.html" data-requires-auth="inquiry">Inquire</a>
         </div>
       </div>
     </div>
   </div>
   <!-- Product Modal End -->
+
+  <!-- Login required modal (soft gate for inquiries) -->
+  <div class="modal fade" id="loginRequiredModal" tabindex="-1" aria-labelledby="loginRequiredLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow">
+        <div class="modal-header">
+          <h5 class="modal-title" id="loginRequiredLabel">Please sign in to inquire</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          To send an inquiry, you need a Nexora account. It’s quick and free.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+          <a id="loginRedirectBtn" class="btn btn-primary" href="#">Login / Sign up</a>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Footer -->
   <div class="container-fluid bg-dark text-white-50 footer pt-5">
@@ -281,7 +304,7 @@
           <h5 class="text-white mb-4">Popular Link</h5>
           <a class="btn btn-link" href="about.html">About Us</a>
           <a class="btn btn-link" href="contact.html">Contact Us</a>
-          <a class="btn btn-link" href="project.html" data-requires-auth="1">Projects</a>
+          <a class="btn btn-link" href="project.html">Projects</a>
         </div>
       </div>
     </div>
@@ -300,30 +323,30 @@
   <script src="lib/owlcarousel/owl.carousel.min.js"></script>
   <script src="js/main.js"></script>
 
-  <!-- Auth/nav + logout behavior -->
+  <!-- Auth/nav + inquiry gate -->
+  <script src="js/auth-nav.js"></script>
+
+  <!-- Tiny fallback to toggle Login/Logout (if auth-nav.js is missing or cached) -->
   <script>
     (function () {
       const loginLink = document.getElementById('loginLink');
       const logoutLink = document.getElementById('logoutLink');
       const hasToken = !!localStorage.getItem('nexora_token');
 
-      // Show/hide nav items
       if (hasToken) {
-        loginLink?.classList.add('d-none');
-        logoutLink?.classList.remove('d-none');
+        loginLink && loginLink.classList.add('d-none');
+        logoutLink && logoutLink.classList.remove('d-none');
       } else {
-        loginLink?.classList.remove('d-none');
-        logoutLink?.classList.add('d-none');
+        loginLink && loginLink.classList.remove('d-none');
+        logoutLink && logoutLink.classList.add('d-none');
       }
 
-      // Clear frontend token on click, then let the anchor navigate to PHP logout
-      logoutLink?.addEventListener('click', function () {
+      // Frontend clear on logout; let PHP endpoint do the redirect after
+      logoutLink && logoutLink.addEventListener('click', function () {
         try {
           localStorage.removeItem('nexora_token');
           sessionStorage.clear();
         } catch (_) { }
-        // No preventDefault: let browser follow /api/auth/logout.php,
-        // which ends PHP session and redirects to /Cognate3/login.html
       });
     })();
   </script>
@@ -346,7 +369,7 @@
         video.load();
       });
 
-      modal?.addEventListener('hidden.bs.modal', () => {
+      modal && modal.addEventListener('hidden.bs.modal', () => {
         video.pause();
         video.currentTime = 0;
       });
@@ -357,21 +380,18 @@
   <script>
     (function () {
       const $ = (s, r = document) => r.querySelector(s);
-      const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 
       const base = '/Cognate3/';
       const LIST_URL = base + 'api/products/list.php';
 
       const grid = $('#productGrid');
-      const filtersWrap = $('#filters');
-      const clearBtn = $('#clearFilters');
-
       const modalTitle = $('#productModalTitle');
       const modalImg = $('#productModalImg');
       const modalCat = $('#productModalCat');
       const modalPrice = $('#productModalPrice');
       const modalDesc = $('#productModalDesc');
-      const modalCTA = $('#productModalCTA');
+      const modalSpecsWrap = $('#productModalSpecsWrap');
+      const modalSpecs = $('#productModalSpecs');
 
       const peso = (v) => {
         const n = Number(v);
@@ -396,42 +416,49 @@
         const catAttr = cats.join(',');
         const catLabel = cats[0] || '';
         const img = (p.image && p.image.trim()) ? p.image : fallbackImage(p);
-        const specs = (p.specs || '').split(',').map(s => s.trim()).filter(Boolean).slice(0, 4);
         const delay = (0.1 + (idx % 6) * 0.1).toFixed(1);
 
         return `
           <div class="col-md-6 col-lg-5th wow fadeIn" data-wow-delay="${delay}s">
             <div class="team-item product-item position-relative overflow-hidden"
-                 data-price="${esc(p.price)}"
-                 data-added="${esc(p.date_added || '')}"
-                 data-desc="${esc(p.description || '')}"
-                 data-sku="${esc(p.sku || '')}"
-                 data-cats="${esc(catAttr)}"
-                 data-name="${esc(p.name || '')}"
-                 data-image="${esc(img)}"
-                 data-video="${esc(p.video_url || '')}">
+                data-price="${esc(p.price)}"
+                data-added="${esc(p.date_added || '')}"
+                data-desc="${esc(p.description || '')}"
+                data-sku="${esc(p.sku || '')}"
+                data-cats="${esc(catAttr)}"
+                data-name="${esc(p.name || '')}"
+                data-image="${esc(img)}"
+                data-specs="${esc(p.specs || '')}">
               <h4 class="visually-hidden">${esc(p.name || '')}</h4>
+
               <img class="img-fluid w-100" src="${esc(img)}" alt="${esc(p.name || '')}" role="button"
-                   tabindex="0" aria-label="View details: ${esc(p.name || '')}" data-bs-toggle="modal"
-                   data-bs-target="#productModal">
+                  tabindex="0" aria-label="View details: ${esc(p.name || '')}" data-bs-toggle="modal"
+                  data-bs-target="#productModal">
 
-              ${specs.length ? `
-                <div class="product-specs">
-                  ${specs.map(s => `<span class="chip">${esc(s)}</span>`).join('')}
-                </div>` : ''}
-
+              <!-- Overlay with NAME + category + price -->
               <div class="team-overlay product-overlay text-center">
+                <div class="h5 text-white mb-1 product-name">${esc(p.name || '')}</div>
                 <small class="text-uppercase d-block mb-1">${esc(catLabel)}</small>
-                <div class="h5 text-light mb-3">${peso(p.price)}</div>
+                <div class="h6 text-light mb-3">${peso(p.price)}</div>
                 <div class="d-flex justify-content-center gap-2">
                   <button type="button" class="btn btn-outline-light btn-sm btn-details" data-bs-toggle="modal"
                           data-bs-target="#productModal">Details</button>
-                  <a class="btn btn-primary btn-sm btn-inquire" href="contact.html">Inquire</a>
+                  <a class="btn btn-primary btn-sm btn-inquire"
+                    href="contact.html"
+                    data-requires-auth="inquiry"
+                    data-intent-href="contact.html">Inquire</a>
                 </div>
+              </div>
+
+              <!-- Always-visible name for touch/mobile (no hover) -->
+              <div class="px-2 py-2 small fw-semibold text-truncate d-lg-none d-block">
+                ${esc(p.name || '')}
               </div>
             </div>
           </div>`;
       }
+
+
 
       function render(items) {
         if (!grid) return;
@@ -450,16 +477,28 @@
 
           const name = card.getAttribute('data-name') || '';
           const img = card.getAttribute('data-image') || '';
-          const cats = card.getAttribute('data-cats') || '';
+          const catsRaw = card.getAttribute('data-cats') || '';
           const price = card.getAttribute('data-price') || '0';
           const desc = card.getAttribute('data-desc') || '';
+          const specsStr = card.getAttribute('data-specs') || '';
 
           if (modalTitle) modalTitle.textContent = name;
           if (modalImg) { modalImg.src = img; modalImg.alt = name; }
-          if (modalCat) modalCat.textContent = cats;
+          if (modalCat) modalCat.textContent = catsRaw.split(',').map(s => s.trim()).filter(Boolean).join(', ');
           if (modalPrice) modalPrice.textContent = peso(price);
           if (modalDesc) modalDesc.textContent = desc;
-          if (modalCTA) modalCTA.href = 'contact.html';
+
+          // SPECS (chips). Hide section if none.
+          const specs = specsStr.split(',').map(s => s.trim()).filter(Boolean);
+          if (modalSpecs && modalSpecsWrap) {
+            if (!specs.length) {
+              modalSpecsWrap.classList.add('d-none');
+              modalSpecs.innerHTML = '';
+            } else {
+              modalSpecsWrap.classList.remove('d-none');
+              modalSpecs.innerHTML = specs.map(s => `<span class="chip">${esc(s)}</span>`).join(' ');
+            }
+          }
         });
       }
 
@@ -501,6 +540,68 @@
           render([]);
         }
       })();
+    })();
+  </script>
+
+  <!-- Soft-gate: require login only when clicking "Inquire" -->
+  <script>
+    (function () {
+      const $ = (s, r = document) => r.querySelector(s);
+
+      function detectBase() {
+        const m = location.pathname.match(/\/Cognate3\/?/i);
+        if (m) return m[0].replace(/\/?$/, '/');
+        const parts = location.pathname.split('/').filter(Boolean);
+        return parts.length ? '/' + parts[0] + '/' : '/';
+      }
+      const base = detectBase();
+
+      const endpoints = { me: base + 'api/auth/me.php' };
+
+      async function isAuthenticated() {
+        // Prefer real PHP session if available
+        try {
+          const r = await fetch(endpoints.me, { method: 'GET', credentials: 'include', cache: 'no-store' });
+          if (r.ok) {
+            const j = await r.json().catch(() => ({}));
+            if (j && j.ok === true) return true;
+          }
+        } catch { }
+        // Fallback to token saved by login.html
+        return !!localStorage.getItem('nexora_token');
+      }
+
+      function showLoginPrompt(nextUrl) {
+        const modalEl = $('#loginRequiredModal');
+        const to = base + 'login.html?next=' + encodeURIComponent(nextUrl || location.href) + '&reason=inquiry';
+        if (!modalEl || !window.bootstrap?.Modal) {
+          location.assign(to);
+          return;
+        }
+        const loginBtn = $('#loginRedirectBtn');
+        if (loginBtn) loginBtn.setAttribute('href', to);
+        new bootstrap.Modal(modalEl).show();
+      }
+
+      // Intercept only "Inquire" actions
+      document.addEventListener('click', async (e) => {
+        const el = e.target.closest('.btn-inquire,[data-requires-auth="inquiry"]');
+        if (!el) return;
+
+        const href = el.getAttribute('href');
+        const intentHref = el.getAttribute('data-intent-href');
+        const nextUrl = href || intentHref || location.href;
+
+        const authed = await isAuthenticated();
+        if (!authed) {
+          e.preventDefault();
+          e.stopPropagation();
+          showLoginPrompt(nextUrl);
+        } else if (!href && intentHref) {
+          e.preventDefault();
+          location.assign(intentHref);
+        }
+      });
     })();
   </script>
 </body>

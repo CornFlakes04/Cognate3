@@ -24,41 +24,13 @@
   <link href="css/bootstrap.min.css" rel="stylesheet" />
   <link href="css/style.css" rel="stylesheet" />
   <style>
-    .auth-hero {
-      min-height: 36vh;
-    }
-
-    .auth-card {
-      border: 0;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
-    }
-
-    .auth-tabs .nav-link {
-      border-radius: 999px;
-    }
-
-    .form-label.required::after {
-      content: " *";
-      color: #dc3545;
-      font-weight: 700;
-    }
-
-    .pwd-toggle {
-      cursor: pointer;
-    }
-
-    .admin-badge {
-      border-radius: 999px;
-      padding: .35rem .75rem;
-    }
-
-    /* Toast container (fixed, top-right) */
-    .toast-container {
-      position: fixed;
-      top: 1rem;
-      right: 1rem;
-      z-index: 1080;
-    }
+    .auth-hero { min-height: 36vh; }
+    .auth-card { border: 0; box-shadow: 0 10px 30px rgba(0, 0, 0, .08); }
+    .auth-tabs .nav-link { border-radius: 999px; }
+    .form-label.required::after { content: " *"; color: #dc3545; font-weight: 700; }
+    .pwd-toggle { cursor: pointer; }
+    .admin-badge { border-radius: 999px; padding: .35rem .75rem; }
+    .toast-container { position: fixed; top: 1rem; right: 1rem; z-index: 1080; }
   </style>
 </head>
 
@@ -142,8 +114,6 @@
                   <input class="form-check-input" type="checkbox" id="rememberMe">
                   <label class="form-check-label" for="rememberMe">Remember me</label>
                 </div>
-
-
 
                 <button class="btn btn-primary ms-auto" type="submit">
                   <i class="bi bi-box-arrow-in-right me-1"></i> Login
@@ -330,7 +300,28 @@
         el.classList.remove('d-none');
       };
 
-      const redirectAfterLogin = (username) => {
+      // Extract role from various possible backend response shapes
+      function extractRoleFromResponse(json) {
+        if (!json || typeof json !== 'object') return null;
+        // common shapes: {role}, {user:{role}}, {data:{role}}, {profile:{role}}
+        if (json.role) return String(json.role);
+        if (json.user && json.user.role) return String(json.user.role);
+        if (json.data && json.data.role) return String(json.data.role);
+        if (json.profile && json.profile.role) return String(json.profile.role);
+        return null;
+      }
+
+      // Demo/local: read role from localStorage users list
+      function getLocalRole(username) {
+        try {
+          const users = JSON.parse(localStorage.getItem('nexora_users') || '[]');
+          const u = users.find(x => (x.username || '').toLowerCase() === String(username || '').toLowerCase());
+          return u && u.role ? String(u.role) : 'user';
+        } catch { return 'user'; }
+      }
+
+      // Final redirect: next param > role-based
+      function redirectAfterLogin(role) {
         const params = new URLSearchParams(location.search);
         const next = params.get('next');
         if (next) {
@@ -338,9 +329,13 @@
           location.replace(target);
           return;
         }
-        const isAdmin = (username || '').trim().toLowerCase() === 'admin';
-        location.replace(isAdmin ? urls.admin : urls.user);
-      };
+        const r = String(role || '').toLowerCase();
+        if (r === 'admin' || r === 'editor') {
+          location.replace(urls.admin);
+        } else {
+          location.replace(urls.user);
+        }
+      }
 
       // small debounce helper
       const debounce = (fn, ms = 350) => {
@@ -376,20 +371,37 @@
                 const errJson = await res.json().catch(() => ({}));
                 throw new Error(errJson.message || 'Invalid credentials.');
               }
-              await res.json();
+              const j = await res.json().catch(() => ({}));
+
+              // Save client token (front-end marker) and username
               localStorage.setItem('nexora_token', 'demo-token');
               localStorage.setItem('nexora_last_username', payload.username);
+
+              // role from backend (fallback to 'user' if missing)
+              let role = extractRoleFromResponse(j);
+              if (!role) {
+                // final guard: consider a legacy "admin" username as admin if backend didn’t send role
+                role = (payload.username.toLowerCase() === 'admin') ? 'admin' : 'user';
+              }
+              localStorage.setItem('nexora_role', String(role).toLowerCase());
+
               setAlert(loginAlert, 'success', 'Login successful. Redirecting…');
-              setTimeout(() => redirectAfterLogin(payload.username), 500);
+              setTimeout(() => redirectAfterLogin(role), 500);
+
             } else {
               // Demo mode
               const users = JSON.parse(localStorage.getItem('nexora_users') || '[]');
               const found = users.find(u => (u.username || '').toLowerCase() === payload.username.toLowerCase());
               if (!found || found.password !== payload.password) throw new Error('Invalid credentials.');
+
               localStorage.setItem('nexora_token', 'demo-token');
               localStorage.setItem('nexora_last_username', payload.username);
+
+              const role = getLocalRole(payload.username); // 'admin' | 'editor' | 'user'
+              localStorage.setItem('nexora_role', String(role).toLowerCase());
+
               setAlert(loginAlert, 'success', 'Login successful. Redirecting…');
-              setTimeout(() => redirectAfterLogin(payload.username), 500);
+              setTimeout(() => redirectAfterLogin(role), 500);
             }
           } catch (err) {
             setAlert(loginAlert, 'danger', err.message || 'Login failed.');
@@ -412,15 +424,12 @@
             credentials: 'include',
             body: JSON.stringify({ check_only: true, username })
           });
-          // If your PHP returns {ok:true, exists:true/false}
           if (res.ok) {
             const j = await res.json().catch(() => ({}));
             if (typeof j.exists === 'boolean') return j.exists;
-            // If it returns {ok:false, message:"Username already exists"}
             if (j && j.ok === false && /exists|taken/i.test(j.message || '')) return true;
             return null;
           }
-          // If PHP uses 409 Conflict for taken usernames
           if (res.status === 409) return true;
           return null;
         } catch {
@@ -430,7 +439,6 @@
 
       // Live (debounced) availability check while typing
       const usernameInput = signupForm ? signupForm.querySelector("input[name='username']") : null;
-      const emailInput = signupForm ? signupForm.querySelector("input[name='email']") : null;
 
       const showInlineNotice = (msg) => {
         if (!signupAlert) return;
@@ -447,18 +455,10 @@
 
         // First try API check
         const exists = await apiUsernameExists(u);
-        if (exists === true) {
-          showInlineNotice('That username is already taken.');
-          return;
-        }
-        if (exists === false) {
-          clearInlineNotice();
-          return;
-        }
+        if (exists === true) { showInlineNotice('That username is already taken.'); return; }
+        if (exists === false) { clearInlineNotice(); return; }
 
-        // Fallbacks (no API or unknown)
-        // 1) If you want, you could call a public users list here (not recommended if protected).
-        // 2) Demo mode: check localStorage
+        // Demo fallback
         const users = JSON.parse(localStorage.getItem('nexora_users') || '[]');
         const takenLocal = users.some(x => (x.username || '').toLowerCase() === u.toLowerCase());
         if (takenLocal) showInlineNotice('That username is already taken (demo).');
@@ -537,10 +537,7 @@
               });
 
               if (!res.ok) {
-                // If backend signals duplicate with 409 or message text
-                if (res.status === 409) {
-                  throw new Error('That username is already taken.');
-                }
+                if (res.status === 409) { throw new Error('That username is already taken.'); }
                 const errJson = await res.json().catch(() => ({}));
                 const msg = (errJson && /exists|taken/i.test(errJson.message || ''))
                   ? 'That username is already taken.'
@@ -569,7 +566,8 @@
                 name: payload.name,
                 username: payload.username,
                 email: payload.email,
-                password: payload.password
+                password: payload.password,
+                role: 'user' // default role for demo signups
               });
               localStorage.setItem('nexora_users', JSON.stringify(users));
 
@@ -602,5 +600,4 @@
   </script>
 
 </body>
-
 </html>
